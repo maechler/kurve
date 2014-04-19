@@ -1,44 +1,56 @@
 "use strict";
 
 var Kurve = {
+    
     config: {
         borderColor: "#535353"
     },
-    runIntervalID: "",
-    ghostCanvas: null,
-    canvas: null,
-    ctx: null,
-    keyMap: {
-        //event.keyIdentifier: "Left",
-        //event.keyIdentifier: "Right"
-    },
-    keysPressed: {},
-    running: false,
-    curves: [],
+    
+    runIntervalID:      null,
+    canvas:             null,
+    ctx:                null,
+    
+    framesPerSecond:    25,
+    
+    keysPressed:        {},
+    running:            false,
+    curves:             [],
+    players:             [],
+    
     toggleRunning: function() {
         Kurve.running = !Kurve.running;
         if (Kurve.running) {
             Kurve.startGame();
         }
     },
+    
     init: function() {
         this.initCanvas();
         this.initContext();
         this.initField();
 
-        this.curves.push(new Kurve.Curve());
+        this.curves.push(new Kurve.Curve(
+            new Kurve.Player(37,39,"#A6C94A")
+        ));
+
+        this.curves.push(new Kurve.Curve(
+            new Kurve.Player(81,87,"#990000")
+        ));
 
         this.addWindowListeners();
         this.startGame();
     },
+    
     initCanvas: function() {
-        this.canvas = document.getElementById("canvas");
-        this.canvas.width = window.innerWidth - 40;
-        this.canvas.height = window.innerHeight - 40;
+        this.canvas         = document.getElementById("canvas");
+        this.canvas.width   = window.innerWidth - 40;
+        this.canvas.height  = window.innerHeight - 40;
     },
+    
     initContext: function() {
         this.ctx = this.canvas.getContext("2d");
     },
+    
     initField: function() {
         this.ctx.beginPath();
         this.ctx.lineWidth = 1;
@@ -52,28 +64,33 @@ var Kurve = {
 
         this.ctx.beginPath(); //in order to start a new path and let the border keep its style
     },
+    
     addWindowListeners: function() {
         window.addEventListener('keydown', this.onKeyDown);
         window.addEventListener('keyup', this.onKeyUp);
     },
+    
     onKeyDown: function(event) {
-        Kurve.keysPressed[event.keyIdentifier] = event.keyIdentifier;
+        Kurve.keysPressed[event.keyCode] = true;
     },
+    
     onKeyUp: function(event) {
-        delete Kurve.keysPressed[event.keyIdentifier];
+        delete Kurve.keysPressed[event.keyCode];
     },
+    
     startGame: function() {
         this.running = true;
         this.run();
-        this.runIntervalID = setInterval(this.run.bind(this), 40);
+        this.runIntervalID = setInterval(this.run.bind(this), 1000 / this.framesPerSecond);
     },
+    
     run: function() {
         var start = new Date().getTime() / 1000;
         
         for (var curve in this.curves) {
             this.curves[curve].draw(this.ctx);
             this.curves[curve].moveToNextFrame();
-            this.curves[curve].checkForCollision();
+            this.curves[curve].checkForCollision(this.ctx);
         }
 
         if (!this.running) clearInterval(this.runIntervalID);
