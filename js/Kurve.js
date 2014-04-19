@@ -7,15 +7,12 @@ var Kurve = {
     },
     
     runIntervalID:      null,
-    canvas:             null,
-    ctx:                null,
-    
     framesPerSecond:    25,
     
     keysPressed:        {},
     running:            false,
     curves:             [],
-    players:             [],
+    players:            [],
     
     toggleRunning: function() {
         Kurve.running = !Kurve.running;
@@ -25,9 +22,7 @@ var Kurve = {
     },
     
     init: function() {
-        this.initCanvas();
-        this.initContext();
-        this.initField();
+        Kurve.Field.init();
 
         this.curves.push(new Kurve.Curve(
             new Kurve.Player(37,39,"#A6C94A")
@@ -39,30 +34,6 @@ var Kurve = {
 
         this.addWindowListeners();
         this.startGame();
-    },
-    
-    initCanvas: function() {
-        this.canvas         = document.getElementById("canvas");
-        this.canvas.width   = window.innerWidth - 40;
-        this.canvas.height  = window.innerHeight - 40;
-    },
-    
-    initContext: function() {
-        this.ctx = this.canvas.getContext("2d");
-    },
-    
-    initField: function() {
-        this.ctx.beginPath();
-        this.ctx.lineWidth = 1;
-        this.ctx.strokeStyle = this.config.borderColor;
-        this.ctx.moveTo(0, 0);
-        this.ctx.lineTo(this.canvas.width, 0);
-        this.ctx.lineTo(this.canvas.width, this.canvas.height);
-        this.ctx.lineTo(0, this.canvas.height);
-        this.ctx.lineTo(0, 0);
-        this.ctx.stroke();
-
-        this.ctx.beginPath(); //in order to start a new path and let the border keep its style
     },
     
     addWindowListeners: function() {
@@ -88,9 +59,9 @@ var Kurve = {
         var start = new Date().getTime() / 1000;
         
         for (var curve in this.curves) {
-            this.curves[curve].draw(this.ctx);
+            this.curves[curve].draw(Kurve.Field.ctx);
             this.curves[curve].moveToNextFrame();
-            this.curves[curve].checkForCollision(this.ctx);
+            this.curves[curve].checkForCollision(Kurve.Field.ctx);
         }
 
         if (!this.running) clearInterval(this.runIntervalID);

@@ -4,14 +4,15 @@ Kurve.Curve = function(player) {
     this.player     = player;
     this.isAlive    = true;
 
-    this.posX       = 10;
-    this.posY       = 10;
-    this.nextPosX   = 10;
-    this.nextPosY   = 10;
+    var randomPosition  = Kurve.Field.getRandomPosition();
+    this.posX           = randomPosition.posX;
+    this.posY           = randomPosition.posY;
+    this.nextPosX       = randomPosition.posX;
+    this.nextPosY       = randomPosition.posY;
 
     this.stepLength = 3;
     this.lineWidth  = 3;
-    this.angle      = 0;
+    this.angle      = 5*Math.random();
     this.dAngle     = 0.08;
     this.holeCount  = 100;
 
@@ -29,15 +30,19 @@ Kurve.Curve = function(player) {
 
     this.checkForCollision = function(ctx) {
         if (this.isCollided(this.nextPosX, this.nextPosY, ctx)) {
-            this.draw(ctx);
-            Kurve.running = false;
-            console.log("GAME OVER");
+            this.die(ctx);
         }
+    };
+    
+    this.die = function(ctx) {
+        this.draw(ctx);
+        Kurve.running = false;
+        console.log("GAME OVER");
     };
     
     this.isCollided = function(posX, posY, ctx) {
         return ctx.getImageData(posX, posY, 1, 1).data[3] !== 0;
-    }
+    };
 
     this.moveTo = function() {
 
