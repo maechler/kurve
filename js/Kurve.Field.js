@@ -9,12 +9,12 @@ Kurve.Field = {
         this.initCanvas();
         this.initContext();
         this.initField();
+        
+        String.fromCharCode(65);
     },
         
     initCanvas: function() {
         this.canvas         = document.getElementById("canvas");
-        this.canvas.width   = window.innerWidth - 40;
-        this.canvas.height  = window.innerHeight - 40;
     },
     
     initContext: function() {
@@ -25,7 +25,7 @@ Kurve.Field = {
         this.ctx.beginPath();
        
         this.ctx.lineWidth = 1;
-        this.ctx.strokeStyle = Kurve.config.borderColor;
+        this.ctx.strokeStyle = Kurve.Config.field.borderColor;
         
         this.ctx.moveTo(0, 0);
         
@@ -40,7 +40,7 @@ Kurve.Field = {
     },
     
     getRandomPosition: function(borderPadding) {
-        if (borderPadding === undefined) borderPadding = 15;
+        if (borderPadding === undefined) borderPadding = 20;
         
         var fieldWidth = this.canvas.width;
         var fieldHeight = this.canvas.height;
