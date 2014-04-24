@@ -19,6 +19,8 @@ Kurve.Field = {
     
     initContext: function() {
         this.ctx = this.canvas.getContext("2d");
+        this.canvas.width   = window.innerWidth*0.7;
+        this.canvas.height   = window.innerHeight;
     },
     
     initField: function() {

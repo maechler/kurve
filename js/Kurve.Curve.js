@@ -11,7 +11,7 @@ Kurve.Curve = function(player) {
     this.nextPosY       = randomPosition.posY;
 
     this.stepLength = 3;
-    this.lineWidth  = 3;
+    this.lineWidth  = 4;
     this.angle      = 5*Math.random();
     this.dAngle     = 0.08;
     this.holeCount  = 100;
@@ -44,19 +44,25 @@ Kurve.Curve = function(player) {
         return ctx.getImageData(posX, posY, 1, 1).data[3] !== 0;
     };
 
+    this.imageTest = function() {
+       var imageTest =  Kurve.Field.ctx.getImageData(0, 0, Kurve.Field.canvas.width, Kurve.Field.canvas.height);
+       
+       for (var i=0; i<6; i++) {
+           imageTest[i];
+       }
+    };
+
     this.moveTo = function() {
 
     };
 
     this.moveToNextFrame = function() {
-        if (Kurve.keysPressed[this.player.keyRight] === true) {
+        if ( Kurve.isKeyPressed(this.player.keyRight) ) {
             this.angle += this.dAngle;
-        } else if (Kurve.keysPressed[this.player.keyLeft] === true) {
+        } else if ( Kurve.isKeyPressed(this.player.keyLeft) ) {
             this.angle -= this.dAngle;
         }
-
-        this.moveTo();
-
+        
         this.posX       = this.nextPosX;
         this.posY       = this.nextPosY;
         this.nextPosX  += this.stepLength * Math.cos(this.angle);

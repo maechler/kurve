@@ -2,18 +2,39 @@
 
 Kurve.Player = function(id, color, keyLeft, keyRight) {
     this.id         = id;
+    this.color      = color;
     this.keyLeft    = keyLeft;
     this.keyRight   = keyRight;
-    this.color      = color;
+    
     this.isActive   = false;
-    this.render     = function(parentContainer) { //renderMenuItem, renderScoreItem
-        var playerHTML   = '<div id="' + this.id + '" class="player inactive ' + this.id +'">';
-        playerHTML      +=      '<div class="title"><h2>' + this.id + '</h2></div>'
-        playerHTML      +=      '<div class="keys">' + String.fromCharCode(this.keyLeft) + ' + ' + String.fromCharCode(this.keyRight) + '</div>';
-        playerHTML      +=      '<div class="clear"></div>';
-        playerHTML      += '</div>';
+    this.points     = 0;
+    
+    this.renderMenuItem = function() {
+        var menuItemHTML    = '<div id="' + this.id + '" class="player inactive ' + this.id +'">';
+        menuItemHTML       +=      '<div class="title"><h2>' + this.id + '</h2></div>'
+        menuItemHTML       +=      '<div class="keys">' + String.fromCharCode(this.keyLeft) + ' + ' + String.fromCharCode(this.keyRight) + '</div>';
+        menuItemHTML       +=      '<div class="clear"></div>';
+        menuItemHTML       += '</div>';
         
-        parentContainer.innerHTML += playerHTML;
+        return menuItemHTML;
     };
+    
+    this.renderScoreItem = function() {
+        var scoreItemHTML   = '<div>';
+        scoreItemHTML      +=      '<div class="title"><h2>' + this.id + '</h2></div>'
+        scoreItemHTML      +=      '<div>' + this.points + '</div>';
+        scoreItemHTML      += '</div>';
+        
+        return scoreItemHTML;
+    };
+    
+    this.isKeyRight = function(keyCode) {
+        return this.keyRight === keyCode;
+    };
+    
+    this.isKeyLeft = function(keyCode) {
+        return this.keyLeft === keyCode;
+    };
+    
 };
 

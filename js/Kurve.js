@@ -19,21 +19,24 @@ var Kurve = {
     
     initPlayers: function() {
         var playersConfig = Kurve.Config.players;
+        var playerHTML = '';
+        
         for (var i in playersConfig) {
             var player = playersConfig[i];
             this.players[player.id] = new Kurve.Player(player.id,player.color,player.keyLeft,player.keyRight);
-            this.players[player.id].render(document.getElementById('menu'));
+            playerHTML += this.players[player.id].renderMenuItem();
         }
+        
+        document.getElementById('menu').innerHTML += playerHTML;
     },
     
     addWindowListeners: function() {
         window.addEventListener('keydown', this.onKeyDown);
         window.addEventListener('keyup', this.onKeyUp);
-        window.addEventListener('keypress', this.onKeyPress);        
+        window.addEventListener('keypress', this.onKeyPress);   
     },
     
     onKeyDown: function(event) {
-        console.log(event.keyCode);
         Kurve.keysPressed[event.keyCode] = true;
     },
     
@@ -41,21 +44,24 @@ var Kurve = {
         delete Kurve.keysPressed[event.keyCode];
     },
     
+    //make empty function and then set either Kurve.Menu.onKeyPress or Kurve.Game.onKeyPress as reference
+    //only use keydown and keyup --> because keypress returns different keycodes
     onKeyPress: function(event) {
+        console.log('we');
         if (event.keyCode===32) {
             Kurve.onSpacePress();
         }
         
         if (Kurve.running) return;
         
-        for (var player in Kurve.Config.players) {
-            if (Kurve.Config.players[player].keyLeft === event.keyCode) {
-                var playerID = Kurve.Config.players[player].id;
+        for (var player in Kurve.players) {
+            if ( Kurve.players[player].isKeyLeft(event.keyCode) ) {
+                var playerID = Kurve.players[player].id;
                 var className = 'active';
                 Kurve.players[playerID].isActive = true;
                 break;
-            } else if (Kurve.Config.players[player].keyRight === event.keyCode) {
-                var playerID = Kurve.Config.players[player].id;
+            } else if (Kurve.players[player].isKeyRight(event.keyCode)) {
+                var playerID = Kurve.players[player].id;
                 var className = 'inactive';
                 this.players[player].isActive = false;
                 break;
@@ -63,23 +69,22 @@ var Kurve = {
         }
         
         if (playerID !== undefined) {
-            console.log(playerID);
             var playerElement = document.getElementById(playerID);
             playerElement.className = playerElement.className.replace('inactive','');
             playerElement.className = playerElement.className.replace('active','');
             playerElement.className += ' ' + className;
-            console.log(playerElement);
         }
-        
-        
-        console.log(playerID);
+    },
+    
+    //use in Curve
+    isKeyPressed: function(keyCode) {
+        return this.keysPressed[keyCode] === true;
     },
     
     onSpacePress: function() {
         this.curves = [];
         for (var player in this.players) {
-            console.log(this.players[player]);
-            if (this.players[player].isActive === false) continue;
+            if (!this.players[player].isActive) continue;
             this.curves.push(new Kurve.Curve(this.players[player]));
         }
         if (this.curves.length === 0) return;
@@ -92,12 +97,14 @@ var Kurve = {
     },
     
     startGame: function() {
+        window.removeEventListener('keypress',  this.onKeyPress);
         Kurve.running = true;
         this.run();
         this.runIntervalID = setInterval(this.run.bind(this), 1000 / this.framesPerSecond);
     },
     
     run: function() {
+        this.curves[0].imageTest();
         var start = new Date().getTime() / 1000;
         
         for (var curve in this.curves) {
@@ -109,8 +116,8 @@ var Kurve = {
         if (!this.running) clearInterval(this.runIntervalID);
         
         var executionTime = new Date().getTime() / 1000 - start;
-        if (executionTime > 0.05) {
-            console.log(executionTime);
+        if (executionTime > 0.040) {
+            console.log('Interval limit exceeded: ' + executionTime);
         }
     }
 
