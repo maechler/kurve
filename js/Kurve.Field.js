@@ -9,8 +9,6 @@ Kurve.Field = {
         this.initCanvas();
         this.initContext();
         this.initField();
-        
-        String.fromCharCode(65);
     },
         
     initCanvas: function() {
@@ -35,6 +33,7 @@ Kurve.Field = {
         this.ctx.lineTo(this.canvas.width, this.canvas.height);
         this.ctx.lineTo(0, this.canvas.height);
         this.ctx.lineTo(0, 0);
+        this.ctx.strokeWidth = 3;
         
         this.ctx.stroke();
 

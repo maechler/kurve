@@ -36,30 +36,19 @@ Kurve.Curve = function(player) {
     
     this.die = function(ctx) {
         this.draw(ctx);
-        Kurve.running = false;
-        console.log("GAME OVER");
+        this.isAlive = false;
+        Kurve.Game.notifyDeath(this);
     };
     
+        //getImageData of entire field just once save in Game or so for performance reasons!!!
     this.isCollided = function(posX, posY, ctx) {
         return ctx.getImageData(posX, posY, 1, 1).data[3] !== 0;
     };
 
-    this.imageTest = function() {
-       var imageTest =  Kurve.Field.ctx.getImageData(0, 0, Kurve.Field.canvas.width, Kurve.Field.canvas.height);
-       
-       for (var i=0; i<6; i++) {
-           imageTest[i];
-       }
-    };
-
-    this.moveTo = function() {
-
-    };
-
     this.moveToNextFrame = function() {
-        if ( Kurve.isKeyPressed(this.player.keyRight) ) {
+        if ( Kurve.Game.isKeyPressed(this.player.keyRight) ) {
             this.angle += this.dAngle;
-        } else if ( Kurve.isKeyPressed(this.player.keyLeft) ) {
+        } else if ( Kurve.Game.isKeyPressed(this.player.keyLeft) ) {
             this.angle -= this.dAngle;
         }
         

@@ -21,7 +21,7 @@ Kurve.Player = function(id, color, keyLeft, keyRight) {
     
     this.renderScoreItem = function() {
         var scoreItemHTML   = '<div>';
-        scoreItemHTML      +=      '<div class="title"><h2>' + this.id + '</h2></div>'
+        scoreItemHTML      +=      '<div class="title active ' + this.id + '"><h2>' + this.id + '</h2></div>'
         scoreItemHTML      +=      '<div>' + this.points + '</div>';
         scoreItemHTML      += '</div>';
         
