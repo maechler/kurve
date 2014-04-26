@@ -10,11 +10,12 @@ Kurve.Curve = function(player) {
     this.nextPosX       = randomPosition.posX;
     this.nextPosY       = randomPosition.posY;
 
-    this.stepLength = 3;
-    this.lineWidth  = 4;
-    this.angle      = 5*Math.random();
-    this.dAngle     = 0.08;
-    this.holeCount  = 100;
+    this.stepLength     = 3;
+    this.lineWidth      = 4;
+    this.angle          = 5*Math.random();
+    this.dAngle         = 0.08;
+    this.holeInterval   = 150;
+    this.holeCount      = 150;
 
     this.draw = function(ctx) {
         ctx.beginPath();
@@ -22,7 +23,15 @@ Kurve.Curve = function(player) {
         ctx.moveTo(this.posX, this.posY);
         ctx.lineTo(this.nextPosX, this.nextPosY);
        
-        ctx.strokeStyle = this.player.color;
+        if (this.holeCount < 0) {
+            ctx.strokeStyle = Kurve.Field.backgroundColor;
+            ctx.globalAlpha=1;
+            if (this.holeCount < -3) this.holeCount = this.holeInterval; 
+        } else {
+            ctx.strokeStyle = this.player.color;
+        }
+        this.holeCount--;
+        
         ctx.lineWidth   = this.lineWidth;
         
         ctx.stroke();
@@ -30,6 +39,7 @@ Kurve.Curve = function(player) {
 
     this.checkForCollision = function(ctx) {
         if (this.isCollided(this.nextPosX, this.nextPosY, ctx)) {
+            console.log(ctx.getImageData(this.nextPosX, this.nextPosY, 1, 1));
             this.die(ctx);
         }
     };

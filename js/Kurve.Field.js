@@ -4,6 +4,7 @@ Kurve.Field = {
     
     canvas:             null,
     ctx:                null,
+    backgroundColor:    '#FFF',
     
     init: function() {
         this.initCanvas();
@@ -33,11 +34,15 @@ Kurve.Field = {
         this.ctx.lineTo(this.canvas.width, this.canvas.height);
         this.ctx.lineTo(0, this.canvas.height);
         this.ctx.lineTo(0, 0);
-        this.ctx.strokeWidth = 3;
+        this.ctx.lineWidth = 3;
         
         this.ctx.stroke();
 
         this.ctx.beginPath(); //in order to start a new path and let the border keep its style
+    },
+    
+    getFieldData: function() {
+        return this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
     },
     
     getRandomPosition: function(borderPadding) {

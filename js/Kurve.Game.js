@@ -11,6 +11,7 @@ Kurve.Game = {
     curves:             [],
     activeCurvesInThisRound: [],
     players:            [],
+    imageData:            {},
     
     init: function() {
         this.intervalTimeOut = Math.round(1000 / this.framesPerSecond);
@@ -19,11 +20,12 @@ Kurve.Game = {
     run: function() {
         var start = new Date().getTime() / 1000;
         
-        for (var curve in this.curves) {
-            if (!this.curves[curve].isAlive) continue;
-            this.curves[curve].draw(Kurve.Field.ctx);
-            this.curves[curve].moveToNextFrame();
-            this.curves[curve].checkForCollision(Kurve.Field.ctx);
+        this.imageData = Kurve.Field.getFieldData();
+
+        for (var curve in this.activeCurvesInThisRound) {
+            this.activeCurvesInThisRound[curve].draw(Kurve.Field.ctx);
+            this.activeCurvesInThisRound[curve].moveToNextFrame();
+            this.activeCurvesInThisRound[curve].checkForCollision(Kurve.Field.ctx);
         }
         
         var executionTime = new Date().getTime() / 1000 - start;
@@ -64,14 +66,30 @@ Kurve.Game = {
         this.renderPlayerScores();
         this.addWindowListeners();
         
-        this.startNewRound();
+        this.initRun();
+        setTimeout(Kurve.Game.startNewRound.bind(this), 2000);
     },
     
     renderPlayerScores: function() {
         var playerHTML = '';
+        console.log(this.players);
+        var sortArray = [];
         
         for (var i in this.players) {
-            playerHTML += this.players[i].renderScoreItem();
+            sortArray.push(this.players[i]);
+        }
+        
+        sortArray.sort(function(a,b) {
+            console.log("playa " + a.points);
+            return b.points - a.points;
+        });
+        
+        console.log('sorted:');
+        console.log(sortArray);
+        
+        for (var i in sortArray) {
+            console.log(i);
+            playerHTML += sortArray[i].renderScoreItem();
         }
         
         document.getElementById('player-scores').innerHTML = playerHTML;
@@ -103,13 +121,20 @@ Kurve.Game = {
     },
     
     startNewRound: function() {
+        this.running        = true;
+        this.runIntervalID  = setInterval(this.run.bind(this), this.intervalTimeOut);
+    },
+    
+    initRun: function() {
         for (var i in this.curves) {
             var curve = this.curves[i];
             this.activeCurvesInThisRound[curve.player.id] = curve;
         }
         
-        this.running        = true;
-        this.runIntervalID  = setInterval(this.run.bind(this), this.intervalTimeOut);
+        for (var curve in this.activeCurvesInThisRound) {
+            this.activeCurvesInThisRound[curve].moveToNextFrame();
+            this.activeCurvesInThisRound[curve].draw(Kurve.Field.ctx);
+        }
     },
     
     terminateRound: function() {
