@@ -2,9 +2,8 @@
 
 Kurve.Field = {
     
-    canvas:             null,
-    ctx:                null,
-    backgroundColor:    '#FFF',
+    canvas:     null,
+    ctx:        null,
     
     init: function() {
         this.initCanvas();
@@ -17,28 +16,23 @@ Kurve.Field = {
     },
     
     initContext: function() {
-        this.ctx = this.canvas.getContext("2d");
-        this.canvas.width   = window.innerWidth*0.7;
-        this.canvas.height   = window.innerHeight;
+        this.ctx            = this.canvas.getContext("2d");
+        this.canvas.width   = window.innerWidth * Kurve.Config.Field.width;
+        this.canvas.height  = window.innerHeight;
     },
     
     initField: function() {
-        this.ctx.beginPath();
-       
-        this.ctx.lineWidth = 1;
-        this.ctx.strokeStyle = Kurve.Config.field.borderColor;
+        this.drawField();
+    },
+    
+    drawField: function() {
+        this.ctx.strokeStyle    = Kurve.Config.Field.borderColor;
+        this.ctx.lineWidth      = 3;
         
-        this.ctx.moveTo(0, 0);
-        
-        this.ctx.lineTo(this.canvas.width, 0);
-        this.ctx.lineTo(this.canvas.width, this.canvas.height);
-        this.ctx.lineTo(0, this.canvas.height);
-        this.ctx.lineTo(0, 0);
-        this.ctx.lineWidth = 3;
-        
+        this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+        this.ctx.rect(0,0,this.canvas.width,this.canvas.height);
+      
         this.ctx.stroke();
-
-        this.ctx.beginPath(); //in order to start a new path and let the border keep its style
     },
     
     getFieldData: function() {

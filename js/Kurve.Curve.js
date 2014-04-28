@@ -15,24 +15,23 @@ Kurve.Curve = function(player) {
     this.angle          = 5*Math.random();
     this.dAngle         = 0.08;
     this.holeInterval   = 150;
-    this.holeCount      = 150;
+    this.holeCount      = this.holeInterval;
 
     this.draw = function(ctx) {
         ctx.beginPath();
+        ctx.globalAlpha=1;    
+       
+        if (this.holeCount < 0) {
+            ctx.globalAlpha=0;
+            if (this.holeCount < -1) this.holeCount = this.holeInterval; 
+        }  
+
+        this.holeCount--;
+        ctx.strokeStyle = this.player.color;        
+        ctx.lineWidth   = this.lineWidth;
         
         ctx.moveTo(this.posX, this.posY);
         ctx.lineTo(this.nextPosX, this.nextPosY);
-       
-        if (this.holeCount < 0) {
-            ctx.strokeStyle = Kurve.Field.backgroundColor;
-            ctx.globalAlpha=1;
-            if (this.holeCount < -3) this.holeCount = this.holeInterval; 
-        } else {
-            ctx.strokeStyle = this.player.color;
-        }
-        this.holeCount--;
-        
-        ctx.lineWidth   = this.lineWidth;
         
         ctx.stroke();
     };

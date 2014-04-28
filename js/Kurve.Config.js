@@ -2,8 +2,9 @@
 
 Kurve.Config = {
     
-    field: {
-        borderColor: "#eee"
+    Field: {
+        borderColor:    "#eee",
+        width:          0.7,    //70% percent of the screen
     },
     
     players: [

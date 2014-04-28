@@ -121,6 +121,7 @@ Kurve.Game = {
     },
     
     startNewRound: function() {
+        Kurve.Field.drawField();
         this.running        = true;
         this.runIntervalID  = setInterval(this.run.bind(this), this.intervalTimeOut);
     },
