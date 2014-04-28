@@ -1,10 +1,14 @@
 "use strict";
 
-Kurve.Curve = function(player) {
-    this.player     = player;
-    this.isAlive    = true;
+Kurve.Curve = function(player, field, game, config) {
+    this.player         = player;
+    this.field          = field;
+    this.game           = game;
+    this.config         = config;
+    
+    this.isAlive        = true;
 
-    var randomPosition  = Kurve.Field.getRandomPosition();
+    var randomPosition  = this.field.getRandomPosition();
     this.posX           = randomPosition.posX;
     this.posY           = randomPosition.posY;
     this.nextPosX       = randomPosition.posX;
@@ -18,15 +22,16 @@ Kurve.Curve = function(player) {
     this.holeCount      = this.holeInterval;
 
     this.draw = function(ctx) {
+        this.holeCount--;
+        
         ctx.beginPath();
-        ctx.globalAlpha=1;    
+        ctx.globalAlpha = 1;    
        
         if (this.holeCount < 0) {
-            ctx.globalAlpha=0;
+            ctx.globalAlpha = 0;
             if (this.holeCount < -1) this.holeCount = this.holeInterval; 
         }  
 
-        this.holeCount--;
         ctx.strokeStyle = this.player.color;        
         ctx.lineWidth   = this.lineWidth;
         
@@ -38,7 +43,6 @@ Kurve.Curve = function(player) {
 
     this.checkForCollision = function(ctx) {
         if (this.isCollided(this.nextPosX, this.nextPosY, ctx)) {
-            console.log(ctx.getImageData(this.nextPosX, this.nextPosY, 1, 1));
             this.die(ctx);
         }
     };
@@ -46,7 +50,7 @@ Kurve.Curve = function(player) {
     this.die = function(ctx) {
         this.draw(ctx);
         this.isAlive = false;
-        Kurve.Game.notifyDeath(this);
+        this.game.notifyDeath(this);
     };
     
         //getImageData of entire field just once save in Game or so for performance reasons!!!
@@ -55,9 +59,9 @@ Kurve.Curve = function(player) {
     };
 
     this.moveToNextFrame = function() {
-        if ( Kurve.Game.isKeyPressed(this.player.keyRight) ) {
+        if ( this.game.isKeyPressed(this.player.keyRight) ) {
             this.angle += this.dAngle;
-        } else if ( Kurve.Game.isKeyPressed(this.player.keyLeft) ) {
+        } else if ( this.game.isKeyPressed(this.player.keyLeft) ) {
             this.angle -= this.dAngle;
         }
         
@@ -66,4 +70,5 @@ Kurve.Curve = function(player) {
         this.nextPosX  += this.stepLength * Math.cos(this.angle);
         this.nextPosY  += this.stepLength * Math.sin(this.angle);
     };
+
 };

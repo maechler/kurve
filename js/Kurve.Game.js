@@ -9,9 +9,9 @@ Kurve.Game = {
     keysPressed:        {},
     running:            false,
     curves:             [],
-    activeCurvesInThisRound: [],
+    runningCurves:      [],
     players:            [],
-    imageData:            {},
+    imageData:          {},
     
     init: function() {
         this.intervalTimeOut = Math.round(1000 / this.framesPerSecond);
@@ -22,10 +22,10 @@ Kurve.Game = {
         
         this.imageData = Kurve.Field.getFieldData();
 
-        for (var curve in this.activeCurvesInThisRound) {
-            this.activeCurvesInThisRound[curve].draw(Kurve.Field.ctx);
-            this.activeCurvesInThisRound[curve].moveToNextFrame();
-            this.activeCurvesInThisRound[curve].checkForCollision(Kurve.Field.ctx);
+        for (var curve in this.runningCurves) {
+            this.runningCurves[curve].draw(Kurve.Field.ctx);
+            this.runningCurves[curve].moveToNextFrame();
+            this.runningCurves[curve].checkForCollision(Kurve.Field.ctx);
         }
         
         var executionTime = new Date().getTime() / 1000 - start;
@@ -72,7 +72,6 @@ Kurve.Game = {
     
     renderPlayerScores: function() {
         var playerHTML = '';
-        console.log(this.players);
         var sortArray = [];
         
         for (var i in this.players) {
@@ -80,15 +79,10 @@ Kurve.Game = {
         }
         
         sortArray.sort(function(a,b) {
-            console.log("playa " + a.points);
             return b.points - a.points;
         });
         
-        console.log('sorted:');
-        console.log(sortArray);
-        
         for (var i in sortArray) {
-            console.log(i);
             playerHTML += sortArray[i].renderScoreItem();
         }
         
@@ -104,16 +98,14 @@ Kurve.Game = {
     },
     
     notifyDeath: function(curve) {
-        console.log('notify Death');
-        delete this.activeCurvesInThisRound[curve.player.id];
+        delete this.runningCurves[curve.player.id];
         var everyBodyDied = true;
         
-        for (var i in this.activeCurvesInThisRound) {
-            console.log('pont++');
-            this.activeCurvesInThisRound[i].player.points += 1;
+        for (var i in this.runningCurves) {
+            this.runningCurves[i].player.points += 1;
             everyBodyDied = false;
         }
-        console.log(this.activeCurvesInThisRound.length);
+        
         this.renderPlayerScores();
         
         //should be everybody but one!
@@ -129,17 +121,16 @@ Kurve.Game = {
     initRun: function() {
         for (var i in this.curves) {
             var curve = this.curves[i];
-            this.activeCurvesInThisRound[curve.player.id] = curve;
+            this.runningCurves[curve.player.id] = curve;
         }
         
-        for (var curve in this.activeCurvesInThisRound) {
-            this.activeCurvesInThisRound[curve].moveToNextFrame();
-            this.activeCurvesInThisRound[curve].draw(Kurve.Field.ctx);
+        for (var curve in this.runningCurves) {
+            this.runningCurves[curve].moveToNextFrame();
+            this.runningCurves[curve].draw(Kurve.Field.ctx);
         }
     },
     
     terminateRound: function() {
-        console.log('terminateRound');
         this.running = false;
         clearInterval(this.runIntervalID);
     }         

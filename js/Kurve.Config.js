@@ -3,7 +3,7 @@
 Kurve.Config = {
     
     Field: {
-        borderColor:    "#eee",
+        borderColor:    "#ddd",
         width:          0.7,    //70% percent of the screen
     },
     

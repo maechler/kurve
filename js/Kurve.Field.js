@@ -2,8 +2,8 @@
 
 Kurve.Field = {
     
-    canvas:     null,
-    ctx:        null,
+    canvas: null,
+    ctx:    null,
     
     init: function() {
         this.initCanvas();
@@ -12,7 +12,7 @@ Kurve.Field = {
     },
         
     initCanvas: function() {
-        this.canvas         = document.getElementById("canvas");
+        this.canvas         = document.getElementById("field");
     },
     
     initContext: function() {
@@ -45,8 +45,8 @@ Kurve.Field = {
         var fieldWidth = this.canvas.width;
         var fieldHeight = this.canvas.height;
         
-        var posX = borderPadding + (fieldWidth - 2*borderPadding)*Math.random();
-        var posY = borderPadding + (fieldHeight - 2*borderPadding)*Math.random();
+        var posX = borderPadding + Math.round( (fieldWidth - 2*borderPadding)*Math.random() );
+        var posY = borderPadding + Math.round( (fieldHeight - 2*borderPadding)*Math.random() );
         
         return {posX:posX,posY:posY};
     }
