@@ -34,12 +34,12 @@ Kurve.Menu = {
         
         for (var player in Kurve.players) {
             if ( Kurve.players[player].isKeyLeft(event.keyCode) ) {
-                var playerID = Kurve.players[player].id;
+                var playerID = Kurve.players[player].getId();
                 var className = 'active';
                 Kurve.players[playerID].isActive = true;
                 break;
             } else if (Kurve.players[player].isKeyRight(event.keyCode)) {
-                var playerID = Kurve.players[player].id;
+                var playerID = Kurve.players[player].getId();
                 var className = 'inactive';
                 Kurve.players[player].isActive = false;
                 break;
@@ -60,12 +60,11 @@ Kurve.Menu = {
     },
     
     onSpacePress: function() {
-        Kurve.Game.curves = [];
         for (var player in Kurve.players) {
             if (!Kurve.players[player].isActive) continue;
             
             Kurve.Game.curves.push(
-                new Kurve.Curve(Kurve.players[player], Kurve.Field, Kurve.Game, Kurve.Config)
+                new Kurve.Curve(Kurve.players[player], Kurve.Field, Kurve.Game, Kurve.Config.Curve)
             );
         }
         if (Kurve.Game.curves.length === 0) return;

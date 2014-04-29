@@ -79,7 +79,7 @@ Kurve.Game = {
         }
         
         sortArray.sort(function(a,b) {
-            return b.points - a.points;
+            return b.getPoints() - a.getPoints();
         });
         
         for (var i in sortArray) {
@@ -93,16 +93,16 @@ Kurve.Game = {
         for (var i in Kurve.players) {
             if (!Kurve.players[i].isActive) continue;
             
-            this.players[Kurve.players[i].id] = Kurve.players[i];
+            this.players[Kurve.players[i].getId()] = Kurve.players[i];
         }
     },
     
     notifyDeath: function(curve) {
-        delete this.runningCurves[curve.player.id];
+        delete this.runningCurves[curve.getPlayer().getId()];
         var everyBodyDied = true;
         
         for (var i in this.runningCurves) {
-            this.runningCurves[i].player.points += 1;
+            this.runningCurves[i].getPlayer().incrementPoints();
             everyBodyDied = false;
         }
         
@@ -119,9 +119,10 @@ Kurve.Game = {
     },
     
     initRun: function() {
+        console.log(this.runningCurves);
         for (var i in this.curves) {
             var curve = this.curves[i];
-            this.runningCurves[curve.player.id] = curve;
+            this.runningCurves[curve.getPlayer().getId()] = curve;
         }
         
         for (var curve in this.runningCurves) {

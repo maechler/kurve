@@ -1,40 +1,66 @@
 "use strict";
 
 Kurve.Player = function(id, color, keyLeft, keyRight) {
-    this.id         = id;
-    this.color      = color;
-    this.keyLeft    = keyLeft;
-    this.keyRight   = keyRight;
-    
+    var points      = 0;
     this.isActive   = false;
-    this.points     = 0;
     
-    this.renderMenuItem = function() {
-        var menuItemHTML    = '<div id="' + this.id + '" class="player inactive ' + this.id +'">';
-        menuItemHTML       +=      '<div class="title"><h2>' + this.id + '</h2></div>'
-        menuItemHTML       +=      '<div class="keys">' + String.fromCharCode(this.keyLeft) + ' + ' + String.fromCharCode(this.keyRight) + '</div>';
-        menuItemHTML       +=      '<div class="clear"></div>';
-        menuItemHTML       += '</div>';
-        
-        return menuItemHTML;
+    this.incrementPoints = function() {
+        points++;
     };
     
-    this.renderScoreItem = function() {
-        var scoreItemHTML   = '<div>';
-        scoreItemHTML      +=      '<div class="title active ' + this.id + '"><h2>' + this.id + '</h2></div>'
-        scoreItemHTML      +=      '<div>' + this.points + '</div>';
-        scoreItemHTML      += '</div>';
-        
-        return scoreItemHTML;
+    this.getPoints = function() {
+        return points;
     };
     
-    this.isKeyRight = function(keyCode) {
-        return this.keyRight === keyCode;
+    this.getId = function() {
+        return id;
     };
     
-    this.isKeyLeft = function(keyCode) {
-        return this.keyLeft === keyCode;
+    this.getColor = function() {
+        return color;
+    };
+    
+    this.getKeyLeft = function() {
+        return keyLeft;
+    };
+    
+    this.getKeyRight = function() {
+        return keyRight;
     };
     
 };
 
+Kurve.Player.prototype.renderMenuItem = function() {
+    var menuItemHTML    = '<div id="' + this.getId() + '" class="player inactive ' + this.getId() +'">';
+    menuItemHTML       +=      '<div class="title"><h2>' + this.getId() + '</h2></div>';
+    menuItemHTML       +=      '<div class="keys">' + this.getLeftKeyChar() + ' + ' + this.getRightKeyChar() + '</div>';
+    menuItemHTML       +=      '<div class="clear"></div>';
+    menuItemHTML       += '</div>';
+
+    return menuItemHTML;
+};
+
+Kurve.Player.prototype.renderScoreItem = function() {
+    var scoreItemHTML   = '<div>';
+    scoreItemHTML      +=      '<div class="title active ' + this.getId() + '"><h2>' + this.getId() + '</h2></div>';
+    scoreItemHTML      +=      '<div>' + this.getPoints() + '</div>';
+    scoreItemHTML      += '</div>';
+
+    return scoreItemHTML;
+};
+
+Kurve.Player.prototype.isKeyRight = function(keyCode) {
+    return this.getKeyRight() === keyCode;
+};
+    
+Kurve.Player.prototype.isKeyLeft = function(keyCode) {
+    return this.getKeyLeft() === keyCode;
+};
+
+Kurve.Player.prototype.getLeftKeyChar = function() {
+    return String.fromCharCode(this.getKeyLeft());
+};
+
+Kurve.Player.prototype.getRightKeyChar = function() {
+    return String.fromCharCode(this.getKeyRight());
+};

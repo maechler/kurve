@@ -1,48 +1,48 @@
 "use strict";
 
+/**
+ * @todo
+ * set functions in prototype
+ */
+
 Kurve.Curve = function(player, field, game, config) {
-    this.player         = player;
-    this.field          = field;
-    this.game           = game;
-    this.config         = config;
-    
     this.isAlive        = true;
 
-    var randomPosition  = this.field.getRandomPosition();
-    this.posX           = randomPosition.posX;
-    this.posY           = randomPosition.posY;
-    this.nextPosX       = randomPosition.posX;
-    this.nextPosY       = randomPosition.posY;
+    var randomPosition  = field.getRandomPosition();
+    var posX            = randomPosition.posX;
+    var posY            = randomPosition.posY;
+    var nextPosX        = randomPosition.posX;
+    var nextPosY        = randomPosition.posY;
 
-    this.stepLength     = 3;
-    this.lineWidth      = 4;
-    this.angle          = 5*Math.random();
-    this.dAngle         = 0.08;
-    this.holeInterval   = 150;
-    this.holeCount      = this.holeInterval;
-
+    var stepLength      = config.stepLength; 
+    var lineWidth       = config.lineWidth;
+    var angle           = config.angle;
+    var dAngle          = config.dAngle;
+    var holeInterval    = config.holeInterval;
+    var holeCount       = config.holeCount;
+    
     this.draw = function(ctx) {
-        this.holeCount--;
+        holeCount--;
         
         ctx.beginPath();
         ctx.globalAlpha = 1;    
        
-        if (this.holeCount < 0) {
+        if (holeCount < 0) {
             ctx.globalAlpha = 0;
-            if (this.holeCount < -1) this.holeCount = this.holeInterval; 
+            if (holeCount < -1) holeCount = holeInterval; 
         }  
 
-        ctx.strokeStyle = this.player.color;        
-        ctx.lineWidth   = this.lineWidth;
+        ctx.strokeStyle = player.getColor();        
+        ctx.lineWidth   = lineWidth;
         
-        ctx.moveTo(this.posX, this.posY);
-        ctx.lineTo(this.nextPosX, this.nextPosY);
+        ctx.moveTo(posX, posY);
+        ctx.lineTo(nextPosX, nextPosY);
         
         ctx.stroke();
     };
 
     this.checkForCollision = function(ctx) {
-        if (this.isCollided(this.nextPosX, this.nextPosY, ctx)) {
+        if (this.isCollided(nextPosX, nextPosY, ctx)) {
             this.die(ctx);
         }
     };
@@ -50,25 +50,28 @@ Kurve.Curve = function(player, field, game, config) {
     this.die = function(ctx) {
         this.draw(ctx);
         this.isAlive = false;
-        this.game.notifyDeath(this);
-    };
-    
-        //getImageData of entire field just once save in Game or so for performance reasons!!!
-    this.isCollided = function(posX, posY, ctx) {
-        return ctx.getImageData(posX, posY, 1, 1).data[3] !== 0;
+        game.notifyDeath(this);
     };
 
     this.moveToNextFrame = function() {
-        if ( this.game.isKeyPressed(this.player.keyRight) ) {
-            this.angle += this.dAngle;
-        } else if ( this.game.isKeyPressed(this.player.keyLeft) ) {
-            this.angle -= this.dAngle;
+        if ( game.isKeyPressed(player.getKeyRight()) ) {
+            angle += dAngle;
+        } else if ( game.isKeyPressed(player.getKeyLeft()) ) {
+            angle -= dAngle;
         }
         
-        this.posX       = this.nextPosX;
-        this.posY       = this.nextPosY;
-        this.nextPosX  += this.stepLength * Math.cos(this.angle);
-        this.nextPosY  += this.stepLength * Math.sin(this.angle);
+        posX       = nextPosX;
+        posY       = nextPosY;
+        nextPosX  += stepLength * Math.cos(angle);
+        nextPosY  += stepLength * Math.sin(angle);
+    };
+    
+    this.getPlayer = function() {
+        return player;
     };
 
+};
+
+Kurve.Curve.prototype.isCollided = function(posX, posY, ctx) {
+    return ctx.getImageData(posX, posY, 1, 1).data[3] !== 0;
 };
