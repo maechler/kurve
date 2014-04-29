@@ -1,10 +1,5 @@
 "use strict";
 
-/**
- * @todo
- * set functions in prototype
- */
-
 Kurve.Curve = function(player, field, game, config) {
     this.isAlive        = true;
 
@@ -19,17 +14,17 @@ Kurve.Curve = function(player, field, game, config) {
     var angle           = config.angle;
     var dAngle          = config.dAngle;
     var holeInterval    = config.holeInterval;
-    var holeCount       = config.holeCount;
+    var holeCountDown   = config.holeCountDown;
     
     this.draw = function(ctx) {
-        holeCount--;
+        holeCountDown--;
         
         ctx.beginPath();
         ctx.globalAlpha = 1;    
        
-        if (holeCount < 0) {
+        if (holeCountDown < 0) {
             ctx.globalAlpha = 0;
-            if (holeCount < -1) holeCount = holeInterval; 
+            if (holeCountDown < -1) holeCountDown = holeInterval; 
         }  
 
         ctx.strokeStyle = player.getColor();        

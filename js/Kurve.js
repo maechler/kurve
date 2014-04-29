@@ -6,7 +6,6 @@ var Kurve = {
     
     init: function() {
         this.initPlayers();
-        
         this.Field.init();
         this.Menu.init();
         this.Game.init();

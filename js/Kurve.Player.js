@@ -33,7 +33,7 @@ Kurve.Player = function(id, color, keyLeft, keyRight) {
 Kurve.Player.prototype.renderMenuItem = function() {
     var menuItemHTML    = '<div id="' + this.getId() + '" class="player inactive ' + this.getId() +'">';
     menuItemHTML       +=      '<div class="title"><h2>' + this.getId() + '</h2></div>';
-    menuItemHTML       +=      '<div class="keys">' + this.getLeftKeyChar() + ' + ' + this.getRightKeyChar() + '</div>';
+    menuItemHTML       +=      '<div class="keys">' + this.getKeyLeftChar() + ' + ' + this.getKeyRightChar() + '</div>';
     menuItemHTML       +=      '<div class="clear"></div>';
     menuItemHTML       += '</div>';
 
@@ -57,10 +57,10 @@ Kurve.Player.prototype.isKeyLeft = function(keyCode) {
     return this.getKeyLeft() === keyCode;
 };
 
-Kurve.Player.prototype.getLeftKeyChar = function() {
+Kurve.Player.prototype.getKeyLeftChar = function() {
     return String.fromCharCode(this.getKeyLeft());
 };
 
-Kurve.Player.prototype.getRightKeyChar = function() {
+Kurve.Player.prototype.getKeyRightChar = function() {
     return String.fromCharCode(this.getKeyRight());
 };

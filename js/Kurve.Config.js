@@ -13,7 +13,7 @@ Kurve.Config = {
         angle:          5*Math.random(),
         dAngle:         0.08,
         holeInterval:   150,
-        holeCount:      150,
+        holeCountDown:  150,
     },
     
     players: [
