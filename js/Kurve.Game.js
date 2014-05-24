@@ -1,5 +1,10 @@
 "use strict";
 
+/**
+ * 
+ * @todo refactor methods! implement round feature!
+ */
+
 Kurve.Game = {    
     
     runIntervalID:      null,
@@ -18,19 +23,12 @@ Kurve.Game = {
     },
     
     run: function() {
-        var start = new Date().getTime() / 1000;
-        
         this.imageData = Kurve.Field.getFieldData();
 
         for (var curve in this.runningCurves) {
             this.runningCurves[curve].draw(Kurve.Field.ctx);
             this.runningCurves[curve].moveToNextFrame();
             this.runningCurves[curve].checkForCollision(Kurve.Field.ctx);
-        }
-        
-        var executionTime = new Date().getTime() / 1000 - start;
-        if (executionTime > this.intervalTimeOut / 1000) {
-            console.log('Interval limit exceeded: ' + executionTime);
         }
     },
     

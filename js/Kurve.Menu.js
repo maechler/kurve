@@ -1,5 +1,10 @@
 "use strict";
 
+/**
+ * 
+ * @todo refactor methods!
+ */
+
 Kurve.Menu = {
     
     init: function() {

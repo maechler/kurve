@@ -17,21 +17,22 @@ Kurve.Curve = function(player, field, game, config) {
     var holeCountDown   = config.holeCountDown;
     
     this.draw = function(ctx) {
-        holeCountDown--;
-        
-        ctx.beginPath();
-        ctx.globalAlpha = 1;    
-       
-        if (holeCountDown < 0) {
-            ctx.globalAlpha = 0;
-            if (holeCountDown < -1) holeCountDown = holeInterval; 
-        }  
+        ctx.beginPath();    
 
         ctx.strokeStyle = player.getColor();        
         ctx.lineWidth   = lineWidth;
         
         ctx.moveTo(posX, posY);
         ctx.lineTo(nextPosX, nextPosY);
+       
+        if (holeCountDown < 0) {
+            ctx.globalAlpha = 0;
+            if (holeCountDown < -1) holeCountDown = holeInterval; 
+        } else {
+            ctx.globalAlpha = 1;    
+        } 
+        
+        holeCountDown--;  
         
         ctx.stroke();
     };
@@ -40,6 +41,15 @@ Kurve.Curve = function(player, field, game, config) {
         if (this.isCollided(nextPosX, nextPosY, ctx)) {
             this.die(ctx);
         }
+    };
+    
+    this.isCollided = function(nextPosX, nextPosY, ctx) {
+        var imageData = game.imageData.data;
+        var width     = game.imageData.width;
+        
+        var dataPos   = ((Math.round(nextPosY) - 1) * width + Math.round(nextPosX)) * 4;
+        
+        return imageData[dataPos] !== 0;
     };
     
     this.die = function(ctx) {
@@ -59,14 +69,12 @@ Kurve.Curve = function(player, field, game, config) {
         posY       = nextPosY;
         nextPosX  += stepLength * Math.cos(angle);
         nextPosY  += stepLength * Math.sin(angle);
+        nextPosX   = Kurve.Utility.round(nextPosX, 1);
+        nextPosY   = Kurve.Utility.round(nextPosY, 1);
     };
     
     this.getPlayer = function() {
         return player;
     };
 
-};
-
-Kurve.Curve.prototype.isCollided = function(posX, posY, ctx) {
-    return ctx.getImageData(posX, posY, 1, 1).data[3] !== 0;
 };
