@@ -2,7 +2,7 @@
 
 var Kurve = {    
     
-    players: [],
+    players: {},
     
     init: function() {
         this.initPlayers();
@@ -12,10 +12,9 @@ var Kurve = {
     },
         
     initPlayers: function() {
-        for (var i in Kurve.Config.players) {
-            var player = Kurve.Config.players[i];
-            this.players[player.id] = new Kurve.Player(player.id,player.color,player.keyLeft,player.keyRight);
-        }
+        Kurve.Config.players.forEach(function(player) {
+            Kurve.players[player.id] = new Kurve.Player(player.id, player.color, player.keyLeft, player.keyRight);
+        });
     }
 
 };

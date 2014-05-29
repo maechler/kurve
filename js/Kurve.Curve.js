@@ -59,9 +59,9 @@ Kurve.Curve = function(player, field, game, config) {
     };
 
     this.moveToNextFrame = function() {
-        if ( game.isKeyPressed(player.getKeyRight()) ) {
+        if ( game.isKeyDown(player.getKeyRight()) ) {
             angle += dAngle;
-        } else if ( game.isKeyPressed(player.getKeyLeft()) ) {
+        } else if ( game.isKeyDown(player.getKeyLeft()) ) {
             angle -= dAngle;
         }
         

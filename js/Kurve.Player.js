@@ -8,25 +8,11 @@ Kurve.Player = function(id, color, keyLeft, keyRight) {
         points++;
     };
     
-    this.getPoints = function() {
-        return points;
-    };
-    
-    this.getId = function() {
-        return id;
-    };
-    
-    this.getColor = function() {
-        return color;
-    };
-    
-    this.getKeyLeft = function() {
-        return keyLeft;
-    };
-    
-    this.getKeyRight = function() {
-        return keyRight;
-    };
+    this.getPoints      = function() { return points; };   
+    this.getId          = function() { return id; };
+    this.getColor       = function() { return color; };
+    this.getKeyLeft     = function() { return keyLeft; };
+    this.getKeyRight    = function() { return keyRight; };
     
 };
 

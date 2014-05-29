@@ -24,47 +24,41 @@ Kurve.Menu = {
     
     addWindowListeners: function() {
         window.addEventListener('keydown', this.onKeyDown.bind(this), false);
-        window.addEventListener('keyup', this.onKeyUp.bind(this), false); 
     },
     
     removeWindowListeners: function() {
-        window.removeEventListener('keydown', this.onKeyDown, false);
-        window.removeEventListener('keyup', this.onKeyUp, false);       
+        window.removeEventListener('keydown', this.onKeyDown, false);  
     },
     
     onKeyDown: function(event) {
         if (event.keyCode===32) {
-            this.onSpacePress();
+            this.onSpaceDown();
         }
         
         for (var player in Kurve.players) {
             if ( Kurve.players[player].isKeyLeft(event.keyCode) ) {
-                var playerID = Kurve.players[player].getId();
-                var className = 'active';
-                Kurve.players[playerID].isActive = true;
+                var playerId    = Kurve.players[player].getId();
+                var className   = 'active';
+                Kurve.players[playerId].isActive = true;
+                
                 break;
             } else if (Kurve.players[player].isKeyRight(event.keyCode)) {
-                var playerID = Kurve.players[player].getId();
-                var className = 'inactive';
+                var playerId    = Kurve.players[player].getId();
+                var className   = 'inactive';
                 Kurve.players[player].isActive = false;
+                
                 break;
             }
         }
                 
-        if (playerID !== undefined) {
-            var playerElement = document.getElementById(playerID);
-            playerElement.className = playerElement.className.replace('inactive','');
-            playerElement.className = playerElement.className.replace('active','');
-            playerElement.className = playerElement.className.replace('  ', ' ');
-            playerElement.className += ' ' + className;
+        if (playerId !== undefined && className !== undefined) {
+            Kurve.Utility.removeClass('inactive', playerId);
+            Kurve.Utility.removeClass('active', playerId);
+            Kurve.Utility.addClass(className, playerId);
         }
     },
     
-    onKeyUp: function(event) {
-        
-    },
-    
-    onSpacePress: function() {
+    onSpaceDown: function() {
         for (var player in Kurve.players) {
             if (!Kurve.players[player].isActive) continue;
             
@@ -72,12 +66,13 @@ Kurve.Menu = {
                 new Kurve.Curve(Kurve.players[player], Kurve.Field, Kurve.Game, Kurve.Config.Curve)
             );
         }
+        
         if (Kurve.Game.curves.length === 0) return;
         
-        document.getElementById('menu').className = 'hidden';
-        document.getElementById('field').className = '';
-        var contentRight = document.getElementById('content-right');
-        contentRight.className = contentRight.className.replace(' hidden', '');
+        Kurve.Utility.addClass('hidden', 'menu');
+        Kurve.Utility.removeClass('hidden', 'field');
+        Kurve.Utility.removeClass('hidden', 'content-right');
+        
         Kurve.Game.startGame();
     }
     

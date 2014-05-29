@@ -11,7 +11,7 @@ Kurve.Game = {
     framesPerSecond:    25,
     intervalTimeOut:    null,
         
-    keysPressed:        {},
+    keysDown:           {},
     running:            false,
     curves:             [],
     runningCurves:      [],
@@ -34,6 +34,7 @@ Kurve.Game = {
     
     addWindowListeners: function() {
         Kurve.Menu.removeWindowListeners();
+        
         window.addEventListener('keydown', this.onKeyDown.bind(this));
         window.addEventListener('keyup', this.onKeyUp.bind(this));  
     },
@@ -41,16 +42,15 @@ Kurve.Game = {
     onKeyDown: function(event) {
         if (event.keyCode === 32) this.onSpaceDown();
         
-        this.keysPressed[event.keyCode] = true;
+        this.keysDown[event.keyCode] = true;
     },
     
     onKeyUp: function(event) {
-        delete this.keysPressed[event.keyCode];
+        delete this.keysDown[event.keyCode];
     },
     
-    //refactor isKeyDown
-    isKeyPressed: function(keyCode) {
-        return this.keysPressed[keyCode] === true;
+    isKeyDown: function(keyCode) {
+        return this.keysDown[keyCode] === true;
     },
     
     onSpaceDown: function() {
@@ -65,7 +65,7 @@ Kurve.Game = {
         this.addWindowListeners();
         
         this.initRun();
-        setTimeout(Kurve.Game.startNewRound.bind(this), 2000);
+        setTimeout(Kurve.Game.startNewRound.bind(this), Kurve.Config.Game.startDelay);
     },
     
     renderPlayerScores: function() {
@@ -97,27 +97,24 @@ Kurve.Game = {
     
     notifyDeath: function(curve) {
         delete this.runningCurves[curve.getPlayer().getId()];
-        var everyBodyDied = true;
         
         for (var i in this.runningCurves) {
             this.runningCurves[i].getPlayer().incrementPoints();
-            everyBodyDied = false;
         }
         
         this.renderPlayerScores();
         
-        //should be everybody but one!
-        if (everyBodyDied) this.terminateRound();
+        if (Object.keys(this.runningCurves).length === 1) this.terminateRound();
     },
     
     startNewRound: function() {
         Kurve.Field.drawField();
+        
         this.running        = true;
         this.runIntervalID  = setInterval(this.run.bind(this), this.intervalTimeOut);
     },
     
     initRun: function() {
-        console.log(this.runningCurves);
         for (var i in this.curves) {
             var curve = this.curves[i];
             this.runningCurves[curve.getPlayer().getId()] = curve;

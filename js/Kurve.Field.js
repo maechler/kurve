@@ -42,11 +42,8 @@ Kurve.Field = {
     getRandomPosition: function(borderPadding) {
         if (borderPadding === undefined) borderPadding = 20;
         
-        var fieldWidth = this.canvas.width;
-        var fieldHeight = this.canvas.height;
-        
-        var posX = borderPadding + Math.round( (fieldWidth - 2*borderPadding)*Math.random() );
-        var posY = borderPadding + Math.round( (fieldHeight - 2*borderPadding)*Math.random() );
+        var posX = borderPadding + Math.round( (this.canvas.width - 2*borderPadding)*Math.random() );
+        var posY = borderPadding + Math.round( (this.canvas.height - 2*borderPadding)*Math.random() );
         
         return {posX:posX,posY:posY};
     }
