@@ -1,21 +1,17 @@
 "use strict";
 
-/**
- * 
- * @todo refactor methods! implement round feature!
- */
-
 Kurve.Game = {    
     
     runIntervalID:      null,
     framesPerSecond:    25,
     intervalTimeOut:    null,
+    maxPoints:          null,
         
     keysDown:           {},
     running:            false,
     curves:             [],
-    runningCurves:      [],
-    players:            [],
+    runningCurves:      {},
+    players:            {},
     imageData:          {},
     
     init: function() {
@@ -64,27 +60,30 @@ Kurve.Game = {
         this.renderPlayerScores();
         this.addWindowListeners();
         
-        this.initRun();
-        setTimeout(Kurve.Game.startNewRound.bind(this), Kurve.Config.Game.startDelay);
+        this.maxPoints = (this.curves.length - 1) * 10;
+        
+        this.startNewRound.bind(this);
     },
     
     renderPlayerScores: function() {
-        var playerHTML = '';
-        var sortArray = [];
+        var playerHTML  = '';
+        var sortArray   = [];
         
         for (var i in this.players) {
             sortArray.push(this.players[i]);
         }
         
-        sortArray.sort(function(a,b) {
-            return b.getPoints() - a.getPoints();
-        });
+        sortArray.sort(this.playerSorting);
         
         for (var i in sortArray) {
             playerHTML += sortArray[i].renderScoreItem();
         }
         
         document.getElementById('player-scores').innerHTML = playerHTML;
+    },
+    
+    playerSorting: function(playerA, playerB) {
+        return playerB.getPoints() - playerA.getPoints();
     },
     
     addPlayers: function() {
@@ -109,26 +108,39 @@ Kurve.Game = {
     
     startNewRound: function() {
         Kurve.Field.drawField();
+        this.initRun();
         
-        this.running        = true;
+        this.running = true;
+        
+        setTimeout(this.startRun.bind(this), Kurve.Config.Game.startDelay);
+    },
+    
+    startRun: function() {
         this.runIntervalID  = setInterval(this.run.bind(this), this.intervalTimeOut);
     },
     
     initRun: function() {
-        for (var i in this.curves) {
-            var curve = this.curves[i];
-            this.runningCurves[curve.getPlayer().getId()] = curve;
-        }
-        
-        for (var curve in this.runningCurves) {
-            this.runningCurves[curve].moveToNextFrame();
-            this.runningCurves[curve].draw(Kurve.Field.ctx);
-        }
+        this.curves.forEach(function(curve) {
+            Kurve.Game.runningCurves[curve.getPlayer().getId()] = curve;
+            
+            curve.setRandomPosition(Kurve.Field.getRandomPosition());
+            curve.drawPoint(Kurve.Field.ctx);
+            curve.moveToNextFrame();
+        });
     },
     
     terminateRound: function() {
         this.running = false;
         clearInterval(this.runIntervalID);
-    }         
+        this.runningCurves = {};
+        
+        for(var i in this.players) {
+            if (this.players[i].getPoints() >= this.maxPoints) this.gameOver(this.players[i]); 
+        }
+    },
+    
+    gameOver: function(player) {
+        alert("And the winner is: " + player.getId() + " !!!");
+    }
 
 };

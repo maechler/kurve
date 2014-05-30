@@ -1,13 +1,12 @@
 "use strict";
 
-Kurve.Curve = function(player, field, game, config) {
+Kurve.Curve = function(player, game, config) {
     this.isAlive        = true;
 
-    var randomPosition  = field.getRandomPosition();
-    var posX            = randomPosition.posX;
-    var posY            = randomPosition.posY;
-    var nextPosX        = randomPosition.posX;
-    var nextPosY        = randomPosition.posY;
+    var posX            = 0;
+    var posY            = 0;
+    var nextPosX        = 0;
+    var nextPosY        = 0;
 
     var stepLength      = config.stepLength; 
     var lineWidth       = config.lineWidth;
@@ -35,6 +34,15 @@ Kurve.Curve = function(player, field, game, config) {
         holeCountDown--;  
         
         ctx.stroke();
+    };
+    
+    this.drawPoint = function(ctx) {
+        ctx.beginPath();
+        
+        ctx.fillStyle = player.getColor();  
+        
+        ctx.arc(posX, posY, 2, 0, 2 * Math.PI, false);
+        ctx.fill();
     };
 
     this.checkForCollision = function(ctx) {
@@ -71,6 +79,13 @@ Kurve.Curve = function(player, field, game, config) {
         nextPosY  += stepLength * Math.sin(angle);
         nextPosX   = Kurve.Utility.round(nextPosX, 1);
         nextPosY   = Kurve.Utility.round(nextPosY, 1);
+    };
+    
+    this.setRandomPosition = function(randomPosition) {
+        posX        = randomPosition.posX;
+        posY        = randomPosition.posY;
+        nextPosX    = randomPosition.posX;
+        nextPosY    = randomPosition.posY;
     };
     
     this.getPlayer = function() {

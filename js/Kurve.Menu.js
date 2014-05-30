@@ -7,6 +7,8 @@
 
 Kurve.Menu = {
     
+    boundKeyDown: null,
+    
     init: function() {
         this.initPlayerMenu();
         this.addWindowListeners();
@@ -23,16 +25,17 @@ Kurve.Menu = {
     },
     
     addWindowListeners: function() {
-        window.addEventListener('keydown', this.onKeyDown.bind(this), false);
+        this.boundKeyDown = this.onKeyDown.bind(this);
+        window.addEventListener('keydown', this.boundKeyDown, false);
     },
     
     removeWindowListeners: function() {
-        window.removeEventListener('keydown', this.onKeyDown, false);  
+        window.removeEventListener('keydown', this.boundKeyDown, false);  
     },
     
     onKeyDown: function(event) {
-        if (event.keyCode===32) {
-            this.onSpaceDown();
+        if (event.keyCode === 32) {
+            Kurve.Menu.onSpaceDown();
         }
         
         for (var player in Kurve.players) {
@@ -63,7 +66,7 @@ Kurve.Menu = {
             if (!Kurve.players[player].isActive) continue;
             
             Kurve.Game.curves.push(
-                new Kurve.Curve(Kurve.players[player], Kurve.Field, Kurve.Game, Kurve.Config.Curve)
+                new Kurve.Curve(Kurve.players[player], Kurve.Game, Kurve.Config.Curve)
             );
         }
         
