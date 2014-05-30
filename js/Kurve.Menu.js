@@ -77,6 +77,10 @@ Kurve.Menu = {
         Kurve.Utility.removeClass('hidden', 'content-right');
         
         Kurve.Game.startGame();
+    },
+    
+    requestFullScreen: function() {
+        window.document.getElementById('content').webkitRequestFullScreen();   
     }
     
 };
