@@ -82,8 +82,5 @@ Kurve.Curve = function(player, game, config) {
         nextPosY    = randomPosition.posY;
     };
     
-    this.getPlayer = function() {
-        return player;
-    };
-
+    this.getPlayer = function() { return player; };
 };

@@ -11,7 +11,7 @@ Kurve.Game = {
     running:            false,
     curves:             [],
     runningCurves:      {},
-    players:            {},
+    players:            [],
     imageData:          {},
     
     init: function() {
@@ -21,10 +21,10 @@ Kurve.Game = {
     run: function() {
         this.imageData = Kurve.Field.getFieldData();
 
-        for (var curve in this.runningCurves) {
-            this.runningCurves[curve].draw(Kurve.Field.ctx);
-            this.runningCurves[curve].moveToNextFrame();
-            this.runningCurves[curve].checkForCollision(Kurve.Field.ctx);
+        for (var i in this.runningCurves) {
+            this.runningCurves[i].draw(Kurve.Field.ctx);
+            this.runningCurves[i].moveToNextFrame();
+            this.runningCurves[i].checkForCollision(Kurve.Field.ctx);
         }
     },
     
@@ -59,19 +59,17 @@ Kurve.Game = {
         this.maxPoints = (this.curves.length - 1) * 10;
         
         this.addPlayers();
-        this.renderPlayerScores();
         this.addWindowListeners();
+        this.renderPlayerScores();
+        
         this.startNewRound.bind(this);
     },
     
     renderPlayerScores: function() {
-        var playerHTML      = '';
-        var sortedPlayers   = [];
+        var playerHTML  = '';
         
-        for (var i in this.players) sortedPlayers.push(this.players[i]);
-        sortedPlayers.sort(this.playerSorting);
-        
-        for (var i in sortedPlayers) playerHTML += sortedPlayers[i].renderScoreItem();
+        this.players.sort(this.playerSorting);
+        this.players.forEach(function(player) { playerHTML += player.renderScoreItem() });
         
         document.getElementById('player-scores').innerHTML = playerHTML;
     },
@@ -81,11 +79,9 @@ Kurve.Game = {
     },
     
     addPlayers: function() {
-        for (var i in Kurve.players) {
-            if ( !Kurve.players[i].isActive ) continue;
-            
-            this.players[Kurve.players[i].getId()] = Kurve.players[i];
-        }
+        Kurve.Game.curves.forEach(function(curve) {
+            Kurve.Game.players.push( curve.getPlayer() );
+        });
     },
     
     notifyDeath: function(curve) {
@@ -131,9 +127,9 @@ Kurve.Game = {
     },
     
     checkForWinner: function() {
-        for(var i in this.players) {
-            if (this.players[i].getPoints() >= this.maxPoints) this.gameOver(this.players[i]); 
-        }        
+        this.players.forEach(function(player) {
+            if (player.getPoints() >= Kurve.Game.maxPoints) Kurve.Game.gameOver(player); 
+        });     
     },
     
     gameOver: function(player) {

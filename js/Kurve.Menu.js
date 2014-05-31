@@ -12,9 +12,9 @@ Kurve.Menu = {
     initPlayerMenu: function() {
         var playerHTML = '';
         
-        for (var i in Kurve.players) {
-            playerHTML += Kurve.players[i].renderMenuItem();
-        }
+        Kurve.players.forEach(function(player) {
+            playerHTML += player.renderMenuItem();
+        });
         
         document.getElementById('menu-players').innerHTML += playerHTML;
     },
@@ -29,26 +29,23 @@ Kurve.Menu = {
     },
     
     onKeyDown: function(event) {
-        if (event.keyCode === 32) {
-            Kurve.Menu.onSpaceDown();
-        }
+        if (event.keyCode === 32)  Kurve.Menu.onSpaceDown();
+        var playerId    = '';
+        var className   = '';
         
-        for (var player in Kurve.players) {
-            if ( Kurve.players[player].isKeyLeft(event.keyCode) ) {
-                var playerId    = Kurve.players[player].getId();
-                var className   = 'active';
-                Kurve.players[playerId].isActive = true;
+        Kurve.players.forEach(function(player) {
+            if ( player.isKeyLeft(event.keyCode) ) {
+                playerId        = player.getId();
+                className       = 'active';
+                player.isActive = true;
                 
-                break;
-            } else if (Kurve.players[player].isKeyRight(event.keyCode)) {
-                var playerId    = Kurve.players[player].getId();
-                var className   = 'inactive';
-                Kurve.players[player].isActive = false;
-                
-                break;
-            }
-        }
-                
+            } else if ( player.isKeyRight(event.keyCode) ) {
+                playerId        = player.getId();
+                className       = 'inactive';
+                player.isActive = false;
+            }    
+        });
+        
         if (playerId !== undefined && className !== undefined) {
             Kurve.Utility.removeClass('inactive', playerId);
             Kurve.Utility.removeClass('active', playerId);
@@ -57,15 +54,15 @@ Kurve.Menu = {
     },
     
     onSpaceDown: function() {
-        for (var player in Kurve.players) {
-            if (!Kurve.players[player].isActive) continue;
-            
-            Kurve.Game.curves.push(
-                new Kurve.Curve(Kurve.players[player], Kurve.Game, Kurve.Config.Curve)
-            );
-        }
+        Kurve.players.forEach(function(player) {
+            if ( player.isActive ) {
+                Kurve.Game.curves.push(
+                    new Kurve.Curve(player, Kurve.Game, Kurve.Config.Curve)
+                );    
+            }
+        });
         
-        if (Kurve.Game.curves.length === 0) return;
+        if (Kurve.Game.curves.length === 0) return; //no players are ready
         
         Kurve.Utility.addClass('hidden', 'menu');
         Kurve.Utility.removeClass('hidden', 'field');

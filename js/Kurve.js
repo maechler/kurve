@@ -2,7 +2,7 @@
 
 var Kurve = {    
     
-    players: {},
+    players: [],
     
     init: function() {
         this.initPlayers();
@@ -13,7 +13,7 @@ var Kurve = {
         
     initPlayers: function() {
         Kurve.Config.players.forEach(function(player) {
-            Kurve.players[player.id] = new Kurve.Player(player.id, player.color, player.keyLeft, player.keyRight);
+            Kurve.players.push( new Kurve.Player(player.id, player.color, player.keyLeft, player.keyRight) );
         });
     }
 
