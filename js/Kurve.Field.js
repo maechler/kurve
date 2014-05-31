@@ -13,12 +13,12 @@ Kurve.Field = {
         
     initCanvas: function() {
         this.canvas         = document.getElementById("field");
+        this.canvas.width   = window.innerWidth * Kurve.Config.Field.width;
+        this.canvas.height  = window.innerHeight;
     },
     
     initContext: function() {
         this.ctx            = this.canvas.getContext("2d");
-        this.canvas.width   = window.innerWidth * Kurve.Config.Field.width;
-        this.canvas.height  = window.innerHeight;
     },
     
     initField: function() {
@@ -29,8 +29,8 @@ Kurve.Field = {
         this.ctx.strokeStyle    = Kurve.Config.Field.borderColor;
         this.ctx.lineWidth      = 3;
         
-        this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
-        this.ctx.rect(0,0,this.canvas.width,this.canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.rect(0, 0, this.canvas.width, this.canvas.height);
       
         this.ctx.stroke();
     },

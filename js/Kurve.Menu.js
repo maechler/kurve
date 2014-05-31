@@ -1,10 +1,5 @@
 "use strict";
 
-/**
- * 
- * @todo refactor methods!
- */
-
 Kurve.Menu = {
     
     boundKeyDown: null,
@@ -80,7 +75,7 @@ Kurve.Menu = {
     },
     
     requestFullScreen: function() {
-        window.document.getElementById('content').webkitRequestFullScreen();   
+        window.document.getElementById('content').requestFullScreen();   
     }
     
 };

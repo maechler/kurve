@@ -38,31 +38,25 @@ Kurve.Curve = function(player, game, config) {
     
     this.drawPoint = function(ctx) {
         ctx.beginPath();
-        
         ctx.fillStyle = player.getColor();  
-        
         ctx.arc(posX, posY, 2, 0, 2 * Math.PI, false);
         ctx.fill();
     };
 
     this.checkForCollision = function(ctx) {
-        if (this.isCollided(nextPosX, nextPosY, ctx)) {
-            this.die(ctx);
-        }
+        if ( this.isCollided(nextPosX, nextPosY) ) this.die(ctx);
     };
     
-    this.isCollided = function(nextPosX, nextPosY, ctx) {
-        var imageData = game.imageData.data;
-        var width     = game.imageData.width;
+    this.isCollided = function(nextPosX, nextPosY) {
+        var nextPixelAlphaPosition = ( (Math.round(nextPosY) - 1) * game.imageData.width + Math.round(nextPosX) ) * 4;
         
-        var dataPos   = ((Math.round(nextPosY) - 1) * width + Math.round(nextPosX)) * 4;
-        
-        return imageData[dataPos] !== 0;
+        return game.imageData.data[nextPixelAlphaPosition] !== 0;
     };
     
     this.die = function(ctx) {
-        this.draw(ctx);
         this.isAlive = false;
+        
+        this.draw(ctx);
         game.notifyDeath(this);
     };
 

@@ -56,28 +56,22 @@ Kurve.Game = {
     },
     
     startGame: function() {
+        this.maxPoints = (this.curves.length - 1) * 10;
+        
         this.addPlayers();
         this.renderPlayerScores();
         this.addWindowListeners();
-        
-        this.maxPoints = (this.curves.length - 1) * 10;
-        
         this.startNewRound.bind(this);
     },
     
     renderPlayerScores: function() {
-        var playerHTML  = '';
-        var sortArray   = [];
+        var playerHTML      = '';
+        var sortedPlayers   = [];
         
-        for (var i in this.players) {
-            sortArray.push(this.players[i]);
-        }
+        for (var i in this.players) sortedPlayers.push(this.players[i]);
+        sortedPlayers.sort(this.playerSorting);
         
-        sortArray.sort(this.playerSorting);
-        
-        for (var i in sortArray) {
-            playerHTML += sortArray[i].renderScoreItem();
-        }
+        for (var i in sortedPlayers) playerHTML += sortedPlayers[i].renderScoreItem();
         
         document.getElementById('player-scores').innerHTML = playerHTML;
     },
@@ -88,7 +82,7 @@ Kurve.Game = {
     
     addPlayers: function() {
         for (var i in Kurve.players) {
-            if (!Kurve.players[i].isActive) continue;
+            if ( !Kurve.players[i].isActive ) continue;
             
             this.players[Kurve.players[i].getId()] = Kurve.players[i];
         }
@@ -103,15 +97,14 @@ Kurve.Game = {
         
         this.renderPlayerScores();
         
-        if (Object.keys(this.runningCurves).length === 1) this.terminateRound();
+        if ( Object.keys(this.runningCurves).length === 1 ) this.terminateRound();
     },
     
-    startNewRound: function() {
-        Kurve.Field.drawField();
-        this.initRun();
-        
+    startNewRound: function() {        
         this.running = true;
         
+        Kurve.Field.drawField();
+        this.initRun();
         setTimeout(this.startRun.bind(this), Kurve.Config.Game.startDelay);
     },
     
@@ -130,13 +123,17 @@ Kurve.Game = {
     },
     
     terminateRound: function() {
-        this.running = false;
-        clearInterval(this.runIntervalID);
-        this.runningCurves = {};
+        this.running        = false;
+        this.runningCurves  = {};
         
+        clearInterval(this.runIntervalID);
+        this.checkForWinner();
+    },
+    
+    checkForWinner: function() {
         for(var i in this.players) {
             if (this.players[i].getPoints() >= this.maxPoints) this.gameOver(this.players[i]); 
-        }
+        }        
     },
     
     gameOver: function(player) {
