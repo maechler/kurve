@@ -133,7 +133,10 @@ Kurve.Game = {
     },
     
     gameOver: function(player) {
-        alert("And the winner is: " + player.getId() + " !!!");
+        var winnerHTML   = '<h1 class="active ' + player.getId() + '">' + player.getId() + ' wins!</h1>';
+        winnerHTML      += '<a href="/">Start new game</a>';
+        
+        Kurve.Lightbox.show(winnerHTML);
     }
 
 };

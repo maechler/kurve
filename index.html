@@ -12,6 +12,7 @@
         <script type="text/javascript" src="js/KurveField.js"></script>
         <script type="text/javascript" src="js/KurveCurve.js"></script>
         <script type="text/javascript" src="js/KurvePlayer.js"></script>
+        <script type="text/javascript" src="js/KurveLightbox.js"></script>
         
         <link rel="stylesheet" href="css/styles.css" />
         <link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
@@ -32,6 +33,17 @@
                 <a href="#" onclick="Kurve.Menu.requestFullScreen()">go full screen</a> 
             </div>
             <div class="clear"></div>
+            <div id="lightbox-overlay" class="hidden">
+                <div id="lightbox-wrap">
+                    <table>
+                        <tr>
+                            <td>
+                                <div id="lightbox-content"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
         </div>
     </body>
 </html>

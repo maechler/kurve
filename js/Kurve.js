@@ -9,6 +9,7 @@ var Kurve = {
         this.Field.init();
         this.Menu.init();
         this.Game.init();
+        this.Lightbox.init();
     },
         
     initPlayers: function() {
