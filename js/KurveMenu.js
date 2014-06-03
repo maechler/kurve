@@ -46,7 +46,7 @@ Kurve.Menu = {
             }    
         });
         
-        if (playerId !== undefined && className !== undefined) {
+        if (playerId !== '' && className !== '') {
             Kurve.Utility.removeClass('inactive', playerId);
             Kurve.Utility.removeClass('active', playerId);
             Kurve.Utility.addClass(className, playerId);
