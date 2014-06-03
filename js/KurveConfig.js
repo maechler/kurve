@@ -10,7 +10,6 @@ Kurve.Config = {
     Curve: {
         stepLength:     3,
         lineWidth:      4,
-        angle:          5*Math.random(),
         dAngle:         0.08,
         holeInterval:   150,
         holeCountDown:  150,

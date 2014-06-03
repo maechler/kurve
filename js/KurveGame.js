@@ -113,6 +113,7 @@ Kurve.Game = {
             Kurve.Game.runningCurves[curve.getPlayer().getId()] = curve;
             
             curve.setRandomPosition(Kurve.Field.getRandomPosition());
+            curve.setRandomAngle();
             curve.drawPoint(Kurve.Field.ctx);
             curve.moveToNextFrame();
         });

@@ -10,7 +10,7 @@ Kurve.Curve = function(player, game, config) {
 
     var stepLength      = config.stepLength; 
     var lineWidth       = config.lineWidth;
-    var angle           = config.angle;
+    var angle           = 0;
     var dAngle          = config.dAngle;
     var holeInterval    = config.holeInterval;
     var holeCountDown   = config.holeCountDown;
@@ -80,6 +80,10 @@ Kurve.Curve = function(player, game, config) {
         posY        = randomPosition.posY;
         nextPosX    = randomPosition.posX;
         nextPosY    = randomPosition.posY;
+    };
+    
+    this.setRandomAngle = function() {
+        angle = 2*Math.PI*Math.random();
     };
     
     this.getPlayer = function() { return player; };
