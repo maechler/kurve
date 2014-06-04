@@ -100,8 +100,8 @@ canvas {
 }
 
 #content-right {
-    margin-left: 2%;
-    width: 28%;
+    margin: 2%;
+    width: 26%;
     float: left;
 }
 
@@ -135,4 +135,15 @@ canvas {
     text-align: left;
     max-width: 60%;
     margin: auto;
+}
+
+#player-scores .title {
+    float: left;
+    width: 180px;
+}
+
+#player-scores .points {
+    float: left;
+    font-size: 40px;
+    padding-top: 15px;
 }

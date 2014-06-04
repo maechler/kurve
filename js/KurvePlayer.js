@@ -27,9 +27,10 @@ Kurve.Player.prototype.renderMenuItem = function() {
 };
 
 Kurve.Player.prototype.renderScoreItem = function() {
-    var scoreItemHTML   = '<div>';
-    scoreItemHTML      +=      '<div class="title active ' + this.getId() + '"><h2>' + this.getId() + '</h2></div>';
-    scoreItemHTML      +=      '<div>' + this.getPoints() + '</div>';
+    var scoreItemHTML   = '<div class="active ' + this.getId() + '">';
+    scoreItemHTML      +=      '<div class="title"><h2>' + this.getId() + '</h2></div>';
+    scoreItemHTML      +=      '<div class="points">' + this.getPoints() + '</div>';
+    scoreItemHTML      +=      '<div class="clear"></div>';
     scoreItemHTML      += '</div>';
 
     return scoreItemHTML;
