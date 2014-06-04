@@ -14,6 +14,12 @@ Kurve.Lightbox = {
         Kurve.Utility.removeClass('hidden', 'lightbox-overlay')
         
         this.lightboxContent.innerHTML = htmlContent;
+    },
+    
+    hide: function() {
+        Kurve.Utility.addClass('hidden', 'lightbox-overlay')
+      
+        this.lightboxContent.innerHTML = '';
     }
     
 }; 
