@@ -13,6 +13,7 @@ Kurve.Game = {
     runningCurves:      {},
     players:            [],
     imageData:          {},
+    deathMatch:         false,
     
     init: function() {
         this.intervalTimeOut = Math.round(1000 / this.framesPerSecond);
@@ -128,9 +129,33 @@ Kurve.Game = {
     },
     
     checkForWinner: function() {
+        var winners = [];
+        
         this.players.forEach(function(player) {
-            if (player.getPoints() >= Kurve.Game.maxPoints) Kurve.Game.gameOver(player); 
-        });     
+            if (player.getPoints() >= Kurve.Game.maxPoints) winners.push(player); 
+        });
+        
+        if (winners.length === 0) return;
+        if (winners.length === 1) this.gameOver(winners[0]);
+        if (winners.length  >  1) this.startDeathMatch(winners);
+    },
+    
+    startDeathMatch: function(winners) {
+        this.deathMatch = true;
+        console.log('death match');
+        Kurve.Lightbox.show("DEATHMATCH!");
+        setTimeout(Kurve.Lightbox.hide.bind(Kurve.Lightbox), 3000);
+        
+        var winnerCurves = [];
+        this.curves.forEach(function(curve) {
+            winners.forEach(function(player){
+                if (curve.getPlayer() === player) winnerCurves.push(curve);
+            });
+        });
+        
+        this.curves = winnerCurves;
+        
+        this.startNewRound();
     },
     
     gameOver: function(player) {
