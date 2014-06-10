@@ -1,44 +1,45 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8" />
+        <meta charset='utf-8' />
         <title>Achtung, die Kurve!</title>
 
-        <script type="text/javascript" src="js/Kurve.js"></script>
-        <script type="text/javascript" src="js/KurveConfig.js"></script>
-        <script type="text/javascript" src="js/KurveUtility.js"></script>
-        <script type="text/javascript" src="js/KurveMenu.js"></script>
-        <script type="text/javascript" src="js/KurveGame.js"></script>
-        <script type="text/javascript" src="js/KurveField.js"></script>
-        <script type="text/javascript" src="js/KurveCurve.js"></script>
-        <script type="text/javascript" src="js/KurvePlayer.js"></script>
-        <script type="text/javascript" src="js/KurveLightbox.js"></script>
+        <script type='text/javascript' src='src/Kurve.js'></script>
+        <script type='text/javascript' src='src/KurveConfig.js'></script>
+        <script type='text/javascript' src='src/KurveUtility.js'></script>
+        <script type='text/javascript' src='src/KurveMenu.js'></script>
+        <script type='text/javascript' src='src/KurveGame.js'></script>
+        <script type='text/javascript' src='src/KurveField.js'></script>
+        <script type='text/javascript' src='src/KurveCurve.js'></script>
+        <script type='text/javascript' src='src/KurvePlayer.js'></script>
+        <script type='text/javascript' src='src/KurveLightbox.js'></script>
         
-        <link rel="stylesheet" href="css/styles.css" />
+        <link rel='icon' href='resources/images/favicon.ico' type='image/ico'>
+        <link rel='stylesheet' href='resources/css/styles.css' />
         <link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
     </head>
     <body>
-        <div id="content">
-            <div id="content-left" class="content">
-                <canvas id="field" class="hidden"></canvas>
-                <div id="menu">
+        <div id='content'>
+            <div id='content-left' class='content'>
+                <canvas id='field' class='hidden'></canvas>
+                <div id='menu'>
                     <h1>Achtung, die Kurve!</h1>
                     <h3>Choose players and hit <strong>SPACE</strong> to start the game.</h3>
-                    <div id="menu-players"></div>
+                    <div id='menu-players'></div>
                 </div>
             </div>
-            <div id="content-right" class="hidden">
-                <div id="player-scores"></div>
-                <a href="/">MENU</a>
-                <a href="#" onclick="Kurve.Menu.requestFullScreen()">go full screen</a> 
+            <div id='content-right' class='hidden'>
+                <div id='player-scores'></div>
+                <a href='/'>MENU</a>
+                <a href='#' onclick='Kurve.Menu.requestFullScreen()'>go full screen</a> 
             </div>
-            <div class="clear"></div>
-            <div id="lightbox-overlay" class="hidden">
-                <div id="lightbox-wrap">
+            <div class='clear'></div>
+            <div id='lightbox-overlay' class='hidden'>
+                <div id='lightbox-wrap'>
                     <table>
                         <tr>
                             <td>
-                                <div id="lightbox-content"></div>
+                                <div id='lightbox-content'></div>
                             </td>
                         </tr>
                     </table>
