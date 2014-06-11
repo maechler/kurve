@@ -57,7 +57,7 @@ Kurve.Menu = {
         Kurve.players.forEach(function(player) {
             if ( player.isActive ) {
                 Kurve.Game.curves.push(
-                    new Kurve.Curve(player, Kurve.Game, Kurve.Config.Curve)
+                    new Kurve.Curve(player, Kurve.Game, Kurve.Field, Kurve.Config.Curve)
                 );    
             }
         });
