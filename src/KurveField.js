@@ -48,11 +48,11 @@ Kurve.Field = {
     },
     
     addDrawnPixel: function(point) {
-        if ( this.drawnPixels[Kurve.Utility.round(point.getPosX(), 0)] === undefined) {
-            this.drawnPixels[Kurve.Utility.round(point.getPosX(), 0)] = [];  
+        if ( this.drawnPixels[u.round(point.getPosX(), 0)] === undefined) {
+            this.drawnPixels[u.round(point.getPosX(), 0)] = [];  
         } 
 
-        this.drawnPixels[Kurve.Utility.round(point.getPosX(), 0)][Kurve.Utility.round(point.getPosY(), 0)] = true;
+        this.drawnPixels[u.round(point.getPosX(), 0)][u.round(point.getPosY(), 0)] = true;
     },
     
     isPointOutOfBounds: function(point) {

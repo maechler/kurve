@@ -52,8 +52,8 @@ Kurve.Curve = function(player, game, field, config) {
     };
     
     this.isCollided = function(nextPosX, nextPosY) {
-        var posX = Kurve.Utility.round(nextPosX, 0);
-        var posY = Kurve.Utility.round(nextPosY, 0);
+        var posX = u.round(nextPosX, 0);
+        var posY = u.round(nextPosY, 0);
         
         var position = new Kurve.Point(posX, posY);
         
@@ -78,8 +78,8 @@ Kurve.Curve = function(player, game, field, config) {
         posY       = nextPosY;
         nextPosX  += stepLength * Math.cos(angle);
         nextPosY  += stepLength * Math.sin(angle);
-        nextPosX   = Kurve.Utility.round(nextPosX, 1);
-        nextPosY   = Kurve.Utility.round(nextPosY, 1);
+        nextPosX   = u.round(nextPosX, 1);
+        nextPosY   = u.round(nextPosY, 1);
     };
     
     this.addPointToTrace = function(point) {

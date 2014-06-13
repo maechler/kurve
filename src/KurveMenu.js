@@ -47,9 +47,9 @@ Kurve.Menu = {
         });
         
         if (playerId !== '' && className !== '') {
-            Kurve.Utility.removeClass('inactive', playerId);
-            Kurve.Utility.removeClass('active', playerId);
-            Kurve.Utility.addClass(className, playerId);
+            u.removeClass('inactive', playerId);
+            u.removeClass('active', playerId);
+            u.addClass(className, playerId);
         }
     },
     
@@ -64,9 +64,9 @@ Kurve.Menu = {
         
         if (Kurve.Game.curves.length === 0) return; //no players are ready
         
-        Kurve.Utility.addClass('hidden', 'menu');
-        Kurve.Utility.removeClass('hidden', 'field');
-        Kurve.Utility.removeClass('hidden', 'content-right');
+        u.addClass('hidden', 'menu');
+        u.removeClass('hidden', 'field');
+        u.removeClass('hidden', 'content-right');
         
         Kurve.Game.startGame();
     },
