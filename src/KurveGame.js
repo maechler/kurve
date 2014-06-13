@@ -19,18 +19,11 @@ Kurve.Game = {
     },
     
     run: function() {
-        if (this.running) requestAnimationFrame(this.drawFrame.bind(this));
+        requestAnimationFrame(this.drawFrame.bind(this));
     },
     
     drawFrame: function() {
-        for (var i in this.runningCurves) {
-            this.runningCurves[i].drawStep(Kurve.Field.ctx);
-            this.runningCurves[i].moveToNextFrame();
-            this.runningCurves[i].checkForCollision(Kurve.Field.ctx);
-            this.runningCurves[i].drawStep(Kurve.Field.ctx);
-            this.runningCurves[i].moveToNextFrame();
-            this.runningCurves[i].checkForCollision(Kurve.Field.ctx);
-        }
+        for (var i in this.runningCurves) this.runningCurves[i].drawNextFrame();
     },
     
     addWindowListeners: function() {
@@ -120,7 +113,6 @@ Kurve.Game = {
             curve.setRandomPosition(Kurve.Field.getRandomPosition());
             curve.setRandomAngle();
             curve.drawPoint(Kurve.Field.ctx);
-            curve.moveToNextFrame();
         });
     },
     

@@ -8,16 +8,16 @@ Kurve.Config = {
     },
     
     Curve: {
-        stepLength:     1,
+        stepLength:     3,
         lineWidth:      4,
-        dAngle:         0.03,
+        dAngle:         0.08,
         holeInterval:   150,
         holeCountDown:  150,
     },
     
     Game: {
         startDelay:     2000,
-        fps:      40
+        fps:            25
     },
     
     players: [

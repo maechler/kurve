@@ -48,6 +48,21 @@ Kurve.Field = {
     },
     
     addDrawnPixel: function(point) {
+        var posX = point.getPosX(0);
+        var posY = point.getPosY(0);
+        
+        this.addPointToDrawnPixel(new Kurve.Point(posX,     posY));
+        this.addPointToDrawnPixel(new Kurve.Point(posX + 1, posY));
+        this.addPointToDrawnPixel(new Kurve.Point(posX + 1, posY - 1));
+        this.addPointToDrawnPixel(new Kurve.Point(posX,     posY - 1));
+        this.addPointToDrawnPixel(new Kurve.Point(posX - 1, posY - 1));
+        this.addPointToDrawnPixel(new Kurve.Point(posX - 1, posY));
+        this.addPointToDrawnPixel(new Kurve.Point(posX - 1, posY + 1));
+        this.addPointToDrawnPixel(new Kurve.Point(posX,     posY + 1));
+        this.addPointToDrawnPixel(new Kurve.Point(posX + 1, posY + 1));
+    },
+    
+    addPointToDrawnPixel: function(point) {
         if ( this.drawnPixels[point.getPosX(0)] === undefined ) {
             this.drawnPixels[point.getPosX(0)] = [];  
         } 

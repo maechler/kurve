@@ -14,6 +14,12 @@ Kurve.Curve = function(player, game, field, config) {
     var holeCountDown   = config.holeCountDown;
     var tracedPoints    = [];
     
+    this.drawNextFrame  = function() {
+        this.drawStep(field.ctx);
+        this.moveToNextFrame();
+        this.checkForCollision(field.ctx);
+    };
+    
     this.drawStep = function(ctx) {
         ctx.beginPath();    
 
@@ -25,14 +31,13 @@ Kurve.Curve = function(player, game, field, config) {
        
         if (holeCountDown < 0) {
             ctx.globalAlpha = 0;
+            
             if (holeCountDown < -1) holeCountDown = holeInterval; 
         } else {
-            var positionClone = position.clone();
-            
             ctx.globalAlpha = 1;  
             
-            field.addDrawnPixel(positionClone);
-            this.addPointToTrace(positionClone);
+            field.addDrawnPixel(position);
+            this.addPointToTrace(position.clone());
         } 
         
         holeCountDown--;  
@@ -70,13 +75,15 @@ Kurve.Curve = function(player, game, field, config) {
         }
         
         position        = nextPosition;
-        nextPosition    = this.getNextPosition();
+        nextPosition    = this.getNextPosition(angle);
     };
     
-    this.getNextPosition = function() {
+    this.getNextPosition = function(angle) {
         var posX = position.getPosX() + stepLength * Math.cos(angle);
         var posY = position.getPosY() + stepLength * Math.sin(angle);
                 
+        //field.addDrawnPixel(new Kurve.Point(position.getPosX() + (stepLength / 2) * Math.cos(angle), position.getPosY() + (stepLength / 2) * Math.sin(angle)));
+            
         return new Kurve.Point(posX, posY);
     };
     
