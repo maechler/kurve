@@ -2,7 +2,7 @@
 
 Kurve.Menu = {
     
-    boundKeyDown: null,
+    boundOnKeyDown: null,
     
     init: function() {
         this.initPlayerMenu();
@@ -20,12 +20,12 @@ Kurve.Menu = {
     },
     
     addWindowListeners: function() {
-        this.boundKeyDown = this.onKeyDown.bind(this);
-        window.addEventListener('keydown', this.boundKeyDown, false);
+        this.boundOnKeyDown = this.onKeyDown.bind(this);
+        window.addEventListener('keydown', this.boundOnKeyDown, false);
     },
     
     removeWindowListeners: function() {
-        window.removeEventListener('keydown', this.boundKeyDown, false);  
+        window.removeEventListener('keydown', this.boundOnKeyDown, false);  
     },
     
     onKeyDown: function(event) {
