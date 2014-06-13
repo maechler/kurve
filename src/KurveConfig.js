@@ -9,7 +9,7 @@ Kurve.Config = {
     
     Curve: {
         stepLength:     1,
-        lineWidth:      3,
+        lineWidth:      4,
         dAngle:         0.04,
         holeInterval:   150,
         holeCountDown:  150,

@@ -47,6 +47,14 @@ Kurve.Field = {
         this.drawnPixels = [];
     },
     
+    addDrawnPixel: function(point) {
+        if ( this.drawnPixels[Kurve.Utility.round(point.getPosX(), 0)] === undefined) {
+            this.drawnPixels[Kurve.Utility.round(point.getPosX(), 0)] = [];  
+        } 
+
+        this.drawnPixels[Kurve.Utility.round(point.getPosX(), 0)][Kurve.Utility.round(point.getPosY(), 0)] = true;
+    },
+    
     isPointOutOfBounds: function(point) {
         return point.getPosX() <= 0 || point.getPosY() <= 0 || point.getPosX() >= this.width || point.getPosY() >= this.height;
     },

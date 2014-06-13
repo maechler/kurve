@@ -7,8 +7,6 @@ Kurve.Curve = function(player, game, field, config) {
     var posY            = 0;
     var nextPosX        = 0;
     var nextPosY        = 0;
-    var lastPosX        = 0;
-    var lastPosY        = 0;
 
     var stepLength      = config.stepLength; 
     var lineWidth       = config.lineWidth;
@@ -32,13 +30,8 @@ Kurve.Curve = function(player, game, field, config) {
             if (holeCountDown < -1) holeCountDown = holeInterval; 
         } else {
             ctx.globalAlpha = 1;  
-                    
-            if ( field.drawnPixels[Kurve.Utility.round(posX, 0)] === undefined) {
-                field.drawnPixels[Kurve.Utility.round(posX, 0)] = [];  
-            } 
-
-            field.drawnPixels[Kurve.Utility.round(posX, 0)][Kurve.Utility.round(posY, 0)] = true;
             
+            field.addDrawnPixel(new Kurve.Point(posX, posY));
             this.addPointToTrace(new Kurve.Point(posX, posY));
         } 
         
@@ -56,8 +49,6 @@ Kurve.Curve = function(player, game, field, config) {
 
     this.checkForCollision = function(ctx) {
         if ( this.isCollided(nextPosX, nextPosY) ) this.die(ctx);
-        lastPosX = Kurve.Utility.round(nextPosX, 0);
-        lastPosY = Kurve.Utility.round(nextPosY, 0);
     };
     
     this.isCollided = function(nextPosX, nextPosY) {

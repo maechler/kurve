@@ -2,7 +2,7 @@
 
 Kurve.Game = {    
     
-    animationFrameId:   null,
+    runIntervalId:      null,
     framesPerSecond:    Kurve.Config.Game.frameRate,
     intervalTimeOut:    null,
     maxPoints:          null,
@@ -19,13 +19,18 @@ Kurve.Game = {
     },
     
     run: function() {
+        if (this.running) requestAnimationFrame(this.drawFrame.bind(this));
+    },
+    
+    drawFrame: function() {
         for (var i in this.runningCurves) {
             this.runningCurves[i].drawStep(Kurve.Field.ctx);
             this.runningCurves[i].moveToNextFrame();
             this.runningCurves[i].checkForCollision(Kurve.Field.ctx);
+            this.runningCurves[i].drawStep(Kurve.Field.ctx);
+            this.runningCurves[i].moveToNextFrame();
+            this.runningCurves[i].checkForCollision(Kurve.Field.ctx);
         }
-        
-        if (this.running) requestAnimationFrame(this.run.bind(this));
     },
     
     addWindowListeners: function() {
@@ -105,7 +110,7 @@ Kurve.Game = {
     },
     
     startRun: function() {
-        this.animationFrameId  = requestAnimationFrame(this.run.bind(this), this.intervalTimeOut);
+        this.runIntervalId  = setInterval(this.run.bind(this), this.intervalTimeOut);
     },
     
     initRun: function() {
@@ -123,7 +128,7 @@ Kurve.Game = {
         this.running        = false;
         this.runningCurves  = {};
         
-        cancelAnimationFrame(this.animationFrameId);
+        clearInterval(this.runIntervalId);
         this.checkForWinner();
     },
     
