@@ -48,11 +48,11 @@ Kurve.Field = {
     },
     
     addDrawnPixel: function(point) {
-        if ( this.drawnPixels[u.round(point.getPosX(), 0)] === undefined) {
-            this.drawnPixels[u.round(point.getPosX(), 0)] = [];  
+        if ( this.drawnPixels[point.getPosX(0)] === undefined ) {
+            this.drawnPixels[point.getPosX(0)] = [];  
         } 
 
-        this.drawnPixels[u.round(point.getPosX(), 0)][u.round(point.getPosY(), 0)] = true;
+        this.drawnPixels[point.getPosX(0)][point.getPosY(0)] = true;
     },
     
     isPointOutOfBounds: function(point) {
@@ -60,7 +60,7 @@ Kurve.Field = {
     },
     
     isPointDrawn: function(point) {
-        return this.drawnPixels[point.getPosX()] !== undefined && this.drawnPixels[point.getPosX()][point.getPosY()] === true;
+        return this.drawnPixels[point.getPosX(0)] !== undefined && this.drawnPixels[point.getPosX(0)][point.getPosY(0)] === true;
     },
     
     getFieldData: function() {
@@ -68,12 +68,12 @@ Kurve.Field = {
     },
     
     getRandomPosition: function(borderPadding) {
-        if (borderPadding === undefined) borderPadding = 20;
+        if ( borderPadding === undefined ) borderPadding = 20;
         
         var posX = borderPadding + Math.round( (this.width - 2*borderPadding)*Math.random() );
         var posY = borderPadding + Math.round( (this.height - 2*borderPadding)*Math.random() );
         
-        return {posX:posX,posY:posY};
+        return new Kurve.Point(posX, posY);
     }
 
 };

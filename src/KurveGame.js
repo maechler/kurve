@@ -3,7 +3,7 @@
 Kurve.Game = {    
     
     runIntervalId:      null,
-    framesPerSecond:    Kurve.Config.Game.frameRate,
+    fps:                Kurve.Config.Game.fps,
     intervalTimeOut:    null,
     maxPoints:          null,
         
@@ -15,7 +15,7 @@ Kurve.Game = {
     deathMatch:         false,
     
     init: function() {
-        this.intervalTimeOut = Math.round(1000 / this.framesPerSecond);
+        this.intervalTimeOut = Math.round(1000 / this.fps);
     },
     
     run: function() {

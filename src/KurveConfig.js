@@ -17,7 +17,7 @@ Kurve.Config = {
     
     Game: {
         startDelay:     2000,
-        frameRate:      40
+        fps:      40
     },
     
     players: [

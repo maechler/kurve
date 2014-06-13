@@ -3,10 +3,8 @@
 Kurve.Curve = function(player, game, field, config) {
     this.isAlive        = true;
 
-    var posX            = 0;
-    var posY            = 0;
-    var nextPosX        = 0;
-    var nextPosY        = 0;
+    var position        = null;
+    var nextPosition    = null;
 
     var stepLength      = config.stepLength; 
     var lineWidth       = config.lineWidth;
@@ -22,17 +20,19 @@ Kurve.Curve = function(player, game, field, config) {
         ctx.strokeStyle = player.getColor();        
         ctx.lineWidth   = lineWidth;
         
-        ctx.moveTo(posX, posY);
-        ctx.lineTo(nextPosX, nextPosY);
+        ctx.moveTo(position.getPosX(), position.getPosY());
+        ctx.lineTo(nextPosition.getPosX(), nextPosition.getPosY());
        
         if (holeCountDown < 0) {
             ctx.globalAlpha = 0;
             if (holeCountDown < -1) holeCountDown = holeInterval; 
         } else {
+            var positionClone = position.clone();
+            
             ctx.globalAlpha = 1;  
             
-            field.addDrawnPixel(new Kurve.Point(posX, posY));
-            this.addPointToTrace(new Kurve.Point(posX, posY));
+            field.addDrawnPixel(positionClone);
+            this.addPointToTrace(positionClone);
         } 
         
         holeCountDown--;  
@@ -43,21 +43,16 @@ Kurve.Curve = function(player, game, field, config) {
     this.drawPoint = function(ctx) {
         ctx.beginPath();
         ctx.fillStyle = player.getColor();  
-        ctx.arc(posX, posY, 2, 0, 2 * Math.PI, false);
+        ctx.arc(position.getPosX(), position.getPosY(), 2, 0, 2 * Math.PI, false);
         ctx.fill();
     };
 
     this.checkForCollision = function(ctx) {
-        if ( this.isCollided(nextPosX, nextPosY) ) this.die(ctx);
+        if ( this.isCollided(nextPosition) ) this.die(ctx);
     };
     
-    this.isCollided = function(nextPosX, nextPosY) {
-        var posX = u.round(nextPosX, 0);
-        var posY = u.round(nextPosY, 0);
-        
-        var position = new Kurve.Point(posX, posY);
-        
-        return field.isPointOutOfBounds(position) || ( field.isPointDrawn(position) && !this.isPointInTrace(position) );
+    this.isCollided = function(nextPosition) {
+        return field.isPointOutOfBounds(nextPosition) || ( field.isPointDrawn(nextPosition) && !this.isPointInTrace(nextPosition) );
     };
     
     this.die = function(ctx) {
@@ -74,12 +69,15 @@ Kurve.Curve = function(player, game, field, config) {
             angle -= dAngle;
         }
         
-        posX       = nextPosX;
-        posY       = nextPosY;
-        nextPosX  += stepLength * Math.cos(angle);
-        nextPosY  += stepLength * Math.sin(angle);
-        nextPosX   = u.round(nextPosX, 1);
-        nextPosY   = u.round(nextPosY, 1);
+        position        = nextPosition;
+        nextPosition    = this.getNextPosition();
+    };
+    
+    this.getNextPosition = function() {
+        var posX = position.getPosX() + stepLength * Math.cos(angle);
+        var posY = position.getPosY() + stepLength * Math.sin(angle);
+                
+        return new Kurve.Point(posX, posY);
     };
     
     this.addPointToTrace = function(point) {
@@ -99,10 +97,8 @@ Kurve.Curve = function(player, game, field, config) {
     };
     
     this.setRandomPosition = function(randomPosition) {
-        posX        = randomPosition.posX;
-        posY        = randomPosition.posY;
-        nextPosX    = randomPosition.posX;
-        nextPosY    = randomPosition.posY;
+        position        = randomPosition;
+        nextPosition    = randomPosition;
     };
     
     this.setRandomAngle = function() {
