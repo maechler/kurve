@@ -14,6 +14,7 @@ Kurve.Game = {
     players:            [],
     deathMatch:         false,
     isPaused:           false,
+    isRoundStarted:     false,
     
     init: function() {
         this.intervalTimeOut = Math.round(1000 / this.fps);
@@ -51,7 +52,7 @@ Kurve.Game = {
     onSpaceDown: function() {
         if ( this.running || this.isPaused ) {
             this.togglePause();   
-        } else {
+        } else if ( !this.isRoundStarted ) {
             this.startNewRound();
         }
     },
@@ -110,6 +111,8 @@ Kurve.Game = {
     },
     
     startNewRound: function() {
+        this.isRoundStarted = true;
+        
         Kurve.Field.drawField();
         this.initRun();
         setTimeout(this.startRun.bind(this), Kurve.Config.Game.startDelay);
@@ -136,6 +139,8 @@ Kurve.Game = {
     },
     
     terminateRound: function() {
+        this.isRoundStarted = false;
+        
         this.stopRun();
         this.runningCurves  = {};
         this.checkForWinner();
