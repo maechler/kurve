@@ -69,10 +69,6 @@ Kurve.Field = {
         return this.drawnPixels[point.getPosX(0)] !== undefined && this.drawnPixels[point.getPosX(0)][point.getPosY(0)] === true;
     },
     
-    getFieldData: function() {
-        return this.ctx.getImageData(0, 0, this.width, this.height);
-    },
-    
     getRandomPosition: function(borderPadding) {
         if ( borderPadding === undefined ) borderPadding = 20;
         

@@ -6,7 +6,7 @@ Kurve.Curve = function(player, game, field, config) {
     var position        = null;
     var nextPosition    = null;
     
-        //think about a better solution
+        //think about a better solution --> trace = []
     this.middlePointSurroundings = [];
     this.nextPointSurroundings   = [];
     
@@ -68,6 +68,7 @@ Kurve.Curve.prototype.drawLine = function(ctx) {
     } else {
         ctx.globalAlpha = 1;  
         
+            //this.trace
         this.getField().addPointsToDrawnPixel(this.middlePointSurroundings);
         this.getField().addPointsToDrawnPixel(this.nextPointSurroundings);
     } 
@@ -80,6 +81,7 @@ Kurve.Curve.prototype.drawLine = function(ctx) {
 Kurve.Curve.prototype.moveToNextFrame = function() {
     this.computeNewAngle();
     
+    //this.generate frame trace
     var middlePoint = this.getMovedPosition(this.getOptions().stepLength / 2);
     var nextPoint   = this.getMovedPosition(this.getOptions().stepLength);
     
@@ -90,7 +92,7 @@ Kurve.Curve.prototype.moveToNextFrame = function() {
     this.setNextPosition(nextPoint);
     
 };
-
+    //generate "to" point
 Kurve.Curve.prototype.getMovedPosition = function(step) {
     var posX = this.getNextPosition().getPosX() + step * Math.cos(this.getOptions().angle);
     var posY = this.getNextPosition().getPosY() + step * Math.sin(this.getOptions().angle);

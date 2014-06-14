@@ -13,6 +13,7 @@ Kurve.Game = {
     runningCurves:      {},
     players:            [],
     deathMatch:         false,
+    isPaused:           false,
     
     init: function() {
         this.intervalTimeOut = Math.round(1000 / this.fps);
@@ -48,9 +49,23 @@ Kurve.Game = {
     },
     
     onSpaceDown: function() {
-        if (this.running) return;
+        if ( this.running || this.isPaused ) {
+            this.togglePause();   
+        } else {
+            this.startNewRound();
+        }
+    },
+    
+    togglePause: function() {
+        if ( this.isPaused ) {
+            Kurve.Lightbox.hide();
+            this.startRun();
+        } else {
+            this.stopRun();
+            Kurve.Lightbox.show("<h1>Paused</h1>");
+        }
         
-        this.startNewRound();
+        this.isPaused = !this.isPaused;
     },
     
     startGame: function() {
@@ -94,16 +109,20 @@ Kurve.Game = {
         if ( Object.keys(this.runningCurves).length === 1 ) this.terminateRound();
     },
     
-    startNewRound: function() {        
-        this.running = true;
-        
+    startNewRound: function() {
         Kurve.Field.drawField();
         this.initRun();
         setTimeout(this.startRun.bind(this), Kurve.Config.Game.startDelay);
     },
     
-    startRun: function() {
+    startRun: function() {        
+        this.running        = true;
         this.runIntervalId  = setInterval(this.run.bind(this), this.intervalTimeOut);
+    },
+    
+    stopRun: function() {        
+        this.running        = false;
+        clearInterval(this.runIntervalId);
     },
     
     initRun: function() {
@@ -117,10 +136,8 @@ Kurve.Game = {
     },
     
     terminateRound: function() {
-        this.running        = false;
+        this.stopRun();
         this.runningCurves  = {};
-        
-        clearInterval(this.runIntervalId);
         this.checkForWinner();
     },
     
