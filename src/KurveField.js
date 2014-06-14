@@ -47,19 +47,10 @@ Kurve.Field = {
         this.drawnPixels = [];
     },
     
-    addDrawnPixel: function(point) {
-        var posX = point.getPosX(0);
-        var posY = point.getPosY(0);
-        
-        this.addPointToDrawnPixel(new Kurve.Point(posX,     posY));
-        this.addPointToDrawnPixel(new Kurve.Point(posX + 1, posY));
-        this.addPointToDrawnPixel(new Kurve.Point(posX + 1, posY - 1));
-        this.addPointToDrawnPixel(new Kurve.Point(posX,     posY - 1));
-        this.addPointToDrawnPixel(new Kurve.Point(posX - 1, posY - 1));
-        this.addPointToDrawnPixel(new Kurve.Point(posX - 1, posY));
-        this.addPointToDrawnPixel(new Kurve.Point(posX - 1, posY + 1));
-        this.addPointToDrawnPixel(new Kurve.Point(posX,     posY + 1));
-        this.addPointToDrawnPixel(new Kurve.Point(posX + 1, posY + 1));
+    addPointsToDrawnPixel: function(points) {
+        points.forEach(function(point) {
+            Kurve.Field.addPointToDrawnPixel(point);
+        });
     },
     
     addPointToDrawnPixel: function(point) {

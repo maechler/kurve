@@ -12,7 +12,6 @@ Kurve.Config = {
         lineWidth:      4,
         dAngle:         0.08,
         holeInterval:   150,
-        holeCountDown:  150,
     },
     
     Game: {
