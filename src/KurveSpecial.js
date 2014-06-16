@@ -1,14 +1,17 @@
 "use strict";
 
-Kurve.Special = function(type, hook, executionTime, act, initAct, closeAct) {
+Kurve.Special = function(hook, act, helpers) {
     this.count          = 1;
     this.isActive       = false;
-    this.executionTime  = Kurve.Game.fps * executionTime;
-    
     this.act            = act;
-    this.initAct        = initAct;
-    this.closeAct       = closeAct;
+    this.helpers        = helpers;
     
-    this.getType        = function() { return type; };
+    this.incrementCount = function() { 
+        this.count++; 
+    };
+    this.decrementCount = function() { 
+        this.count--; 
+    };
+    
     this.getHook        = function() { return hook; };
 };

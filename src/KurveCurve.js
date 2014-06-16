@@ -10,7 +10,7 @@ Kurve.Curve = function(player, game, field, config) {
     this.middlePointSurroundings = [];
     this.nextPointSurroundings   = [];
     
-    this.special        = Kurve.Factory.getSpecial(Kurve.Specialconfig.type.RUN_FASTER);
+    this.special        = Kurve.Factory.getSpecial(Kurve.Specialconfig.type.JUMP);
     
     var tracePoints     = [];
     

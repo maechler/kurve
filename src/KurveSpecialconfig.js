@@ -3,7 +3,8 @@
 Kurve.Specialconfig = [];
 
 Kurve.Specialconfig.type = {
-    RUN_FASTER: 'RUN_FASTER'
+    RUN_FASTER: 'RUN_FASTER',
+    JUMP:       'JUMP'
 };
 
 Kurve.Specialconfig.hook = {
@@ -11,26 +12,51 @@ Kurve.Specialconfig.hook = {
 };
  
 Kurve.Specialconfig[Kurve.Specialconfig.type.RUN_FASTER] = {
-     type:              Kurve.Specialconfig.type.RUN_FASTER,
-     hook:              Kurve.Specialconfig.hook.DRAW_NEXT_FRAME,
-     executionTime:     4,
-     initAct:           function(curve) {
-        this.isActive = true;
+     hook: Kurve.Specialconfig.hook.DRAW_NEXT_FRAME,
+     
+     helpers: {
+        executionTime: 0,
+        initAct: function() {
+           this.isActive  = true;
+           this.helpers.executionTime = 4 * Kurve.Game.fps; //4s 
+        },
+        closeAct: function() {
+            this.isActive = false;       
+            this.decrementCount();
+        }  
      },
-     closeAct:          function(curve) {
-         this.isActive = false;
-         this.executionTime = 4 * Kurve.Game.fps; //4s        
-         this.count--;
-     },
-     act:               function(curve) {
-        if ( !this.isActive )           this.initAct(curve);
-        if ( this.executionTime < 1 )   this.closeAct(curve); 
+     
+     act: function(curve) {
+        if ( !this.isActive )                   this.helpers.initAct.call(this);
+        if ( this.helpers.executionTime < 1 )   this.helpers.closeAct.call(this); 
 
         curve.moveToNextFrame();
         curve.checkForCollision();
         curve.drawLine(curve.getField().ctx);
 
-        this.executionTime--;
+        this.helpers.executionTime--;
+     }
+ };
+  
+Kurve.Specialconfig[Kurve.Specialconfig.type.JUMP] = {
+     hook: Kurve.Specialconfig.hook.DRAW_NEXT_FRAME,
+     
+     helpers: {
+         jumpWidth:         10,
+         timeOut:           250,
+         previousExecution: new Date()
+     },
+     
+     act: function(curve) {
+         var now = new Date();
+         
+         if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
+             var jumpedPosition = curve.getMovedPosition(curve.getOptions().stepLength * this.helpers.jumpWidth);        
+             curve.setNextPosition(jumpedPosition);
+             
+             this.decrementCount();
+             this.helpers.previousExecution = now;
+         }
      }
  };
  
