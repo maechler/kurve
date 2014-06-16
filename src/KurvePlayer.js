@@ -13,6 +13,7 @@ Kurve.Player = function(id, color, keyLeft, keyRight) {
     this.getColor       = function() { return color; };
     this.getKeyLeft     = function() { return keyLeft; };
     this.getKeyRight    = function() { return keyRight; };
+    this.getKeySpecial  = function() { return 65; }; //A
     
 };
 

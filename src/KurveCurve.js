@@ -10,6 +10,8 @@ Kurve.Curve = function(player, game, field, config) {
     this.middlePointSurroundings = [];
     this.nextPointSurroundings   = [];
     
+    this.special        = Kurve.Factory.getSpecial(Kurve.Specialconfig.type.RUN_FASTER);
+    
     var tracePoints     = [];
     
     var options         = {
@@ -43,6 +45,8 @@ Kurve.Curve.prototype.drawNextFrame = function() {
     this.moveToNextFrame();
     this.checkForCollision();
     this.drawLine(this.getField().ctx);
+    
+    if ( this.useSpecial(Kurve.Specialconfig.hook.DRAW_NEXT_FRAME) ) this.special.act(this);
 };
 
 Kurve.Curve.prototype.drawPoint = function(ctx) {
@@ -140,4 +144,14 @@ Kurve.Curve.prototype.computeNewAngle = function() {
     
 Kurve.Curve.prototype.setRandomAngle = function() {
     this.setAngle(2 * Math.PI * Math.random());
+};
+
+Kurve.Curve.prototype.useSpecial = function(hook) {
+    if ( this.special.isActive
+         || Kurve.Game.isKeyDown(this.getPlayer().getKeySpecial()) 
+         && this.special.getHook() === hook
+         && this.special.count > 0 ) 
+         return true;
+     
+    return false;
 };

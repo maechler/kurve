@@ -160,7 +160,6 @@ Kurve.Game = {
     
     startDeathMatch: function(winners) {
         this.deathMatch = true;
-        console.log('death match');
         Kurve.Lightbox.show("DEATHMATCH!");
         setTimeout(Kurve.Lightbox.hide.bind(Kurve.Lightbox), 3000);
         
