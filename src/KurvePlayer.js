@@ -1,6 +1,6 @@
 "use strict";
 
-Kurve.Player = function(id, color, keyLeft, keyRight) {
+Kurve.Player = function(id, color, keyLeft, keyRight, keySpecial) {
     var points      = 0;
     this.isActive   = false;
     
@@ -13,14 +13,14 @@ Kurve.Player = function(id, color, keyLeft, keyRight) {
     this.getColor       = function() { return color; };
     this.getKeyLeft     = function() { return keyLeft; };
     this.getKeyRight    = function() { return keyRight; };
-    this.getKeySpecial  = function() { return 65; }; //A
+    this.getKeySpecial  = function() { return keySpecial; }; //A
     
 };
 
 Kurve.Player.prototype.renderMenuItem = function() {
     var menuItemHTML    = '<div id="' + this.getId() + '" class="player inactive ' + this.getId() +'">';
     menuItemHTML       +=      '<div class="title"><h2>' + this.getId() + '</h2></div>';
-    menuItemHTML       +=      '<div class="keys">' + this.getKeyLeftChar() + ' + ' + this.getKeyRightChar() + '</div>';
+    menuItemHTML       +=      '<div class="keys">' + this.getKeyLeftChar() + ' + ' + this.getKeyRightChar() + ' + ' + this.getKeySpecialChar() + '</div>';
     menuItemHTML       +=      '<div class="clear"></div>';
     menuItemHTML       += '</div>';
 
@@ -51,4 +51,8 @@ Kurve.Player.prototype.getKeyLeftChar = function() {
 
 Kurve.Player.prototype.getKeyRightChar = function() {
     return String.fromCharCode(this.getKeyRight());
+};
+
+Kurve.Player.prototype.getKeySpecialChar = function() {
+    return String.fromCharCode(this.getKeySpecial());
 };
