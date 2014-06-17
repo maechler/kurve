@@ -147,3 +147,23 @@ canvas {
     font-size: 40px;
     padding-top: 15px;
 }
+
+#author {
+    position: absolute;
+    bottom: 15px;
+    padding-right: 15px;
+    font-size: 11px;
+    color: #888;
+}
+
+#author a,
+#author a:visited{
+    padding: 2px;
+    color: #888;
+    text-decoration: none;
+}
+
+#author a:hover{
+    color: #444;
+    text-decoration: underline;
+}
