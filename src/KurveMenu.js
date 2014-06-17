@@ -29,6 +29,7 @@ Kurve.Menu = {
     },
     
     onKeyDown: function(event) {
+        console.log(event.keyCode, String.fromCharCode(event.keyCode));
         if (event.keyCode === 32)  Kurve.Menu.onSpaceDown();
         var playerId    = '';
         var className   = '';

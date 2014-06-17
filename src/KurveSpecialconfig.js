@@ -1,18 +1,21 @@
 "use strict";
 
-Kurve.Specialconfig = [];
+Kurve.Specialconfig = {};
 
-Kurve.Specialconfig.type = {
+Kurve.Specialconfig.types = {
     RUN_FASTER: 'RUN_FASTER',
-    JUMP:       'JUMP'
+    JUMP:       'JUMP',
+    INVISIBLE:  'INVISIBLE'
 };
 
-Kurve.Specialconfig.hook = {
-    DRAW_NEXT_FRAME: 'DRAW_NEXT_FRAME'
+Kurve.Specialconfig.hooks = {
+    DRAW_NEXT_FRAME:    'DRAW_NEXT_FRAME',
+    DRAW_LINE:          'DRAW_LINE',
+    IS_COLLIDED:        'IS_COLLIDED'
 };
  
-Kurve.Specialconfig[Kurve.Specialconfig.type.RUN_FASTER] = {
-     hook: Kurve.Specialconfig.hook.DRAW_NEXT_FRAME,
+Kurve.Specialconfig[Kurve.Specialconfig.types.RUN_FASTER] = {
+     hooks: [Kurve.Specialconfig.hooks.DRAW_NEXT_FRAME],
      
      helpers: {
         executionTime: 0,
@@ -26,7 +29,7 @@ Kurve.Specialconfig[Kurve.Specialconfig.type.RUN_FASTER] = {
         }  
      },
      
-     act: function(curve) {
+     act: function(hook, curve) {
         if ( !this.isActive )                   this.helpers.initAct.call(this);
         if ( this.helpers.executionTime < 1 )   this.helpers.closeAct.call(this); 
 
@@ -38,8 +41,8 @@ Kurve.Specialconfig[Kurve.Specialconfig.type.RUN_FASTER] = {
      }
  };
   
-Kurve.Specialconfig[Kurve.Specialconfig.type.JUMP] = {
-     hook: Kurve.Specialconfig.hook.DRAW_NEXT_FRAME,
+Kurve.Specialconfig[Kurve.Specialconfig.types.JUMP] = {
+     hooks: [Kurve.Specialconfig.hooks.DRAW_NEXT_FRAME],
      
      helpers: {
          jumpWidth:         10,
@@ -47,7 +50,7 @@ Kurve.Specialconfig[Kurve.Specialconfig.type.JUMP] = {
          previousExecution: new Date()
      },
      
-     act: function(curve) {
+     act: function(hook, curve) {
          var now = new Date();
          
          if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
@@ -58,5 +61,38 @@ Kurve.Specialconfig[Kurve.Specialconfig.type.JUMP] = {
              this.helpers.previousExecution = now;
          }
      }
+ };
+  
+Kurve.Specialconfig[Kurve.Specialconfig.types.INVISIBLE] = {
+    hooks: [
+        Kurve.Specialconfig.hooks.DRAW_LINE,
+        Kurve.Specialconfig.hooks.IS_COLLIDED
+    ],
+
+    helpers: {
+        executionTime: 0,
+        initAct: function() {
+           this.isActive  = true;
+           this.helpers.executionTime = 4 * Kurve.Game.fps; //4s 
+        },
+        closeAct: function() {
+            this.isActive = false;       
+            this.decrementCount();
+        }  
+    },
+
+    act: function(hook, curve) {
+        if ( hook === Kurve.Specialconfig.hooks.DRAW_LINE ) {
+            if ( !this.isActive )                   this.helpers.initAct.call(this);
+            if ( this.helpers.executionTime < 1 )   this.helpers.closeAct.call(this); 
+
+            curve.invisible = true;
+
+            this.helpers.executionTime--;          
+        } else if ( hook === Kurve.Specialconfig.hooks.IS_COLLIDED && this.isActive ) {
+            return false;
+        }
+
+    }
  };
  

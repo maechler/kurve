@@ -1,6 +1,6 @@
 "use strict";
 
-Kurve.Special = function(hook, act, helpers) {
+Kurve.Special = function(hooks, act, helpers) {
     this.count          = 1;
     this.isActive       = false;
     this.act            = act;
@@ -9,9 +9,12 @@ Kurve.Special = function(hook, act, helpers) {
     this.incrementCount = function() { 
         this.count++; 
     };
+    
     this.decrementCount = function() { 
         this.count--; 
     };
     
-    this.getHook        = function() { return hook; };
+    this.usesHook       = function(hook) {
+        return hooks.indexOf(hook) > -1;
+    };
 };

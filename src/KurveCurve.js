@@ -2,18 +2,13 @@
 
 Kurve.Curve = function(player, game, field, config) {
     
-        //refactor to fromPosition toPosition alias fromPosition = position
     var position        = null;
     var nextPosition    = null;
     
-        //think about a better solution --> trace = []
-    this.middlePointSurroundings = [];
-    this.nextPointSurroundings   = [];
-    
-    this.special        = Kurve.Factory.getSpecial(Kurve.Specialconfig.type.JUMP);
-    
-    var tracePoints     = [];
-    
+    this.trac           = [];
+    this.special        = Kurve.Factory.getSpecial(Kurve.Specialconfig.types.INVISIBLE);
+    this.invisible      = false;
+
     var options         = {
         stepLength:     config.stepLength,
         lineWidth:      config.lineWidth,
@@ -36,7 +31,6 @@ Kurve.Curve = function(player, game, field, config) {
     this.getField           = function() { return field; };
     this.getPosition        = function() { return position; };
     this.getNextPosition    = function() { return nextPosition; };
-    this.getTracePoints     = function() { return tracePoints; };
     this.getOptions         = function() { return options; };
     
 };
@@ -46,7 +40,7 @@ Kurve.Curve.prototype.drawNextFrame = function() {
     this.checkForCollision();
     this.drawLine(this.getField().ctx);
     
-    if ( this.useSpecial(Kurve.Specialconfig.hook.DRAW_NEXT_FRAME) ) this.special.act(this);
+    if ( this.useSpecial(Kurve.Specialconfig.hooks.DRAW_NEXT_FRAME) ) this.special.act(Kurve.Specialconfig.hooks.DRAW_NEXT_FRAME, this);
 };
 
 Kurve.Curve.prototype.drawPoint = function(ctx) {
@@ -58,23 +52,22 @@ Kurve.Curve.prototype.drawPoint = function(ctx) {
 
 Kurve.Curve.prototype.drawLine = function(ctx) {
     ctx.beginPath();    
+    this.invisible = ( this.getOptions().holeCountDown < 0 );
 
     ctx.strokeStyle = this.getPlayer().getColor();        
     ctx.lineWidth   = this.getOptions().lineWidth;
+    
+    if ( this.useSpecial(Kurve.Specialconfig.hooks.DRAW_LINE) ) this.special.act(Kurve.Specialconfig.hooks.DRAW_LINE, this);
 
     ctx.moveTo(this.getPosition().getPosX(), this.getPosition().getPosY());
     ctx.lineTo(this.getNextPosition().getPosX(), this.getNextPosition().getPosY());
 
-    if (this.getOptions().holeCountDown < 0) {
+    if ( this.invisible ) {
         ctx.globalAlpha = 0;
-
-        if (this.getOptions().holeCountDown < -1) this.getOptions().holeCountDown = this.getOptions().holeInterval; 
+        if (this.getOptions().holeCountDown < -1) this.getOptions().holeCountDown = this.getOptions().holeInterval;
     } else {
         ctx.globalAlpha = 1;  
-        
-            //this.trace
-        this.getField().addPointsToDrawnPixel(this.middlePointSurroundings);
-        this.getField().addPointsToDrawnPixel(this.nextPointSurroundings);
+        this.getField().addPointsToDrawnPixel(this.trace);
     } 
 
     this.getOptions().holeCountDown--;  
@@ -85,18 +78,17 @@ Kurve.Curve.prototype.drawLine = function(ctx) {
 Kurve.Curve.prototype.moveToNextFrame = function() {
     this.computeNewAngle();
     
-    //this.generate frame trace
     var middlePoint = this.getMovedPosition(this.getOptions().stepLength / 2);
     var nextPoint   = this.getMovedPosition(this.getOptions().stepLength);
     
-    this.middlePointSurroundings = this.getPointSurroundings(middlePoint);
-    this.nextPointSurroundings = this.getPointSurroundings(nextPoint);
+    this.trace = this.getPointSurroundings(nextPoint);
+    this.trace.concat(this.getPointSurroundings(middlePoint));
     
     this.setPosition(this.getNextPosition());
     this.setNextPosition(nextPoint);
     
 };
-    //generate "to" point
+
 Kurve.Curve.prototype.getMovedPosition = function(step) {
     var posX = this.getNextPosition().getPosX() + step * Math.cos(this.getOptions().angle);
     var posY = this.getNextPosition().getPosY() + step * Math.sin(this.getOptions().angle);
@@ -127,6 +119,8 @@ Kurve.Curve.prototype.checkForCollision = function() {
 };
 
 Kurve.Curve.prototype.isCollided = function(position) {
+    if ( this.useSpecial(Kurve.Specialconfig.hooks.IS_COLLIDED) ) return this.special.act(Kurve.Specialconfig.hooks.IS_COLLIDED, this);
+    
     return this.getField().isPointOutOfBounds(position) || this.getField().isPointDrawn(position);
 };
 
@@ -149,9 +143,8 @@ Kurve.Curve.prototype.setRandomAngle = function() {
 Kurve.Curve.prototype.useSpecial = function(hook) {
     if ( this.special.isActive
          || Kurve.Game.isKeyDown(this.getPlayer().getKeySpecial()) 
-         && this.special.getHook() === hook
-         && this.special.count > 0 ) 
-         return true;
+         && this.special.usesHook(hook) 
+         && this.special.count > 0 )  return true;
      
     return false;
 };
