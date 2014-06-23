@@ -2,22 +2,24 @@
 
 Kurve.Game = {    
     
-    runIntervalId:      null,
-    fps:                Kurve.Config.Game.fps,
-    intervalTimeOut:    null,
-    maxPoints:          null,
+    runIntervalId:          null,
+    fps:                    Kurve.Config.Game.fps,
+    intervalTimeOut:        null,
+    maxPoints:              null,
         
-    keysDown:           {},
-    running:            false,
-    curves:             [],
-    runningCurves:      {},
-    players:            [],
-    deathMatch:         false,
-    isPaused:           false,
-    isRoundStarted:     false,
+    keysDown:               {},
+    running:                false,
+    curves:                 [],
+    runningCurves:          {},
+    players:                [],
+    deathMatch:             false,
+    isPaused:               false,
+    isRoundStarted:         false,
+    playerScoresElement:    null,
     
     init: function() {
-        this.intervalTimeOut = Math.round(1000 / this.fps);
+        this.intervalTimeOut        = Math.round(1000 / this.fps);
+        this.playerScoresElement    = document.getElementById('player-scores');
     },
     
     run: function() {
@@ -85,7 +87,7 @@ Kurve.Game = {
         this.players.sort(this.playerSorting);
         this.players.forEach(function(player) { playerHTML += player.renderScoreItem() });
         
-        document.getElementById('player-scores').innerHTML = playerHTML;
+        this.playerScoresElement.innerHTML = playerHTML;
     },
     
     playerSorting: function(playerA, playerB) {
