@@ -20,6 +20,4 @@ var Kurve = {
 
 };
 
-document.addEventListener("DOMContentLoaded", function() {
-    Kurve.init();
-});
+document.addEventListener("DOMContentLoaded", Kurve.init.bind(Kurve));
