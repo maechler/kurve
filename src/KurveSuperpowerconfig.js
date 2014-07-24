@@ -22,12 +22,12 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
     helpers: {
        executionTime: 0,
        initAct: function() {
+          this.decrementCount();
           this.isActive  = true;
           this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
        },
        closeAct: function() {
            this.isActive = false;
-           this.decrementCount();
        }
     },
 
@@ -55,13 +55,13 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
     },
      
     act: function(hook, curve) {
+        this.decrementCount();
         var now = new Date();
          
         if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
             var jumpedPosition = curve.getMovedPosition(curve.getOptions().stepLength * this.helpers.jumpWidth);
             curve.setNextPosition(jumpedPosition);
-             
-            this.decrementCount();
+
             this.helpers.previousExecution = now;
         }
     }
@@ -78,12 +78,12 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
     helpers: {
         executionTime: 0,
         initAct: function() {
+           this.decrementCount();
            this.isActive  = true;
            this.helpers.executionTime = 4 * Kurve.Game.fps; //4s 
         },
         closeAct: function() {
-            this.isActive = false;       
-            this.decrementCount();
+            this.isActive = false;
         }  
     },
 

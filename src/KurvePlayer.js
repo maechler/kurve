@@ -54,8 +54,20 @@ Kurve.Player.prototype.renderScoreItem = function() {
                 '<div class="title"><h2>' + this.getId() + '</h2></div>' +
                 '<div class="points">' + this.getPoints() + '</div>' +
                 '<div class="clear"></div>' +
+                '<div class="superpowers">' + this.renderNumberOfSuperPowers() + '</div>' +
+                '<div class="clear"></div>' +
             '</div>';
 };
+
+Kurve.Player.prototype.renderNumberOfSuperPowers = function() {
+    var superpowers = '';
+
+    for (var i=0; i < this.getSuperpower().count; i++ ) {
+        superpowers += '<div class="superpowerCircle ' + this.getId() + '"></div>';
+    }
+
+    return superpowers;
+}
 
 Kurve.Player.prototype.isKeyRight = function(keyCode) {
     return this.getKeyRight() === keyCode;

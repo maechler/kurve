@@ -1,17 +1,19 @@
 'use strict';
 
 Kurve.Superpower = function(hooks, act, helpers, type) {
-    this.count          = 1;
+    this.count          = 3;
     this.isActive       = false;
     this.act            = act;
     this.helpers        = helpers;
     
     this.incrementCount = function() { 
-        this.count++; 
+        this.count++;
+        Kurve.Game.renderPlayerScores();
     };
     
     this.decrementCount = function() { 
-        this.count--; 
+        this.count--;
+        Kurve.Game.renderPlayerScores();
     };
     
     this.usesHook       = function(hook) {

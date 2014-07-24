@@ -262,6 +262,40 @@ canvas {
     font-size: 40px;
 }
 
+.superpowerCircle {
+    height: 7px;
+    width: 7px;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    margin-top: 2px;
+    margin-right: 2px;
+    float: left;
+}
+
+.superpowerCircle.red {
+    border: 2px solid #D4373E;
+}
+
+.superpowerCircle.green {
+    border: 2px solid #3BCB69;
+}
+
+.superpowerCircle.blue {
+    border: 2px solid #3B90C3;
+}
+
+.superpowerCircle.orange {
+    border: 2px solid #FFA039;
+}
+
+.superpowerCircle.purple {
+    border: 2px solid #7D11CD;
+}
+
+.superpowerCircle.pink {
+    border: 2px solid #DC72FF;
+}
+
 #author {
     position: absolute;
     bottom: 15px;

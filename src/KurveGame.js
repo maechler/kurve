@@ -65,7 +65,7 @@ Kurve.Game = {
             this.startRun();
         } else {
             this.stopRun();
-            Kurve.Lightbox.show('<h1>Paused</h1>');
+            Kurve.Lightbox.show('<h2>Game is paused</h2>');
         }
         
         this.isPaused = !this.isPaused;
