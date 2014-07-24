@@ -161,6 +161,10 @@ canvas {
     margin: 0 5px 8px 0;
 }
 
+#menu-players-list div {
+    cursor: pointer;
+}
+
 #menu-players-list .title,
 #menu-players-list .key.left,
 #menu-players-list .key.right,
@@ -214,11 +218,6 @@ canvas {
 #menu-players .superpowers div {
     width: 100%;
     text-align: center;
-    display: none;
-}
-
-#menu-players .superpowers div.active {
-    display: block;
 }
 
 #lightbox-overlay {

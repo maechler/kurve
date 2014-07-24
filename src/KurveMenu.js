@@ -7,6 +7,7 @@ Kurve.Menu = {
     init: function() {
         this.initPlayerMenu();
         this.addWindowListeners();
+        this.addMouseListeners();
     },
         
     initPlayerMenu: function() {
@@ -23,35 +24,35 @@ Kurve.Menu = {
         this.boundOnKeyDown = this.onKeyDown.bind(this);
         window.addEventListener('keydown', this.boundOnKeyDown, false);
     },
+
+    addMouseListeners: function() {
+        var playerItems = document.getElementById('menu-players-list').children;
+
+        for (var i=0; i < playerItems.length; i++) {
+            playerItems[i].addEventListener('click', this.onPlayerItemClicked, false);
+        }
+    },
     
     removeWindowListeners: function() {
         window.removeEventListener('keydown', this.boundOnKeyDown, false);  
     },
+
+    onPlayerItemClicked: function(event) {
+        Kurve.Menu.togglePlayerActivation(this.id);
+    },
     
     onKeyDown: function(event) {
-        console.log(event.keyCode, String.fromCharCode(event.keyCode));
-        if (event.keyCode === 32)  Kurve.Menu.onSpaceDown();
-        var playerId    = '';
-        var className   = '';
-        
+        if (event.keyCode === 32) Kurve.Menu.onSpaceDown();
+
         Kurve.players.forEach(function(player) {
             if ( player.isKeyLeft(event.keyCode) ) {
-                playerId        = player.getId();
-                className       = 'active';
-                player.isActive = true;
-                
+                Kurve.Menu.activatePlayer(player.getId());
             } else if ( player.isKeyRight(event.keyCode) ) {
-                playerId        = player.getId();
-                className       = 'inactive';
-                player.isActive = false;
-            }    
+                Kurve.Menu.deactivatePlayer(player.getId());
+            } else if ( player.isKeySuperpower(event.keyCode) ) {
+                Kurve.Menu.nextSuperpower(player.getId());
+            }
         });
-        
-        if (playerId !== '' && className !== '') {
-            u.removeClass('inactive', playerId);
-            u.removeClass('active', playerId);
-            u.addClass(className, playerId);
-        }
     },
     
     onSpaceDown: function() {
@@ -71,7 +72,81 @@ Kurve.Menu = {
         
         Kurve.Game.startGame();
     },
-    
+
+    onNextSuperPowerClicked: function(event, playerId) {
+        event.stopPropagation();
+        Kurve.Menu.nextSuperpower(playerId);
+    },
+
+    onPreviousSuperPowerClicked: function(event, playerId) {
+        event.stopPropagation();
+        Kurve.Menu.previousSuperpower(playerId);
+    },
+
+    nextSuperpower: function(playerId) {
+        var player = Kurve.getPlayer(playerId);
+        var count = 0;
+        var superpowerType = '';
+
+        for (var i in Kurve.Superpowerconfig.types) {
+            count++;
+            if ( !(Kurve.Superpowerconfig.types[i] === player.getSuperpower().getType() ) ) continue;
+
+            if ( Object.keys(Kurve.Superpowerconfig.types).length === count) {
+                superpowerType = Object.keys(Kurve.Superpowerconfig.types)[0];
+                break;
+            } else {
+                superpowerType = Object.keys(Kurve.Superpowerconfig.types)[count];
+                break;
+            }
+        }
+
+        player.setSuperpower( Kurve.Factory.getSuperpower(superpowerType) );
+    },
+
+    previousSuperpower: function(playerId) {
+        var player = Kurve.getPlayer(playerId);
+        var count = 0;
+        var superpowerType = '';
+
+        for (var i in Kurve.Superpowerconfig.types) {
+            count++;
+            if ( !(Kurve.Superpowerconfig.types[i] === player.getSuperpower().getType() ) ) continue;
+
+            if ( 1 === count) {
+                superpowerType = Object.keys(Kurve.Superpowerconfig.types)[Object.keys(Kurve.Superpowerconfig.types).length - 1];
+                break;
+            } else {
+                superpowerType = Object.keys(Kurve.Superpowerconfig.types)[count - 2];
+                break;
+            }
+        }
+
+        player.setSuperpower( Kurve.Factory.getSuperpower(superpowerType) );
+    },
+
+    activatePlayer: function(playerId) {
+        Kurve.getPlayer(playerId).isActive = true;
+
+        u.removeClass('inactive', playerId);
+        u.addClass('active', playerId);
+    },
+
+    deactivatePlayer: function(playerId) {
+        Kurve.getPlayer(playerId).isActive = false;
+
+        u.removeClass('active', playerId);
+        u.addClass('inactive', playerId);
+    },
+
+    togglePlayerActivation: function(playerId) {
+        if ( Kurve.getPlayer(playerId).isActive ) {
+            Kurve.Menu.deactivatePlayer(playerId);
+        } else {
+            Kurve.Menu.activatePlayer(playerId);
+        }
+    },
+
     requestFullScreen: function() {
         document.body.webkitRequestFullScreen();
     }

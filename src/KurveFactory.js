@@ -8,6 +8,6 @@ Kurve.Factory = {
         var act     = Kurve.Superpowerconfig[type].act;
         var helpers = Kurve.Superpowerconfig[type].helpers;
         
-        return new Kurve.Superpower(hooks, act, helpers);
+        return new Kurve.Superpower(hooks, act, helpers, type);
     }    
 };

@@ -3,6 +3,7 @@
 var Kurve = {    
     
     players: [],
+    playersById: [],
     
     init: function() {
         this.initPlayers();
@@ -14,10 +15,16 @@ var Kurve = {
         
     initPlayers: function() {
         Kurve.Config.players.forEach(function(player) {
-            Kurve.players.push(new Kurve.Player(player.id, player.color, player.keyLeft, player.keyRight, player.keySuperpower));
-        });
-    }
+            var player = new Kurve.Player(player.id, player.color, player.keyLeft, player.keyRight, player.keySuperpower);
 
+            Kurve.players.push(player);
+            Kurve.playersById[player.getId()] = player;
+        });
+    },
+
+    getPlayer: function(playerId) {
+        return this.playersById[playerId];
+    }
 };
 
 document.addEventListener('DOMContentLoaded', Kurve.init.bind(Kurve));

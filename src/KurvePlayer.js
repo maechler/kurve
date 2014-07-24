@@ -1,20 +1,33 @@
 'use strict';
 
 Kurve.Player = function(id, color, keyLeft, keyRight, keySuperpower) {
-    var points      = 0;
+    var points              = 0;
+    var superpower          = Kurve.Factory.getSuperpower(Kurve.Superpowerconfig.types.RUN_FASTER);
+    var superPowerElement   = null;
+
     this.isActive   = false;
     
     this.incrementPoints = function() {
         points++;
     };
+
+    this.setSuperpower      = function(newSuperpower) {
+        superpower = newSuperpower;
+
+        if (superPowerElement === null) {
+            superPowerElement = document.getElementById(this.getId() + '-superpower');
+        }
+
+        superPowerElement.innerHTML = this.getSuperpower().getLabel();
+    };
     
-    this.getPoints      = function() { return points; };   
-    this.getId          = function() { return id; };
-    this.getColor       = function() { return color; };
-    this.getKeyLeft     = function() { return keyLeft; };
-    this.getKeyRight    = function() { return keyRight; };
-    this.getKeySuperpower  = function() { return keySuperpower; };
-    
+    this.getPoints          = function() { return points; };
+    this.getId              = function() { return id; };
+    this.getColor           = function() { return color; };
+    this.getSuperpower      = function() { return superpower; };
+    this.getKeyLeft         = function() { return keyLeft; };
+    this.getKeyRight        = function() { return keyRight; };
+    this.getKeySuperpower   = function() { return keySuperpower; };
 };
 
 Kurve.Player.prototype.renderMenuItem = function() {
@@ -24,7 +37,13 @@ Kurve.Player.prototype.renderMenuItem = function() {
                 '<div class="key right light"><div>' + this.getKeyRightChar() + '</div></div>' +
                 '<div class="superpower">' +
                     '<div class="key light">' + this.getKeySuperpowerChar() + '</div>' +
-                    '<div class="superpowerType light">' + this.renderSuperpowerMenu() + '</div>' +
+                    '<div class="superpowerType light">' +
+                        '<div class="left" onclick="Kurve.Menu.onPreviousSuperPowerClicked(event, \'' + this.getId() + '\')"></div>' +
+                        '<div class="superpowers">' +
+                            '<div id="' + this.getId() + '-superpower">' + this.getSuperpower().getLabel() + '</div>' +
+                        '</div> ' +
+                        '<div class="right" onclick="Kurve.Menu.onNextSuperPowerClicked(event, \'' + this.getId() + '\')"></div>' +
+                    '</div> ' +
                 '</div>' +
                 '<div class="clear"></div>' +
             '</div>';
@@ -38,36 +57,16 @@ Kurve.Player.prototype.renderScoreItem = function() {
             '</div>';
 };
 
-Kurve.Player.prototype.superpowerMenu = null;
-
-Kurve.Player.prototype.renderSuperpowerMenu = function() {
-    if ( !(typeof Kurve.Player.prototype.superpowerMenu === 'string') ) {
-        var superpowerMenu = '<div class="left"></div> ' +
-                                '<div class="superpowers">';
-        var classesFirstElement = 'class="active"';
-
-        for (var superpowerType in Kurve.Superpowerconfig.types) {
-            superpowerMenu +=  '<div ' + classesFirstElement + ' data-superpowerType="' + superpowerType + '">' +
-                                    Kurve.Superpowerconfig[superpowerType].label +
-                                '</div>';
-            classesFirstElement = '';
-        }
-
-        superpowerMenu +=       '</div> <div class="right">' +
-                            '</div>';
-
-        Kurve.Player.prototype.superpowerMenu = superpowerMenu;
-    }
-
-    return Kurve.Player.prototype.superpowerMenu;
-};
-
 Kurve.Player.prototype.isKeyRight = function(keyCode) {
     return this.getKeyRight() === keyCode;
 };
     
 Kurve.Player.prototype.isKeyLeft = function(keyCode) {
     return this.getKeyLeft() === keyCode;
+};
+
+Kurve.Player.prototype.isKeySuperpower = function(keyCode) {
+    return this.getKeySuperpower() === keyCode;
 };
 
 Kurve.Player.prototype.getKeyLeftChar = function() {

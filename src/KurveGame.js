@@ -137,6 +137,7 @@ Kurve.Game = {
             curve.setRandomPosition(Kurve.Field.getRandomPosition());
             curve.setRandomAngle();
             curve.drawPoint(Kurve.Field.ctx);
+            curve.getPlayer().getSuperpower().isActive = false;
         });
     },
     
