@@ -5,7 +5,6 @@
         <title>Achtung, die Kurve!</title>
                 
         <link rel='stylesheet' href='resources/css/styles.css' />
-        <link href='http://fonts.googleapis.com/css?family=VT323' rel='stylesheet' type='text/css'>
 
         <script type='text/javascript' src='src/window.js'></script>
         <script type='text/javascript' src='src/Kurve.js'></script>
@@ -15,8 +14,8 @@
         <script type='text/javascript' src='src/KurveMenu.js'></script>
         <script type='text/javascript' src='src/KurveGame.js'></script>
         <script type='text/javascript' src='src/KurveField.js'></script>
-        <script type='text/javascript' src='src/KurveSpecialconfig.js'></script>
-        <script type='text/javascript' src='src/KurveSpecial.js'></script>
+        <script type='text/javascript' src='src/KurveSuperpowerconfig.js'></script>
+        <script type='text/javascript' src='src/KurveSuperpower.js'></script>
         <script type='text/javascript' src='src/KurveCurve.js'></script>
         <script type='text/javascript' src='src/KurvePoint.js'></script>
         <script type='text/javascript' src='src/KurvePlayer.js'></script>
@@ -28,26 +27,51 @@
         <div id='content'>
             <div id='content-left' class='content'>
                 <canvas id='field' class='hidden'></canvas>
+
                 <div id='menu'>
-                    <h1>Achtung, die Kurve!</h1>
-                    <h3>Choose players and hit <strong>SPACE</strong> to start the game.</h3>
-                    <div id='menu-players'></div>
+                    <div id='menu-intro' class='light'>
+                        <h3>Choose players using your mouse or the keyboard and hit <strong>SPACE</strong> to start the game!</h3>
+                    </div>
+
+                    <div id='menu-players'>
+                        <div class='head'>
+                            <div class='title'>
+                                <span>player</span>
+                            </div>
+                            <div class='key left'>
+                                <span>left</span>
+                            </div>
+                            <div class='key right'>
+                                <span>right</span>
+                            </div>
+                            <div class='superpower'>
+                                <span>superpower</span>
+                            </div>
+                        </div>
+                        <div class='clear'></div>
+
+                        <div id='menu-players-list'></div>
+                    </div>
                 </div>
             </div>
-            <div id='content-right' class='hidden'>
+
+            <div id='content-right' class='hidden light'>
                 <div id='player-scores'></div>
-                <a href='/'>MENU</a>
-                <a href='#' onclick='Kurve.Menu.requestFullScreen()'>go full screen</a> 
+
+                <a href='/' class='button'>menu</a>
+                <a href='#' class='button' onclick='Kurve.Menu.requestFullScreen()'>go full screen</a>
+
                 <div id='author'>
                     <span>Authored by </span>
-                    <a href="http://markusmaechler.ch" target="_blank" rel="author">Markus Mächler</a>
+                    <a href='http://markusmaechler.ch' target='_blank' rel='author'>Markus Mächler</a>
                     <span>&nbsp;&Iota;&nbsp;</span>
-                    <a href="https://github.com/mmchler/kurve" target="_blank">GitHub</a>
+                    <a href='https://github.com/mmchler/kurve' target='_blank'>GitHub</a>
                     <span>&nbsp;&Iota;&nbsp;</span>
-                    <a href="https://github.com/mmchler/kurve/issues" target="_blank">Report a Bug or Feature Request</a>
+                    <a href='https://github.com/mmchler/kurve/issues' target='_blank'>Report a Bug or Feature Request</a>
                 </div>
             </div>
             <div class='clear'></div>
+
             <div id='lightbox-overlay' class='hidden'>
                 <div id='lightbox-wrap'>
                     <table>

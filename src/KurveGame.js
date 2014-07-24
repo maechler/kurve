@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Kurve.Game = {    
     
@@ -38,7 +38,7 @@ Kurve.Game = {
     },
     
     onKeyDown: function(event) {
-        if (event.keyCode === 32) this.onSpaceDown();
+        if ( event.keyCode === 32 ) this.onSpaceDown();
         
         this.keysDown[event.keyCode] = true;
     },
@@ -65,7 +65,7 @@ Kurve.Game = {
             this.startRun();
         } else {
             this.stopRun();
-            Kurve.Lightbox.show("<h1>Paused</h1>");
+            Kurve.Lightbox.show('<h1>Paused</h1>');
         }
         
         this.isPaused = !this.isPaused;
@@ -126,7 +126,7 @@ Kurve.Game = {
     },
     
     stopRun: function() {        
-        this.running        = false;
+        this.running = false;
         clearInterval(this.runIntervalId);
     },
     
@@ -162,7 +162,7 @@ Kurve.Game = {
     
     startDeathMatch: function(winners) {
         this.deathMatch = true;
-        Kurve.Lightbox.show("DEATHMATCH!");
+        Kurve.Lightbox.show('DEATHMATCH!');
         setTimeout(Kurve.Lightbox.hide.bind(Kurve.Lightbox), 3000);
         
         var winnerCurves = [];
@@ -177,8 +177,8 @@ Kurve.Game = {
         this.startNewRound();
     },
     
-    gameOver: function(player) {
-        var winnerHTML   = '<h1 class="active ' + player.getId() + '">' + player.getId() + ' wins!</h1>';
+    gameOver: function(winner) {
+        var winnerHTML   = '<h1 class="active ' + winner.getId() + '">' + winner.getId() + ' wins!</h1>';
         winnerHTML      += '<a href="/">Start new game</a>';
         
         Kurve.Lightbox.show(winnerHTML);

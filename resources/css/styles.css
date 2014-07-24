@@ -1,30 +1,23 @@
 html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal}ol,ul{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:text-top}sub{vertical-align:text-bottom}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;*font-size:100%}legend{color:#000}#yui3-css-stamp.cssreset{display:none}
 
 body {
-    color: #535353;
+    color: #3F3E37;
+    background: #EBE7DC;
     position: absolute;
     width: 100%;
     height: 100%;
-    font-family: Arial, sans-serif;
-}
-
-h1, h2 {
-    font-family: 'VT323', serif;
-}
-
-h1 {
-    font-size: 80px;
-    margin: 10px 0 30px 0;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 18px;
+    top: 0;
+    left: 0;
 }
 
 h2 {
-    font-size: 60px;
-    margin: 0 0 10px 0;
+    font-size: 40px;
 }
 
 h3 {
-    font-size: 20px;
-    margin: 5px 0 15px 0;
+    font-size: 18px;
 }
 
 strong {
@@ -32,8 +25,18 @@ strong {
 }
 
 canvas {
-    background: #FFF;
     position: absolute;
+}
+
+.button {
+    background: #EBE7DC;
+    padding: 10px;
+    color: #666666;
+    text-decoration: none;
+}
+
+.button:hover {
+    background: #D9D6CB;
 }
 
 .hidden {
@@ -42,6 +45,10 @@ canvas {
 
 .clear {
     clear: both;
+}
+
+.light {
+    background-color: #F7F6F2;
 }
 
 .inactive {
@@ -60,37 +67,32 @@ canvas {
 }
 
 .red.active {
-    color: #C9000A;
+    color: #D4373E;
 }
 
 .green.active {
-    color: #027C00;
+    color: #3BCB69;
 }
 
 .blue.active {
-    color: #2A368C;
+    color: #3B90C3;
 }
 
 .orange.active {
-    color: #FF7219;
+    color: #FFA039;
 }
 
 .purple.active {
-    color: #63238C;
+    color: #7D11CD;
 }
 
 .pink.active {
-    color: #FF92EA;
+    color: #DC72FF;
 }
 
 #content {
-    background: #F9F9F0;
     width: 100%;
     height: 100%;
-}
-
-.content {
-    background: #FFF;
 }
 
 #content-left {
@@ -100,13 +102,123 @@ canvas {
 }
 
 #content-right {
-    margin: 2%;
+    padding: 1% 2%;
     width: 26%;
     float: left;
+    height: 96%;
 }
 
 #menu {
     padding: 30px;
+    width: 600px;
+}
+
+#menu-intro {
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+#menu-players .player > div {
+    float: left;
+}
+
+#menu-players .player > div > * {
+    padding: 10px;
+    height: 40px;
+    vertical-align: middle;
+    font-size: 28px;
+    line-height: 40px;
+}
+
+#menu-players .head div {
+    float: left;
+    font-size: 18px;
+    background: #D9D6CC;
+    padding: 5px 0;
+}
+
+#menu-players .head div *{
+    padding: 5px 10px;
+}
+
+#menu-players .title {
+    width: 160px;
+    margin: 0 5px 8px 0;
+}
+
+#menu-players .key {
+    text-align: center;
+}
+
+#menu-players .key.left,
+#menu-players .key.right {
+    width: 60px;
+    margin: 0 5px 8px 0;
+}
+
+#menu-players .superpower .key {
+    width: 40px;
+    margin: 0 5px 8px 0;
+}
+
+#menu-players-list .title,
+#menu-players-list .key.left,
+#menu-players-list .key.right,
+#menu-players-list .superpower .key,
+#menu-players-list .superpower .superpowerType {
+    border-bottom: 1px solid #8C8A81;
+}
+
+#menu-players .superpower {
+    width: 305px;
+}
+
+#menu-players .superpower .key {
+    float: left;
+    margin-right: 2px;
+}
+
+#menu-players .superpowerType {
+    font-size: 18px;
+    width: 223px;
+    height: 40px;
+    float: left;
+    overflow: hidden;
+}
+
+#menu-players .superpowerType div {
+    float: left;
+    font-size: 18px;
+}
+
+#menu-players .superpowerType .left {
+    width: 15px;
+    height: 32px;
+    background: url('../images/arrow-left.png');
+    margin-top: 5px;
+}
+
+#menu-players .superpowerType .right {
+    width: 15px;
+    height: 32px;
+    background: url('../images/arrow-right.png');
+    margin-top: 5px;
+    float: right;
+}
+
+#menu-players .superpowers {
+    width: 165px;
+    padding: 0 10px;
+}
+
+#menu-players .superpowers div {
+    width: 100%;
+    text-align: center;
+    display: none;
+}
+
+#menu-players .superpowers div.active {
+    display: block;
 }
 
 #lightbox-overlay {
@@ -137,6 +249,10 @@ canvas {
     margin: auto;
 }
 
+#player-scores {
+    margin: 10px 0 30px 0;
+}
+
 #player-scores .title {
     float: left;
     width: 180px;
@@ -145,7 +261,6 @@ canvas {
 #player-scores .points {
     float: left;
     font-size: 40px;
-    padding-top: 15px;
 }
 
 #author {

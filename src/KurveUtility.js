@@ -1,7 +1,15 @@
-"use strict";
+'use strict';
 
-Kurve.Utility = function() {    
-    //to be used for good
+Kurve.Utility = function(element) {
+    if ( element instanceof String ) {}
+
+    return new Kurve.Utility.Element(element);
+};
+
+Kurve.Utility.Element = function(element) {
+    this.element = element;
+
+
 };
 
 Kurve.Utility.round = function(number, digitsAfterComa) {

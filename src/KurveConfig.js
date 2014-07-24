@@ -1,10 +1,10 @@
-"use strict";
+'use strict';
 
 Kurve.Config = {
     
     Field: {
-        borderColor:    "#ddd",
-        width:          0.7,    //70% percent of the screen
+        borderColor:    '#ACAC9D',
+        width:          0.7,        //70% percent of the screen
     },
     
     Curve: {
@@ -16,16 +16,16 @@ Kurve.Config = {
     
     Game: {
         startDelay:     2000,
-        fps:            25
+        fps:            25,
     },
     
     players: [
-        { id:"red",      color:"#C9000A",   keyLeft:49,   keyRight:81,   keySpecial:65  },
-        { id:"green",    color:"#027C00",   keyLeft:89,   keyRight:88,   keySpecial:67  },
-        { id:"blue",     color:"#2A368C",   keyLeft:86,   keyRight:66,   keySpecial:78  },
-        { id:"purple",   color:"#63238C",   keyLeft:79,   keyRight:48,   keySpecial:80 },
-        { id:"pink",     color:"#FF92EA",   keyLeft:53,   keyRight:54,   keySpecial:55  },
-        { id:"orange",   color:"#FF7219",   keyLeft:90,   keyRight:85,   keySpecial:73  }
+        { id:'red',      color:'#D4373E',   keyLeft:49,   keyRight:81,   keySuperpower:65  },
+        { id:'orange',   color:'#FFA039',   keyLeft:90,   keyRight:85,   keySuperpower:73  },
+        { id:'green',    color:'#3BCB69',   keyLeft:89,   keyRight:88,   keySuperpower:67  },
+        { id:'blue',     color:'#3B90C3',   keyLeft:86,   keyRight:66,   keySuperpower:78  },
+        { id:'purple',   color:'#7D11CD',   keyLeft:79,   keyRight:48,   keySuperpower:80  },
+        { id:'pink',     color:'#DC72FF',   keyLeft:53,   keyRight:54,   keySuperpower:55  },
     ]
 
 };

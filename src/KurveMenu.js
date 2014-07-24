@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Kurve.Menu = {
     
@@ -16,7 +16,7 @@ Kurve.Menu = {
             playerHTML += player.renderMenuItem();
         });
         
-        document.getElementById('menu-players').innerHTML += playerHTML;
+        document.getElementById('menu-players-list').innerHTML += playerHTML;
     },
     
     addWindowListeners: function() {
@@ -73,7 +73,7 @@ Kurve.Menu = {
     },
     
     requestFullScreen: function() {
-        window.document.getElementById('content').requestFullScreen();   
+        document.body.webkitRequestFullScreen();
     }
     
 };

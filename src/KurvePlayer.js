@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-Kurve.Player = function(id, color, keyLeft, keyRight, keySpecial) {
+Kurve.Player = function(id, color, keyLeft, keyRight, keySuperpower) {
     var points      = 0;
     this.isActive   = false;
     
@@ -13,28 +13,53 @@ Kurve.Player = function(id, color, keyLeft, keyRight, keySpecial) {
     this.getColor       = function() { return color; };
     this.getKeyLeft     = function() { return keyLeft; };
     this.getKeyRight    = function() { return keyRight; };
-    this.getKeySpecial  = function() { return keySpecial; }; //A
+    this.getKeySuperpower  = function() { return keySuperpower; };
     
 };
 
 Kurve.Player.prototype.renderMenuItem = function() {
-    var menuItemHTML    = '<div id="' + this.getId() + '" class="player inactive ' + this.getId() +'">';
-    menuItemHTML       +=      '<div class="title"><h2>' + this.getId() + '</h2></div>';
-    menuItemHTML       +=      '<div class="keys">' + this.getKeyLeftChar() + ' + ' + this.getKeyRightChar() + ' + ' + this.getKeySpecialChar() + '</div>';
-    menuItemHTML       +=      '<div class="clear"></div>';
-    menuItemHTML       += '</div>';
-
-    return menuItemHTML;
+    return  '<div id="' + this.getId() + '" class="player inactive ' + this.getId() +'">' +
+                '<div class="title light"><h2>' + this.getId() + '</h2></div>' +
+                '<div class="key left light"><div>' + this.getKeyLeftChar() + '</div></div>' +
+                '<div class="key right light"><div>' + this.getKeyRightChar() + '</div></div>' +
+                '<div class="superpower">' +
+                    '<div class="key light">' + this.getKeySuperpowerChar() + '</div>' +
+                    '<div class="superpowerType light">' + this.renderSuperpowerMenu() + '</div>' +
+                '</div>' +
+                '<div class="clear"></div>' +
+            '</div>';
 };
 
 Kurve.Player.prototype.renderScoreItem = function() {
-    var scoreItemHTML   = '<div class="active ' + this.getId() + '">';
-    scoreItemHTML      +=      '<div class="title"><h2>' + this.getId() + '</h2></div>';
-    scoreItemHTML      +=      '<div class="points">' + this.getPoints() + '</div>';
-    scoreItemHTML      +=      '<div class="clear"></div>';
-    scoreItemHTML      += '</div>';
+    return  '<div class="active ' + this.getId() + '">' +
+                '<div class="title"><h2>' + this.getId() + '</h2></div>' +
+                '<div class="points">' + this.getPoints() + '</div>' +
+                '<div class="clear"></div>' +
+            '</div>';
+};
 
-    return scoreItemHTML;
+Kurve.Player.prototype.superpowerMenu = null;
+
+Kurve.Player.prototype.renderSuperpowerMenu = function() {
+    if ( !(typeof Kurve.Player.prototype.superpowerMenu === 'string') ) {
+        var superpowerMenu = '<div class="left"></div> ' +
+                                '<div class="superpowers">';
+        var classesFirstElement = 'class="active"';
+
+        for (var superpowerType in Kurve.Superpowerconfig.types) {
+            superpowerMenu +=  '<div ' + classesFirstElement + ' data-superpowerType="' + superpowerType + '">' +
+                                    Kurve.Superpowerconfig[superpowerType].label +
+                                '</div>';
+            classesFirstElement = '';
+        }
+
+        superpowerMenu +=       '</div> <div class="right">' +
+                            '</div>';
+
+        Kurve.Player.prototype.superpowerMenu = superpowerMenu;
+    }
+
+    return Kurve.Player.prototype.superpowerMenu;
 };
 
 Kurve.Player.prototype.isKeyRight = function(keyCode) {
@@ -53,6 +78,6 @@ Kurve.Player.prototype.getKeyRightChar = function() {
     return String.fromCharCode(this.getKeyRight());
 };
 
-Kurve.Player.prototype.getKeySpecialChar = function() {
-    return String.fromCharCode(this.getKeySpecial());
-};
+Kurve.Player.prototype.getKeySuperpowerChar = function() {
+    return String.fromCharCode(this.getKeySuperpower());
+a};

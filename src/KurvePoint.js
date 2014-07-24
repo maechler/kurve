@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Kurve.Point = function(posX, posY) {
     this.getPosX = function(precision) {

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var Kurve = {    
     
@@ -14,10 +14,10 @@ var Kurve = {
         
     initPlayers: function() {
         Kurve.Config.players.forEach(function(player) {
-            Kurve.players.push(new Kurve.Player(player.id, player.color, player.keyLeft, player.keyRight, player.keySpecial));
+            Kurve.players.push(new Kurve.Player(player.id, player.color, player.keyLeft, player.keyRight, player.keySuperpower));
         });
     }
 
 };
 
-document.addEventListener("DOMContentLoaded", Kurve.init.bind(Kurve));
+document.addEventListener('DOMContentLoaded', Kurve.init.bind(Kurve));

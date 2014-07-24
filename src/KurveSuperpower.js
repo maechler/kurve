@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-Kurve.Special = function(hooks, act, helpers) {
+Kurve.Superpower = function(hooks, act, helpers) {
     this.count          = 1;
     this.isActive       = false;
     this.act            = act;

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Kurve.Field = {
     
@@ -20,7 +20,7 @@ Kurve.Field = {
         var width           = window.innerWidth * Kurve.Config.Field.width;
         var height          = window.innerHeight;
         
-        this.canvas         = document.getElementById("field");
+        this.canvas         = document.getElementById('field');
         this.canvas.width   = width;
         this.canvas.height  = height;
         this.width          = width;
@@ -28,7 +28,7 @@ Kurve.Field = {
     },
     
     initContext: function() {
-        this.ctx = this.canvas.getContext("2d");
+        this.ctx = this.canvas.getContext('2d');
     },
     
     initField: function() {

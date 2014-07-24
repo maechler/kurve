@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 
 Kurve.Factory = {
-    getSpecial: function(type) {
-        if ( !Kurve.Specialconfig.hasOwnProperty(type) ) throw 'Special type ' + type + ' is not yet registered.';
+    getSuperpower: function(type) {
+        if ( !Kurve.Superpowerconfig.hasOwnProperty(type) ) throw 'Superpower type ' + type + ' is not yet registered.';
         
-        var hooks   = Kurve.Specialconfig[type].hooks;
-        var act     = Kurve.Specialconfig[type].act;
-        var helpers = Kurve.Specialconfig[type].helpers;
+        var hooks   = Kurve.Superpowerconfig[type].hooks;
+        var act     = Kurve.Superpowerconfig[type].act;
+        var helpers = Kurve.Superpowerconfig[type].helpers;
         
-        return new Kurve.Special(hooks, act, helpers);
+        return new Kurve.Superpower(hooks, act, helpers);
     }    
 };

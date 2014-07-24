@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Kurve.Curve = function(player, game, field, config) {
     
@@ -6,7 +6,7 @@ Kurve.Curve = function(player, game, field, config) {
     var nextPosition    = null;
     
     this.trac           = [];
-    this.special        = Kurve.Factory.getSpecial(Kurve.Specialconfig.types.INVISIBLE);
+    this.superpower        = Kurve.Factory.getSuperpower(Kurve.Superpowerconfig.types.INVISIBLE);
     this.invisible      = false;
 
     var options         = {
@@ -40,7 +40,7 @@ Kurve.Curve.prototype.drawNextFrame = function() {
     this.checkForCollision();
     this.drawLine(this.getField().ctx);
     
-    if ( this.useSpecial(Kurve.Specialconfig.hooks.DRAW_NEXT_FRAME) ) this.special.act(Kurve.Specialconfig.hooks.DRAW_NEXT_FRAME, this);
+    if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME) ) this.superpower.act(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME, this);
 };
 
 Kurve.Curve.prototype.drawPoint = function(ctx) {
@@ -57,7 +57,7 @@ Kurve.Curve.prototype.drawLine = function(ctx) {
     ctx.strokeStyle = this.getPlayer().getColor();        
     ctx.lineWidth   = this.getOptions().lineWidth;
     
-    if ( this.useSpecial(Kurve.Specialconfig.hooks.DRAW_LINE) ) this.special.act(Kurve.Specialconfig.hooks.DRAW_LINE, this);
+    if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.DRAW_LINE) ) this.superpower.act(Kurve.Superpowerconfig.hooks.DRAW_LINE, this);
 
     ctx.moveTo(this.getPosition().getPosX(), this.getPosition().getPosY());
     ctx.lineTo(this.getNextPosition().getPosX(), this.getNextPosition().getPosY());
@@ -119,7 +119,7 @@ Kurve.Curve.prototype.checkForCollision = function() {
 };
 
 Kurve.Curve.prototype.isCollided = function(position) {
-    if ( this.useSpecial(Kurve.Specialconfig.hooks.IS_COLLIDED) ) return this.special.act(Kurve.Specialconfig.hooks.IS_COLLIDED, this);
+    if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.IS_COLLIDED) ) return this.superpower.act(Kurve.Superpowerconfig.hooks.IS_COLLIDED, this);
     
     return this.getField().isPointOutOfBounds(position) || this.getField().isPointDrawn(position);
 };
@@ -140,11 +140,11 @@ Kurve.Curve.prototype.setRandomAngle = function() {
     this.setAngle(2 * Math.PI * Math.random());
 };
 
-Kurve.Curve.prototype.useSpecial = function(hook) {
-    if ( this.special.isActive
-         || Kurve.Game.isKeyDown(this.getPlayer().getKeySpecial()) 
-         && this.special.usesHook(hook) 
-         && this.special.count > 0 )  return true;
+Kurve.Curve.prototype.useSuperpower = function(hook) {
+    if ( this.superpower.isActive
+         || Kurve.Game.isKeyDown(this.getPlayer().getKeySuperpower()) 
+         && this.superpower.usesHook(hook) 
+         && this.superpower.count > 0 )  return true;
      
     return false;
 };
