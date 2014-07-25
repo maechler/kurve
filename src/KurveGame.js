@@ -102,6 +102,7 @@ Kurve.Game = {
     
     notifyDeath: function(curve) {
         delete this.runningCurves[curve.getPlayer().getId()];
+        this.losers.push(curve);
         
         for (var i in this.runningCurves) {
             this.runningCurves[i].getPlayer().incrementPoints();
@@ -114,9 +115,11 @@ Kurve.Game = {
     
     startNewRound: function() {
         this.isRoundStarted = true;
+        this.losers         = [];
         
         Kurve.Field.drawField();
         this.initRun();
+        this.renderPlayerScores();
         setTimeout(this.startRun.bind(this), Kurve.Config.Game.startDelay);
     },
     
@@ -146,7 +149,20 @@ Kurve.Game = {
         
         this.stopRun();
         this.runningCurves  = {};
+        this.incrementSuperpowers();
         this.checkForWinner();
+    },
+
+    incrementSuperpowers: function() {
+        var numberOfPlayers = this.players.length;
+
+        this.players[numberOfPlayers - 1].getSuperpower().count += 2;
+
+        var numberOfOtherPlayersGettingSomething = u.round((numberOfPlayers - 2) / 2, 0);
+
+        for (var i = numberOfOtherPlayersGettingSomething; i > 0; i--) {
+            this.players[numberOfPlayers - 1 - i].getSuperpower().count++;
+        }
     },
     
     checkForWinner: function() {
