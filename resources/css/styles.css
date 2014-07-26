@@ -110,12 +110,12 @@ canvas {
 
 #menu {
     padding: 30px;
-    width: 600px;
+    width: 580px;
 }
 
 #menu-intro {
     padding: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 #menu-players .player > div {
@@ -143,7 +143,7 @@ canvas {
 
 #menu-players .title {
     width: 160px;
-    margin: 0 5px 8px 0;
+    margin: 0 1px 1px 0;
 }
 
 #menu-players .key {
@@ -153,12 +153,12 @@ canvas {
 #menu-players .key.left,
 #menu-players .key.right {
     width: 60px;
-    margin: 0 5px 8px 0;
+    margin: 0 1px 1px 0;
 }
 
 #menu-players .superpower .key {
     width: 40px;
-    margin: 0 5px 8px 0;
+    margin: 0 1px 1px 0;
 }
 
 #menu-players-list div {
@@ -170,21 +170,21 @@ canvas {
 #menu-players-list .key.right,
 #menu-players-list .superpower .key,
 #menu-players-list .superpower .superpowerType {
-    border-bottom: 1px solid #8C8A81;
+    border-bottom: 1px solid #D9D6CC;
 }
 
 #menu-players .superpower {
-    width: 305px;
+    width: 297px;
 }
 
 #menu-players .superpower .key {
     float: left;
-    margin-right: 2px;
+    margin-right: 1px;
 }
 
 #menu-players .superpowerType {
     font-size: 18px;
-    width: 223px;
+    width: 216px;
     height: 40px;
     float: left;
     overflow: hidden;
