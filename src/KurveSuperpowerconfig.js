@@ -55,7 +55,6 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
     },
      
     act: function(hook, curve) {
-        this.decrementCount();
         var now = new Date();
          
         if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
@@ -63,6 +62,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
             curve.setNextPosition(jumpedPosition);
 
             this.helpers.previousExecution = now;
+            this.decrementCount();
         }
     }
  };
