@@ -315,3 +315,11 @@ canvas {
     color: #444;
     text-decoration: underline;
 }
+
+.beta {
+    position: fixed;
+    bottom: 20px;
+    left: 30px;
+    font-size: 60px;
+    opacity: 0.7;
+}

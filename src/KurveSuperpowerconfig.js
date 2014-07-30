@@ -50,7 +50,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
      
     helpers: {
         jumpWidth:         10,
-        timeOut:           250,
+        timeOut:           250, //until superpower can be called again
         previousExecution: new Date()
     },
      
