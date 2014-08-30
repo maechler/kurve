@@ -55,7 +55,11 @@ Kurve.Game = {
         if ( this.running || this.isPaused ) {
             this.togglePause();   
         } else if ( !this.isRoundStarted ) {
-            this.startNewRound();
+            if ( this.deathMatch ) {
+                this.startDeathMatch();
+            } else {
+                this.startNewRound();
+            }
         }
     },
     
@@ -145,6 +149,12 @@ Kurve.Game = {
     },
     
     terminateRound: function() {
+        if ( this.deathMatch ) {
+            console.log(this.runningCurves);
+            var curve = this.runningCurves[Object.keys(this.runningCurves)[0]];
+            this.gameOver(curve.getPlayer());
+        }
+
         this.isRoundStarted = false;
         
         this.stopRun();
@@ -166,6 +176,8 @@ Kurve.Game = {
     },
     
     checkForWinner: function() {
+        if ( this.deathMatch ) return;
+
         var winners = [];
         
         this.players.forEach(function(player) {
@@ -174,31 +186,36 @@ Kurve.Game = {
         
         if (winners.length === 0) return;
         if (winners.length === 1) this.gameOver(winners[0]);
-        if (winners.length  >  1) this.startDeathMatch(winners);
+        if (winners.length  >  1) this.initDeathMatch(winners);
     },
-    
-    startDeathMatch: function(winners) {
+
+    initDeathMatch: function(winners) {
         this.deathMatch = true;
-        Kurve.Lightbox.show('DEATHMATCH!');
-        setTimeout(Kurve.Lightbox.hide.bind(Kurve.Lightbox), 3000);
-        
+        Kurve.Lightbox.show('<h1>DEATHMATCH!</h1>');
+
         var winnerCurves = [];
         this.curves.forEach(function(curve) {
             winners.forEach(function(player){
-                if (curve.getPlayer() === player) winnerCurves.push(curve);
+                if (curve.getPlayer() === player) {
+                    winnerCurves.push(curve);
+                    player.setColor('#333');
+                }
             });
         });
-        
+
         this.curves = winnerCurves;
-        
+    },
+    
+    startDeathMatch: function(winners) {
+        Kurve.Lightbox.hide();
         this.startNewRound();
     },
     
     gameOver: function(winner) {
-        var winnerHTML   = '<h1 class="active ' + winner.getId() + '">' + winner.getId() + ' wins!</h1>';
-        winnerHTML      += '<a href="/">Start new game</a>';
-        
-        Kurve.Lightbox.show(winnerHTML);
+        Kurve.Lightbox.show(
+            '<h1 class="active ' + winner.getId() + '">' + winner.getId() + ' wins!</h1>' +
+            '<a href="/" class="button">Start new game</a>'
+        );
     }
 
 };

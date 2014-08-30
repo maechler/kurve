@@ -20,6 +20,8 @@ Kurve.Player = function(id, color, keyLeft, keyRight, keySuperpower) {
 
         superPowerElement.innerHTML = this.getSuperpower().getLabel();
     };
+
+    this.setColor           = function(newColor) { color = newColor; };
     
     this.getPoints          = function() { return points; };
     this.getId              = function() { return id; };
@@ -91,4 +93,4 @@ Kurve.Player.prototype.getKeyRightChar = function() {
 
 Kurve.Player.prototype.getKeySuperpowerChar = function() {
     return String.fromCharCode(this.getKeySuperpower());
-a};
+};

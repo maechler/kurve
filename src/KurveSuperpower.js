@@ -1,7 +1,7 @@
 'use strict';
 
 Kurve.Superpower = function(hooks, act, helpers, type) {
-    this.count          = 3;
+    this.count          = 1;
     this.isActive       = false;
     this.act            = act;
     this.helpers        = helpers;

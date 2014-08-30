@@ -12,6 +12,11 @@ body {
     left: 0;
 }
 
+h1 {
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
 h2 {
     font-size: 40px;
 }
@@ -317,11 +322,11 @@ canvas {
 }
 
 .beta {
-    -moz-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    -webkit-transform: rotate(90deg);
-    transform: rotate(90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
     position: fixed;
     top: 200px;
     right: -88px;

@@ -3,7 +3,7 @@
 var Kurve = {    
     
     players: [],
-    playersById: [],
+    playersById: {},
     
     init: function() {
         this.initPlayers();
