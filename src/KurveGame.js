@@ -27,7 +27,9 @@ Kurve.Game = {
     },
     
     drawFrame: function() {
-        for (var i in this.runningCurves) this.runningCurves[i].drawNextFrame();
+        for (var i in this.runningCurves) {
+            if ( this.runningCurves[i] !== undefined ) this.runningCurves[i].drawNextFrame();
+        }
     },
     
     addWindowListeners: function() {
