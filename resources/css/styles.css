@@ -310,11 +310,11 @@ canvas {
     padding-right: 15px;
     font-size: 11px;
     color: #888;
+    line-height: 1.4;
 }
 
 #author a,
 #author a:visited{
-    padding: 2px;
     color: #888;
     text-decoration: none;
 }
