@@ -12,13 +12,11 @@ Kurve.Lightbox = {
     
     show: function(htmlContent) {
         u.removeClass('hidden', 'lightbox-overlay');
-        
         this.lightboxContent.innerHTML = htmlContent;
     },
     
     hide: function() {
         u.setClassName('hidden', 'lightbox-overlay');
-      
         this.lightboxContent.innerHTML = '';
     }
     

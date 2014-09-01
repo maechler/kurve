@@ -7,6 +7,8 @@ Kurve.Curve = function(player, game, field, config, superpower) {
     
     this.trac           = [];
     this.invisible      = false;
+    this.previousMiddlePoint = null;
+    this.previousMiddlePosition = null;
 
     var options         = {
         stepLength:     config.stepLength,
@@ -22,7 +24,7 @@ Kurve.Curve = function(player, game, field, config, superpower) {
     
     this.setPosition        = function(newPosition) { position = newPosition; };
     this.setNextPosition    = function(newPosition) { nextPosition = newPosition; };
-    this.setRandomPosition  = function(newPosition) { position = nextPosition = newPosition; };
+    this.setRandomPosition  = function(newPosition) { position = nextPosition = this.previousMiddlePosition = this.previousMiddlePoint = newPosition; };
     this.setAngle           = function(newAngle)    { options.angle = newAngle; };
     
     this.getPlayer          = function() { return player; };
@@ -32,7 +34,6 @@ Kurve.Curve = function(player, game, field, config, superpower) {
     this.getPosition        = function() { return position; };
     this.getNextPosition    = function() { return nextPosition; };
     this.getOptions         = function() { return options; };
-    
 };
 
 Kurve.Curve.prototype.drawNextFrame = function() {
@@ -40,7 +41,12 @@ Kurve.Curve.prototype.drawNextFrame = function() {
     this.checkForCollision();
     this.drawLine(this.getField().ctx);
     
-    if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME) ) this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME, this);
+    if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME) ) {
+        console.log('### USE SUPERPOWER ###');
+        console.log('superpower', this.getPlayer().getSuperpower());
+        this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME, this);
+
+    }
 };
 
 Kurve.Curve.prototype.drawPoint = function(ctx) {
@@ -54,12 +60,12 @@ Kurve.Curve.prototype.drawLine = function(ctx) {
     ctx.beginPath();    
     this.invisible = ( this.getOptions().holeCountDown < 0 );
 
-    ctx.strokeStyle = this.getPlayer().getColor();        
+    ctx.strokeStyle = this.getPlayer().getColor();
     ctx.lineWidth   = this.getOptions().lineWidth;
     
     if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.DRAW_LINE) ) this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.DRAW_LINE, this);
 
-    ctx.moveTo(this.getPosition().getPosX(), this.getPosition().getPosY());
+    ctx.moveTo(this.previousMiddlePosition.getPosX(), this.previousMiddlePosition.getPosY());
     ctx.lineTo(this.getNextPosition().getPosX(), this.getNextPosition().getPosY());
 
     if ( this.invisible ) {
@@ -83,10 +89,14 @@ Kurve.Curve.prototype.moveToNextFrame = function() {
     
     this.trace = this.getPointSurroundings(nextPoint);
     this.trace.concat(this.getPointSurroundings(middlePoint));
-    
+
+    if ( this.previousMiddlePoint === null) this.previousMiddlePoint = middlePoint;
+
+    this.previousMiddlePosition = this.previousMiddlePoint;
     this.setPosition(this.getNextPosition());
     this.setNextPosition(nextPoint);
-    
+
+    this.previousMiddlePoint = middlePoint;
 };
 
 Kurve.Curve.prototype.getMovedPosition = function(step) {
@@ -141,6 +151,13 @@ Kurve.Curve.prototype.setRandomAngle = function() {
 };
 
 Kurve.Curve.prototype.useSuperpower = function(hook) {
+    console.log('isActive: ', this.getPlayer().getSuperpower().isActive);
+    console.log('otherStuff: ', Kurve.Game.isKeyDown(this.getPlayer().getKeySuperpower())
+        && this.getPlayer().getSuperpower().usesHook(hook)
+    && this.getPlayer().getSuperpower().count > 0);
+
+    console.log('superpower2: ', this.getPlayer().getSuperpower());
+
     if ( (this.getPlayer().getSuperpower().isActive
          || Kurve.Game.isKeyDown(this.getPlayer().getKeySuperpower()) )
          && this.getPlayer().getSuperpower().usesHook(hook) 

@@ -64,7 +64,10 @@ Kurve.Menu = {
             }
         });
         
-        if (Kurve.Game.curves.length === 0) return; //no players are ready
+        if (Kurve.Game.curves.length <= 1) {
+            Kurve.Game.curves = [];
+            return; //not enough players are ready
+        }
         
         u.addClass('hidden', 'menu');
         u.removeClass('hidden', 'field');
@@ -94,11 +97,11 @@ Kurve.Menu = {
 
             if ( Object.keys(Kurve.Superpowerconfig.types).length === count) {
                 superpowerType = Object.keys(Kurve.Superpowerconfig.types)[0];
-                break;
             } else {
                 superpowerType = Object.keys(Kurve.Superpowerconfig.types)[count];
-                break;
             }
+
+            break;
         }
 
         player.setSuperpower( Kurve.Factory.getSuperpower(superpowerType) );
@@ -115,11 +118,11 @@ Kurve.Menu = {
 
             if ( 1 === count) {
                 superpowerType = Object.keys(Kurve.Superpowerconfig.types)[Object.keys(Kurve.Superpowerconfig.types).length - 1];
-                break;
             } else {
                 superpowerType = Object.keys(Kurve.Superpowerconfig.types)[count - 2];
-                break;
             }
+
+            break;
         }
 
         player.setSuperpower( Kurve.Factory.getSuperpower(superpowerType) );

@@ -7,7 +7,9 @@ Kurve.Factory = {
         var hooks   = Kurve.Superpowerconfig[type].hooks;
         var act     = Kurve.Superpowerconfig[type].act;
         var helpers = Kurve.Superpowerconfig[type].helpers;
-        
+
+        console.log(helpers);
+
         return new Kurve.Superpower(hooks, act, helpers, type);
     }    
 };

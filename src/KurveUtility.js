@@ -8,8 +8,6 @@ Kurve.Utility = function(element) {
 
 Kurve.Utility.Element = function(element) {
     this.element = element;
-
-
 };
 
 Kurve.Utility.round = function(number, digitsAfterComa) {
