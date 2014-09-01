@@ -2,7 +2,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 
 body {
     color: #3F3E37;
-    background: #EBE7DC;
+    background-color: #EBE7DC;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -10,6 +10,9 @@ body {
     font-size: 18px;
     top: 0;
     left: 0;
+    background-image: none; /* url('../images/stripes.png') */
+    background-position: left bottom;
+    background-repeat: no-repeat;
 }
 
 h1 {
