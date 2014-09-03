@@ -32,8 +32,6 @@ Kurve.Factory = {
         var act     = Kurve.Superpowerconfig[type].act;
         var helpers = Kurve.Superpowerconfig[type].helpers;
 
-        console.log(helpers);
-
         return new Kurve.Superpower(hooks, act, helpers, type);
     }    
 };

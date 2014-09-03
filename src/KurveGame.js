@@ -78,15 +78,9 @@ Kurve.Game = {
     },
     
     onSpaceDown: function() {
-        if ( this.running || this.isPaused ) {
-            this.togglePause();   
-        } else if ( !this.isRoundStarted ) {
-            if ( this.deathMatch ) {
-                this.startDeathMatch();
-            } else {
-                this.startNewRound();
-            }
-        }
+        if ( this.running || this.isPaused ) return this.togglePause();
+        if ( !this.isRoundStarted && !this.deathMatch) return this.startNewRound();
+        if ( !this.isRoundStarted && this.deathMatch) return this.startDeathMatch();
     },
     
     togglePause: function() {
@@ -176,7 +170,6 @@ Kurve.Game = {
     
     terminateRound: function() {
         if ( this.deathMatch ) {
-            console.log(this.runningCurves);
             var curve = this.runningCurves[Object.keys(this.runningCurves)[0]];
             this.gameOver(curve.getPlayer());
         }

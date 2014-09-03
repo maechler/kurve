@@ -49,24 +49,15 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
           this.decrementCount();
           this.isActive  = true;
           this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
-          console.log('init', this.helpers.executionTime);
        },
        closeAct: function() {
-           console.log('close');
            this.isActive = false;
        }
     },
 
     act: function(hook, curve) {
-       console.log('act', this.helpers.executionTime);
-       console.log(this.isActive);
-
        if ( !this.isActive )                   this.helpers.initAct.call(this);
        if ( this.helpers.executionTime < 1 )   this.helpers.closeAct.call(this);
-
-
-        console.log('act 2', this.helpers.executionTime);
-        console.log(this.isActive);
 
        curve.moveToNextFrame();
        curve.checkForCollision();
@@ -93,6 +84,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
         if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
             var jumpedPosition = curve.getMovedPosition(curve.getOptions().stepLength * this.helpers.jumpWidth);
             curve.setNextPosition(jumpedPosition);
+            curve.previousMiddlePoint = jumpedPosition;
 
             this.helpers.previousExecution = now;
             this.decrementCount();

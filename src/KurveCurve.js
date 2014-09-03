@@ -66,10 +66,7 @@ Kurve.Curve.prototype.drawNextFrame = function() {
     this.drawLine(this.getField().ctx);
     
     if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME) ) {
-        console.log('### USE SUPERPOWER ###');
-        console.log('superpower', this.getPlayer().getSuperpower());
         this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME, this);
-
     }
 };
 
@@ -175,17 +172,9 @@ Kurve.Curve.prototype.setRandomAngle = function() {
 };
 
 Kurve.Curve.prototype.useSuperpower = function(hook) {
-    console.log('isActive: ', this.getPlayer().getSuperpower().isActive);
-    console.log('otherStuff: ', Kurve.Game.isKeyDown(this.getPlayer().getKeySuperpower())
-        && this.getPlayer().getSuperpower().usesHook(hook)
-    && this.getPlayer().getSuperpower().count > 0);
+    if ( !this.getPlayer().getSuperpower().usesHook(hook) ) return false;
+    if ( this.getPlayer().getSuperpower().isActive ) return true;
+    if ( Kurve.Game.isKeyDown(this.getPlayer().getKeySuperpower()) && this.getPlayer().getSuperpower().count > 0 ) return true;
 
-    console.log('superpower2: ', this.getPlayer().getSuperpower());
-
-    if ( (this.getPlayer().getSuperpower().isActive
-         || Kurve.Game.isKeyDown(this.getPlayer().getKeySuperpower()) )
-         && this.getPlayer().getSuperpower().usesHook(hook) 
-         && this.getPlayer().getSuperpower().count > 0 )  return true;
-     
     return false;
 };
