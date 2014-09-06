@@ -29,7 +29,8 @@ Kurve.Superpowerconfig = {};
 Kurve.Superpowerconfig.types = {
     RUN_FASTER: 'RUN_FASTER',
     JUMP:       'JUMP',
-    INVISIBLE:  'INVISIBLE'
+    INVISIBLE:  'INVISIBLE',
+    CROSS_BAR:  'CROSS_BAR'
 };
 
 Kurve.Superpowerconfig.hooks = {
@@ -105,11 +106,11 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
         initAct: function() {
            this.decrementCount();
            this.isActive  = true;
-           this.helpers.executionTime = 4 * Kurve.Game.fps; //4s 
+           this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
         },
         closeAct: function() {
             this.isActive = false;
-        }  
+        }
     },
 
     act: function(hook, curve) {
@@ -126,4 +127,44 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
 
     }
  };
+
+Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_BAR] = {
+    label: 'cross bar',
+
+    hooks: [
+        Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME
+    ],
+
+    helpers: {
+        timeOut:            250, //until superpower can be called again
+        previousExecution:  new Date(),
+        barWidth:           40
+    },
+
+    act: function(hook, curve) {
+        var now = new Date();
+
+        if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
+
+            var leftEndX     = Math.cos(curve.getOptions().angle - Math.PI / 2) * this.helpers.barWidth + curve.getPosition().getPosX();
+            var leftEndY     = Math.sin(curve.getOptions().angle - Math.PI / 2) * this.helpers.barWidth + curve.getPosition().getPosY();
+            var rightEndX    = Math.cos(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPosition().getPosX();
+            var rightEndY    = Math.sin(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPosition().getPosY();
+            var ctx          = Kurve.Field.ctx;
+
+            ctx.beginPath();
+
+            ctx.strokeStyle = curve.getPlayer().getColor();
+            ctx.lineWidth   = curve.getOptions().lineWidth;
+
+            ctx.moveTo(leftEndX, leftEndY);
+            ctx.lineTo(rightEndX, rightEndY);
+
+            ctx.stroke();
+
+            this.helpers.previousExecution = now;
+            this.decrementCount();
+        }
+    }
+};
  
