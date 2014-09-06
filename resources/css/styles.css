@@ -13,6 +13,13 @@ body {
     background-image: none; /* url('../images/stripes.png') */
     background-position: left bottom;
     background-repeat: no-repeat;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
 }
 
 h1 {
@@ -275,6 +282,7 @@ canvas {
     width: 7px;
     -moz-border-radius: 7px;
     -webkit-border-radius: 7px;
+    border-radius: 7px;
     margin-top: 2px;
     margin-right: 2px;
     float: left;
