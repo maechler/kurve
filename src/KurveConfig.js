@@ -28,7 +28,7 @@ Kurve.Config = {
 
     Debug: {
         curvePosition:      false,
-        fieldDrawnPixels:   true,
+        fieldDrawnPixels:   false,
     },
     
     Field: {

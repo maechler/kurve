@@ -28,16 +28,17 @@ Kurve.Superpowerconfig = {};
 
 Kurve.Superpowerconfig.types = {
     RUN_FASTER: 'RUN_FASTER',
-    JUMP:       'JUMP',
-    INVISIBLE:  'INVISIBLE',
-    CROSS_BAR:  'CROSS_BAR',
+    RUN_SLOWER: 'RUN_SLOWER',
+    JUMP: 'JUMP',
+    INVISIBLE: 'INVISIBLE',
+    VERTICAL_BAR: 'VERTICAL_BAR',
     CROSS_WALLS:'CROSS_WALLS'
 };
 
 Kurve.Superpowerconfig.hooks = {
-    DRAW_NEXT_FRAME:    'DRAW_NEXT_FRAME',
-    DRAW_LINE:          'DRAW_LINE',
-    IS_COLLIDED:        'IS_COLLIDED'
+    DRAW_NEXT_FRAME: 'DRAW_NEXT_FRAME',
+    DRAW_LINE: 'DRAW_LINE',
+    IS_COLLIDED: 'IS_COLLIDED'
 };
  
 Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
@@ -68,6 +69,36 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
        this.helpers.executionTime--;
     }
  };
+
+Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
+    label: 'run slower',
+
+    hooks: [Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME],
+
+    helpers: {
+        initialStepLength: 0,
+        executionTime: 0,
+        initAct: function(curve) {
+            this.decrementCount();
+            this.isActive  = true;
+            this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
+            this.initialStepLength = curve.getOptions().stepLength;
+
+            curve.getOptions().stepLength = this.initialStepLength / 2;
+        },
+        closeAct: function(curve) {
+            this.isActive = false;
+            curve.getOptions().stepLength = this.initialStepLength;
+        }
+    },
+
+    act: function(hook, curve) {
+        if ( !this.isActive )                   this.helpers.initAct.call(this, curve);
+        if ( this.helpers.executionTime < 1 )   this.helpers.closeAct.call(this, curve);
+
+        this.helpers.executionTime--;
+    }
+};
   
 Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
     label: 'jump',
@@ -129,8 +160,8 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
     }
  };
 
-Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_BAR] = {
-    label: 'cross bar',
+Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
+    label: 'vertical bar',
 
     hooks: [
         Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME
