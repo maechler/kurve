@@ -114,12 +114,14 @@ Kurve.Field = {
      *  y = mx + d
      */
     addLineToDrawnPixel: function(fromPoint, toPoint) {
-        var dX = toPoint.getPosX() - fromPoint.getPosX();
-        var dY = toPoint.getPosY() - fromPoint.getPosY();
-        var m  = dY / dX;
-        var d  = toPoint.getPosY() - m * toPoint.getPosX();
+        var dX      = toPoint.getPosX() - fromPoint.getPosX();
+        var dY      = toPoint.getPosY() - fromPoint.getPosY();
+        var m       = dY / dX;
+        var d       = toPoint.getPosY() - m * toPoint.getPosX();
+        var absDX   = u.round(Math.abs(dX) * this.drawnPixelPrecision, 0);
+        var steps   = absDX < 1 ? 1 : absDX;
 
-        for (var i=0; i < u.round(Math.abs(dX) * this.drawnPixelPrecision, 0); i++) {
+        for (var i=0; i < steps; i++) {
             var step = dX > 0 ? (i / this.drawnPixelPrecision) : -(i / this.drawnPixelPrecision);
             var posX = fromPoint.getPosX() + step;
             var posY = m * posX + d;
