@@ -62,12 +62,22 @@ canvas {
     clear: both;
 }
 
+.layer {
+    width: 100%;
+    height: 100%;
+}
+
 .light {
     background-color: #F7F6F2;
 }
 
 .inactive {
     color: #969696;
+}
+
+#layer-menu table {
+    margin: auto;
+    height: 100%;
 }
 
 .player .title {

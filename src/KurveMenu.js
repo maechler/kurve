@@ -93,9 +93,8 @@ Kurve.Menu = {
             return; //not enough players are ready
         }
         
-        u.addClass('hidden', 'menu');
-        u.removeClass('hidden', 'field');
-        u.removeClass('hidden', 'content-right');
+        u.addClass('hidden', 'layer-menu');
+        u.removeClass('hidden', 'layer-game');
         
         Kurve.Game.startGame();
     },
