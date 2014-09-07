@@ -33,10 +33,14 @@ Kurve.Field = {
     height:         null,
     
     drawnPixels:    [],
+
+    defaultColor:       null,
+    defaultLineWidth:   null,
     
     init: function() {
         this.initCanvas();
         this.initContext();
+        this.initDrawing();
         this.initField();
     },
         
@@ -58,7 +62,12 @@ Kurve.Field = {
     initField: function() {
         this.drawField();
     },
-    
+
+    initDrawing: function() {
+        this.defaultColor       = Kurve.Config.Field.defaultColor;
+        this.defaultLineWidth   = Kurve.Config.Field.defaultLineWidth;
+    },
+
     drawField: function() {
         this.ctx.strokeStyle    = Kurve.Config.Field.borderColor;
         this.ctx.lineWidth      = 3;
@@ -70,6 +79,51 @@ Kurve.Field = {
         
         this.drawnPixels = [];
     },
+
+    drawLine: function(fromPoint, toPoint, color) {
+        if ( color === undefined ) color = this.defaultColor;
+
+        this.ctx.beginPath();
+
+        this.ctx.strokeStyle = color;
+        this.ctx.lineWidth   = this.defaultLineWidth;
+
+        this.ctx.moveTo(fromPoint.getPosX(), fromPoint.getPosY());
+        this.ctx.lineTo(toPoint.getPosX(), toPoint.getPosY());
+
+        this.ctx.stroke();
+
+        this.addLineToDrawnPixel(fromPoint, toPoint);
+    },
+
+    drawPoint: function(point, color) {
+        if ( color === undefined ) color = this.defaultColor;
+
+        this.ctx.beginPath();
+        this.ctx.fillStyle = color;
+        this.ctx.arc(point.getPosX(), point.getPosY(), 2, 0, 2 * Math.PI, false);
+        this.ctx.fill();
+
+        this.addPointToDrawnPixel(point);
+    },
+
+    /**
+     *  y = mx + d
+     */
+    addLineToDrawnPixel: function(fromPoint, toPoint) {
+        var dX = toPoint.getPosX() - fromPoint.getPosX();
+        var dY = toPoint.getPosY() - fromPoint.getPosY();
+        var m  = dY / dX;
+        var d  = toPoint.getPosY() - m * toPoint.getPosX();
+
+        for (var i=0; i < u.round(Math.abs(dX) * 10, 0); i++) {
+            var step = dX > 0 ? (1 / 10) : -(i / 10);
+            var posX = fromPoint.getPosX() + step;
+            var posY = m * posX + d;
+
+            this.addPointsToDrawnPixel(this.getPointSurroundings(new Kurve.Point(posX, posY)));
+        }
+    },
     
     addPointsToDrawnPixel: function(points) {
         points.forEach(function(point) {
@@ -79,10 +133,14 @@ Kurve.Field = {
     
     addPointToDrawnPixel: function(point) {
         if ( this.drawnPixels[point.getPosX(0)] === undefined ) {
-            this.drawnPixels[point.getPosX(0)] = [];  
+            this.drawnPixels[point.getPosX(0)] = [];
         } 
 
         this.drawnPixels[point.getPosX(0)][point.getPosY(0)] = true;
+
+        //debug drawn points
+        //this.ctx.fillStyle = "#37FDFC";
+        //this.ctx.fillRect(point.getPosX(0), point.getPosY(0), 1, 1);
     },
     
     isPointOutOfBounds: function(point) {
@@ -100,6 +158,24 @@ Kurve.Field = {
         var posY = borderPadding + Math.round( (this.height - 2*borderPadding)*Math.random() );
         
         return new Kurve.Point(posX, posY);
+    },
+
+    getPointSurroundings: function(point) {
+        var posX                = point.getPosX(0);
+        var posY                = point.getPosY(0);
+        var pointSurroundings   = [];
+
+        pointSurroundings.push(new Kurve.Point(posX,     posY));
+        pointSurroundings.push(new Kurve.Point(posX + 1, posY));
+        pointSurroundings.push(new Kurve.Point(posX + 1, posY - 1));
+        pointSurroundings.push(new Kurve.Point(posX,     posY - 1));
+        pointSurroundings.push(new Kurve.Point(posX - 1, posY - 1));
+        pointSurroundings.push(new Kurve.Point(posX - 1, posY));
+        pointSurroundings.push(new Kurve.Point(posX - 1, posY + 1));
+        pointSurroundings.push(new Kurve.Point(posX,     posY + 1));
+        pointSurroundings.push(new Kurve.Point(posX + 1, posY + 1));
+
+        return pointSurroundings;
     }
 
 };

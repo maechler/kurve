@@ -28,8 +28,7 @@ Kurve.Curve = function(player, game, field, config, superpower) {
     
     var position        = null;
     var nextPosition    = null;
-    
-    this.trac           = [];
+
     this.invisible      = false;
     this.previousMiddlePoint = null;
     this.previousMiddlePosition = null;
@@ -58,48 +57,39 @@ Kurve.Curve = function(player, game, field, config, superpower) {
     this.getPosition        = function() { return position; };
     this.getNextPosition    = function() { return nextPosition; };
     this.getOptions         = function() { return options; };
+
 };
 
 Kurve.Curve.prototype.drawNextFrame = function() {
     this.moveToNextFrame();
     this.checkForCollision();
-    this.drawLine(this.getField().ctx);
+    this.drawLine(this.getField());
+
+    //debug curve position
+    //this.getField().ctx.fillStyle = "#000";
+    //this.getField().ctx.fillRect(this.getPosition().getPosX(0), this.getPosition().getPosY(0), 1, 1);
     
     if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME) ) {
         this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME, this);
     }
 };
 
-Kurve.Curve.prototype.drawPoint = function(ctx) {
-    ctx.beginPath();
-    ctx.fillStyle = this.getPlayer().getColor();  
-    ctx.arc(this.getPosition().getPosX(), this.getPosition().getPosY(), 2, 0, 2 * Math.PI, false);
-    ctx.fill();
+Kurve.Curve.prototype.drawCurrentPosition = function(field) {
+    field.drawPoint(this.getPosition(), this.getPlayer().getColor());
 };
 
-Kurve.Curve.prototype.drawLine = function(ctx) {
-    ctx.beginPath();    
-    this.invisible = ( this.getOptions().holeCountDown < 0 );
+Kurve.Curve.prototype.drawLine = function(field) {
+    this.invisible = this.getOptions().holeCountDown < 0;
 
-    ctx.strokeStyle = this.getPlayer().getColor();
-    ctx.lineWidth   = this.getOptions().lineWidth;
-    
     if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.DRAW_LINE) ) this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.DRAW_LINE, this);
 
-    ctx.moveTo(this.previousMiddlePosition.getPosX(), this.previousMiddlePosition.getPosY());
-    ctx.lineTo(this.getNextPosition().getPosX(), this.getNextPosition().getPosY());
-
     if ( this.invisible ) {
-        ctx.globalAlpha = 0;
-        if (this.getOptions().holeCountDown < -1) this.getOptions().holeCountDown = this.getOptions().holeInterval;
+        if ( this.getOptions().holeCountDown < -1 ) this.resetHoleCountDown();
     } else {
-        ctx.globalAlpha = 1;  
-        this.getField().addPointsToDrawnPixel(this.trace);
-    } 
+        field.drawLine(this.previousMiddlePosition, this.getNextPosition(), this.getPlayer().getColor());
+    }
 
-    this.getOptions().holeCountDown--;  
-
-    ctx.stroke();
+    this.getOptions().holeCountDown--;
 };
 
 Kurve.Curve.prototype.moveToNextFrame = function() {
@@ -107,11 +97,8 @@ Kurve.Curve.prototype.moveToNextFrame = function() {
     
     var middlePoint = this.getMovedPosition(this.getOptions().stepLength / 2);
     var nextPoint   = this.getMovedPosition(this.getOptions().stepLength);
-    
-    this.trace = this.getPointSurroundings(nextPoint);
-    this.trace.concat(this.getPointSurroundings(middlePoint));
 
-    if ( this.previousMiddlePoint === null) this.previousMiddlePoint = middlePoint;
+    if ( this.previousMiddlePoint === null ) this.previousMiddlePoint = middlePoint;
 
     this.previousMiddlePosition = this.previousMiddlePoint;
     this.setPosition(this.getNextPosition());
@@ -125,24 +112,6 @@ Kurve.Curve.prototype.getMovedPosition = function(step) {
     var posY = this.getNextPosition().getPosY() + step * Math.sin(this.getOptions().angle);
 
     return new Kurve.Point(posX, posY);
-};
-
-Kurve.Curve.prototype.getPointSurroundings = function(point) {
-    var posX                = point.getPosX(0);
-    var posY                = point.getPosY(0);
-    var pointSurroundings   = [];
-
-    pointSurroundings.push(new Kurve.Point(posX,     posY));
-    pointSurroundings.push(new Kurve.Point(posX + 1, posY));
-    pointSurroundings.push(new Kurve.Point(posX + 1, posY - 1));
-    pointSurroundings.push(new Kurve.Point(posX,     posY - 1));
-    pointSurroundings.push(new Kurve.Point(posX - 1, posY - 1));
-    pointSurroundings.push(new Kurve.Point(posX - 1, posY));
-    pointSurroundings.push(new Kurve.Point(posX - 1, posY + 1));
-    pointSurroundings.push(new Kurve.Point(posX,     posY + 1));
-    pointSurroundings.push(new Kurve.Point(posX + 1, posY + 1));
-    
-    return pointSurroundings;
 };
 
 Kurve.Curve.prototype.checkForCollision = function() {
@@ -177,4 +146,8 @@ Kurve.Curve.prototype.useSuperpower = function(hook) {
     if ( Kurve.Game.isKeyDown(this.getPlayer().getKeySuperpower()) && this.getPlayer().getSuperpower().count > 0 ) return true;
 
     return false;
+};
+
+Kurve.Curve.prototype.resetHoleCountDown = function() {
+    this.getOptions().holeCountDown = this.getOptions().holeInterval;
 };

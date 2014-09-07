@@ -27,8 +27,10 @@
 Kurve.Config = {
     
     Field: {
-        borderColor:    '#ACAC9D',
-        width:          0.7,        //70% percent of the screen
+        defaultColor:       '#333',
+        defaultLineWidth:   4,
+        borderColor:        '#ACAC9D',
+        width:              0.7, //70% percent of the screen
     },
     
     Curve: {

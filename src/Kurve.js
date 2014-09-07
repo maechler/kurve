@@ -49,6 +49,7 @@ var Kurve = {
     getPlayer: function(playerId) {
         return this.playersById[playerId];
     }
+
 };
 
 document.addEventListener('DOMContentLoaded', Kurve.init.bind(Kurve));

@@ -62,7 +62,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
 
        curve.moveToNextFrame();
        curve.checkForCollision();
-       curve.drawLine(curve.getField().ctx);
+       curve.drawLine(curve.getField());
 
        this.helpers.executionTime--;
     }
@@ -150,17 +150,8 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_BAR] = {
             var leftEndY     = Math.sin(curve.getOptions().angle - Math.PI / 2) * this.helpers.barWidth + curve.getPosition().getPosY();
             var rightEndX    = Math.cos(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPosition().getPosX();
             var rightEndY    = Math.sin(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPosition().getPosY();
-            var ctx          = Kurve.Field.ctx;
 
-            ctx.beginPath();
-
-            ctx.strokeStyle = curve.getPlayer().getColor();
-            ctx.lineWidth   = curve.getOptions().lineWidth;
-
-            ctx.moveTo(leftEndX, leftEndY);
-            ctx.lineTo(rightEndX, rightEndY);
-
-            ctx.stroke();
+            Kurve.Field.drawLine(new Kurve.Point(leftEndX, leftEndY), new Kurve.Point(rightEndX, rightEndY), curve.getPlayer().getColor());
 
             this.helpers.previousExecution = now;
             this.decrementCount();

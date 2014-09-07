@@ -44,6 +44,10 @@ Kurve.Game = {
     init: function() {
         this.intervalTimeOut        = Math.round(1000 / this.fps);
         this.playerScoresElement    = document.getElementById('player-scores');
+
+        //var contentRight            = document.getElementById('content-right');
+        //contentRight.style.width    = contentRight.clientWidth;
+        //contentRight.style.height   = contentRight.clientHeight;
     },
     
     run: function() {
@@ -163,7 +167,7 @@ Kurve.Game = {
             
             curve.setRandomPosition(Kurve.Field.getRandomPosition());
             curve.setRandomAngle();
-            curve.drawPoint(Kurve.Field.ctx);
+            curve.drawCurrentPosition(Kurve.Field);
             curve.getPlayer().getSuperpower().isActive = false;
         });
     },

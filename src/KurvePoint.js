@@ -25,17 +25,17 @@
 'use strict';
 
 Kurve.Point = function(posX, posY) {
+
     this.getPosX = function(precision) {
         if ( precision === undefined ) return posX;
-        
         return u.round(posX, precision); 
     };
     
     this.getPosY = function(precision) {
         if ( precision === undefined ) return posY;
-        
         return u.round(posY, precision); 
     };
+
 };
 
 Kurve.Point.prototype.equals = function(point) {

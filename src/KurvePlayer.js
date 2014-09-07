@@ -25,6 +25,7 @@
 'use strict';
 
 Kurve.Player = function(id, color, keyLeft, keyRight, keySuperpower) {
+
     var points              = 0;
     var superpower          = Kurve.Factory.getSuperpower(Kurve.Superpowerconfig.types.RUN_FASTER);
     var superPowerElement   = null;
@@ -54,6 +55,7 @@ Kurve.Player = function(id, color, keyLeft, keyRight, keySuperpower) {
     this.getKeyLeft         = function() { return keyLeft; };
     this.getKeyRight        = function() { return keyRight; };
     this.getKeySuperpower   = function() { return keySuperpower; };
+
 };
 
 Kurve.Player.prototype.renderMenuItem = function() {

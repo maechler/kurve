@@ -25,6 +25,7 @@
 'use strict';
 
 Kurve.Superpower = function(hooks, act, helpers, type) {
+
     this.count          = 1;
     this.isActive       = false;
     this.act            = act;
@@ -46,4 +47,5 @@ Kurve.Superpower = function(hooks, act, helpers, type) {
 
     this.getType        = function() { return type; };
     this.getLabel       = function() { return Kurve.Superpowerconfig[this.getType()].label; }
+
 };
