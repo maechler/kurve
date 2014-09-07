@@ -30,6 +30,10 @@ Kurve.Superpower = function(hooks, act, helpers, type) {
     this.isActive       = false;
     this.act            = act;
     this.helpers        = helpers;
+
+    this.deActivateSuperpower = function() {
+        this.isActive = Kurve.Superpowerconfig[type].isActiveFromStart ? true : false;
+    };
     
     this.incrementCount = function() { 
         this.count++;

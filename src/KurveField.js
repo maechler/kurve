@@ -139,7 +139,7 @@ Kurve.Field = {
     addPointToDrawnPixel: function(point) {
         if ( this.drawnPixels[point.getPosX(0)] === undefined ) {
             this.drawnPixels[point.getPosX(0)] = [];
-        } 
+        }
 
         this.drawnPixels[point.getPosX(0)][point.getPosY(0)] = true;
 

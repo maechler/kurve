@@ -30,7 +30,8 @@ Kurve.Superpowerconfig.types = {
     RUN_FASTER: 'RUN_FASTER',
     JUMP:       'JUMP',
     INVISIBLE:  'INVISIBLE',
-    CROSS_BAR:  'CROSS_BAR'
+    CROSS_BAR:  'CROSS_BAR',
+    CROSS_WALLS:'CROSS_WALLS'
 };
 
 Kurve.Superpowerconfig.hooks = {
@@ -155,6 +156,60 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_BAR] = {
 
             this.helpers.previousExecution = now;
             this.decrementCount();
+        }
+    }
+};
+
+Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
+    label: 'cross walls',
+
+    isActiveFromStart: true,
+
+    hooks: [
+        Kurve.Superpowerconfig.hooks.IS_COLLIDED
+    ],
+
+    helpers: {
+        getWallCrossedPosition: function(curve) {
+            var position = curve.getNextPosition();
+            var field = curve.getField();
+            var posX, posY = 0;
+
+            if ( position.getPosX() > field.width ) {
+                posX = position.getPosX() - field.width;
+                posY = position.getPosY();
+            } else if ( position.getPosX() < 0 ) {
+                posX = position.getPosX() + field.width;
+                posY = position.getPosY();
+            } else if ( position.getPosY() > field.height ) {
+                posX = position.getPosX();
+                posY = position.getPosY() - field.height;
+            } else {
+                //position.getPosY() < 0 or an error occured
+                posX = position.getPosX();
+                posY = position.getPosY() + field.height;
+            }
+
+            return new Kurve.Point(posX, posY);
+        }
+    },
+
+    act: function(hook, curve) {
+        var position = curve.getNextPosition();
+
+        if ( curve.getField().isPointOutOfBounds(position) && this.count > 0 ) {
+            this.decrementCount();
+            var movedPosition = this.helpers.getWallCrossedPosition(curve);
+
+            curve.setPosition(movedPosition);
+            curve.setNextPosition(movedPosition);
+            curve.previousMiddlePosition = movedPosition;
+            curve.previousMiddlePoint = movedPosition;
+
+            return false;
+        } else {
+            //standard collision detection todo refactor not to use same logic twice
+            return curve.getField().isPointOutOfBounds(position) || curve.getField().isPointDrawn(position);
         }
     }
 };

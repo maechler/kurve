@@ -27,12 +27,12 @@
 Kurve.Game = {    
     
     runIntervalId:          null,
-    fps:                    Kurve.Config.Game.fps,
+    fps:                    null,
     intervalTimeOut:        null,
     maxPoints:              null,
         
     keysDown:               {},
-    running:                false,
+    isRunning:              false,
     curves:                 [],
     runningCurves:          {},
     players:                [],
@@ -42,6 +42,7 @@ Kurve.Game = {
     playerScoresElement:    null,
     
     init: function() {
+        this.fps                    = Kurve.Config.Game.fps;
         this.intervalTimeOut        = Math.round(1000 / this.fps);
         this.playerScoresElement    = document.getElementById('player-scores');
 
@@ -82,7 +83,7 @@ Kurve.Game = {
     },
     
     onSpaceDown: function() {
-        if ( this.running || this.isPaused ) return this.togglePause();
+        if ( this.isRunning || this.isPaused ) return this.togglePause();
         if ( !this.isRoundStarted && !this.deathMatch) return this.startNewRound();
         if ( !this.isRoundStarted && this.deathMatch) return this.startDeathMatch();
     },
@@ -152,12 +153,12 @@ Kurve.Game = {
     },
     
     startRun: function() {        
-        this.running        = true;
+        this.isRunning        = true;
         this.runIntervalId  = setInterval(this.run.bind(this), this.intervalTimeOut);
     },
     
     stopRun: function() {        
-        this.running = false;
+        this.isRunning = false;
         clearInterval(this.runIntervalId);
     },
     
@@ -168,7 +169,7 @@ Kurve.Game = {
             curve.setRandomPosition(Kurve.Field.getRandomPosition());
             curve.setRandomAngle();
             curve.drawCurrentPosition(Kurve.Field);
-            curve.getPlayer().getSuperpower().isActive = false;
+            curve.getPlayer().getSuperpower().deActivateSuperpower();
         });
     },
     

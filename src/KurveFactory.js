@@ -33,7 +33,10 @@ Kurve.Factory = {
         var act     = Kurve.Superpowerconfig[type].act;
         var helpers = Kurve.Superpowerconfig[type].helpers;
 
-        return new Kurve.Superpower(hooks, act, helpers, type);
+        var superPower =  new Kurve.Superpower(hooks, act, helpers, type);
+        superPower.isActive = true;Kurve.Superpowerconfig[type].isActiveFromStart ? true : false;
+
+        return superPower;
     }
 
 };
