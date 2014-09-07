@@ -64,13 +64,14 @@ Kurve.Curve.prototype.drawNextFrame = function() {
     this.moveToNextFrame();
     this.checkForCollision();
     this.drawLine(this.getField());
-
-    //debug curve position
-    //this.getField().ctx.fillStyle = "#000";
-    //this.getField().ctx.fillRect(this.getPosition().getPosX(0), this.getPosition().getPosY(0), 1, 1);
     
     if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME) ) {
         this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME, this);
+    }
+
+    if ( Kurve.Config.Debug.curvePosition ) {
+        this.getField().ctx.fillStyle = "#000";
+        this.getField().ctx.fillRect(this.getPosition().getPosX(0), this.getPosition().getPosY(0), 1, 1);
     }
 };
 
@@ -81,7 +82,9 @@ Kurve.Curve.prototype.drawCurrentPosition = function(field) {
 Kurve.Curve.prototype.drawLine = function(field) {
     this.invisible = this.getOptions().holeCountDown < 0;
 
-    if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.DRAW_LINE) ) this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.DRAW_LINE, this);
+    if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.DRAW_LINE) ) {
+        this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.DRAW_LINE, this);
+    }
 
     if ( this.invisible ) {
         if ( this.getOptions().holeCountDown < -1 ) this.resetHoleCountDown();

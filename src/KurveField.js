@@ -36,6 +36,8 @@ Kurve.Field = {
 
     defaultColor:       null,
     defaultLineWidth:   null,
+
+    drawnPixelPrecision: null,
     
     init: function() {
         this.initCanvas();
@@ -64,8 +66,9 @@ Kurve.Field = {
     },
 
     initDrawing: function() {
-        this.defaultColor       = Kurve.Config.Field.defaultColor;
-        this.defaultLineWidth   = Kurve.Config.Field.defaultLineWidth;
+        this.defaultColor = Kurve.Config.Field.defaultColor;
+        this.defaultLineWidth = Kurve.Config.Field.defaultLineWidth;
+        this.drawnPixelPrecision = Kurve.Config.Field.drawnPixelPrecision;
     },
 
     drawField: function() {
@@ -116,8 +119,8 @@ Kurve.Field = {
         var m  = dY / dX;
         var d  = toPoint.getPosY() - m * toPoint.getPosX();
 
-        for (var i=0; i < u.round(Math.abs(dX) * 10, 0); i++) {
-            var step = dX > 0 ? (1 / 10) : -(i / 10);
+        for (var i=0; i < u.round(Math.abs(dX) * this.drawnPixelPrecision, 0); i++) {
+            var step = dX > 0 ? (i / this.drawnPixelPrecision) : -(i / this.drawnPixelPrecision);
             var posX = fromPoint.getPosX() + step;
             var posY = m * posX + d;
 
@@ -138,9 +141,10 @@ Kurve.Field = {
 
         this.drawnPixels[point.getPosX(0)][point.getPosY(0)] = true;
 
-        //debug drawn points
-        //this.ctx.fillStyle = "#37FDFC";
-        //this.ctx.fillRect(point.getPosX(0), point.getPosY(0), 1, 1);
+        if ( Kurve.Config.Debug.fieldDrawnPixels ) {
+            this.ctx.fillStyle = "#37FDFC";
+            this.ctx.fillRect(point.getPosX(0), point.getPosY(0), 1, 1);
+        }
     },
     
     isPointOutOfBounds: function(point) {

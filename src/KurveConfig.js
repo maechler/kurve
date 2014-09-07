@@ -25,12 +25,18 @@
 'use strict';
 
 Kurve.Config = {
+
+    Debug: {
+        curvePosition:      false,
+        fieldDrawnPixels:   true,
+    },
     
     Field: {
         defaultColor:       '#333',
         defaultLineWidth:   4,
         borderColor:        '#ACAC9D',
         width:              0.7, //70% percent of the screen
+        drawnPixelPrecision:5,
     },
     
     Curve: {
