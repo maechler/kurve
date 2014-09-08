@@ -169,7 +169,8 @@ Kurve.Game = {
             curve.setRandomPosition(Kurve.Field.getRandomPosition());
             curve.setRandomAngle();
             curve.drawCurrentPosition(Kurve.Field);
-            curve.getPlayer().getSuperpower().deActivateSuperpower();
+            curve.getPlayer().getSuperpower().close(curve);
+            curve.getPlayer().getSuperpower().init(curve);
         });
     },
     

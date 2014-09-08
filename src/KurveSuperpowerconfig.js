@@ -58,6 +58,10 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
        }
     },
 
+    init: function(curve) {
+
+    },
+
     act: function(hook, curve) {
        if ( !this.isActive )                   this.helpers.initAct.call(this);
        if ( this.helpers.executionTime < 1 )   this.helpers.closeAct.call(this);
@@ -67,6 +71,10 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
        curve.drawLine(curve.getField());
 
        this.helpers.executionTime--;
+    },
+
+    close: function(curve) {
+        this.isActive = false;
     }
  };
 
@@ -76,20 +84,24 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
     hooks: [Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME],
 
     helpers: {
-        initialStepLength: 0,
+        initialStepLength: null,
         executionTime: 0,
         initAct: function(curve) {
             this.decrementCount();
             this.isActive  = true;
             this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
-            this.initialStepLength = curve.getOptions().stepLength;
+            this.helpers.initialStepLength = curve.getOptions().stepLength;
 
-            curve.getOptions().stepLength = this.initialStepLength / 2;
+            curve.getOptions().stepLength = this.helpers.initialStepLength / 2;
         },
         closeAct: function(curve) {
             this.isActive = false;
-            curve.getOptions().stepLength = this.initialStepLength;
+            curve.getOptions().stepLength = this.helpers.initialStepLength;
         }
+    },
+
+    init: function(curve) {
+
     },
 
     act: function(hook, curve) {
@@ -97,6 +109,11 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
         if ( this.helpers.executionTime < 1 )   this.helpers.closeAct.call(this, curve);
 
         this.helpers.executionTime--;
+    },
+
+    close: function(curve) {
+        this.isActive = false;
+        if ( this.helpers.initialStepLength !== null ) curve.getOptions().stepLength = this.helpers.initialStepLength;
     }
 };
   
@@ -110,6 +127,10 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
         timeOut:           250, //until superpower can be called again
         previousExecution: new Date()
     },
+
+    init: function(curve) {
+
+    },
      
     act: function(hook, curve) {
         var now = new Date();
@@ -122,6 +143,10 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
             this.helpers.previousExecution = now;
             this.decrementCount();
         }
+    },
+
+    close: function(curve) {
+        this.isActive = false;
     }
  };
   
@@ -145,6 +170,10 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
         }
     },
 
+    init: function(curve) {
+
+    },
+
     act: function(hook, curve) {
         if ( hook === Kurve.Superpowerconfig.hooks.DRAW_LINE ) {
             if ( !this.isActive )                   this.helpers.initAct.call(this);
@@ -157,6 +186,10 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
             return false;
         }
 
+    },
+
+    close: function(curve) {
+        this.isActive = false;
     }
  };
 
@@ -171,6 +204,10 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
         timeOut:            250, //until superpower can be called again
         previousExecution:  new Date(),
         barWidth:           40
+    },
+
+    init: function(curve) {
+
     },
 
     act: function(hook, curve) {
@@ -188,13 +225,15 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
             this.helpers.previousExecution = now;
             this.decrementCount();
         }
+    },
+
+    close: function(curve) {
+        this.isActive = false;
     }
 };
 
 Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
     label: 'cross walls',
-
-    isActiveFromStart: true,
 
     hooks: [
         Kurve.Superpowerconfig.hooks.IS_COLLIDED
@@ -225,6 +264,10 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
         }
     },
 
+    init: function(curve) {
+        this.isActive = true;
+    },
+
     act: function(hook, curve) {
         var position = curve.getNextPosition();
 
@@ -242,6 +285,10 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
             //standard collision detection todo refactor not to use same logic twice
             return curve.getField().isPointOutOfBounds(position) || curve.getField().isPointDrawn(position);
         }
+    },
+
+    close: function(curve) {
+        this.isActive = false;
     }
 };
  

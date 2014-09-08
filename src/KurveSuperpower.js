@@ -24,16 +24,14 @@
 
 'use strict';
 
-Kurve.Superpower = function(hooks, act, helpers, type) {
+Kurve.Superpower = function(hooks, act, helpers, type, init, close) {
 
     this.count          = 1;
     this.isActive       = false;
     this.act            = act;
     this.helpers        = helpers;
-
-    this.deActivateSuperpower = function() {
-        this.isActive = Kurve.Superpowerconfig[type].isActiveFromStart ? true : false;
-    };
+    this.init           = init;
+    this.close          = close;
     
     this.incrementCount = function() { 
         this.count++;
