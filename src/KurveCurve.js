@@ -32,6 +32,7 @@ Kurve.Curve = function(player, game, field, config, superpower) {
     this.invisible      = false;
     this.previousMiddlePoint = null;
     this.previousMiddlePosition = null;
+    this.selfCollisionTimeout = config.selfCollisionTimeout;
 
     var options         = {
         stepLength:     config.stepLength,
@@ -76,7 +77,7 @@ Kurve.Curve.prototype.drawNextFrame = function() {
 };
 
 Kurve.Curve.prototype.drawCurrentPosition = function(field) {
-    field.drawPoint(this.getPosition(), this.getPlayer().getColor());
+    field.drawUntrackedPoint(this.getPosition(), this.getPlayer().getColor());
 };
 
 Kurve.Curve.prototype.drawLine = function(field) {
@@ -118,13 +119,40 @@ Kurve.Curve.prototype.getMovedPosition = function(step) {
 };
 
 Kurve.Curve.prototype.checkForCollision = function() {
-    if ( this.isCollided(this.getNextPosition()) ) this.die();
+    var trace = u.interpolateTwoPoints(this.getPosition(), this.getNextPosition());
+    var isCollided = false;
+    var that = this;
+
+    trace.forEach(function(point) {
+        if ( that.isCollided(point) ) isCollided = true;
+
+        if ( Kurve.Config.Debug.curveTrace ) {
+            that.getField().ctx.globalAlpha = 0.5;
+            that.getField().ctx.fillStyle = "#000";
+            that.getField().ctx.fillRect(point.getPosX(0), point.getPosY(0), 1, 1);
+        }
+    });
+
+    if ( isCollided ) this.die();
 };
 
 Kurve.Curve.prototype.isCollided = function(position) {
     if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.IS_COLLIDED) ) return this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.IS_COLLIDED, this);
-    
-    return this.getField().isPointOutOfBounds(position) || this.getField().isPointDrawn(position);
+
+    if ( this.getField().isPointOutOfBounds(position) ) return true;
+    if ( !this.getField().isPointDrawn(position) ) return false;
+    if ( !this.getField().isPointDrawnInColor(position, this.getPlayer().getColor()) ) return true;
+
+    return !this.isPointInImmediateTrace(position);
+};
+
+Kurve.Curve.prototype.isPointInImmediateTrace = function(position) {
+    var now = new Date();
+    var point = this.getField().getDrawnPoint(position);
+
+    if ( now.getTime() - point.time.getTime() < this.selfCollisionTimeout ) return true;
+
+    return false;
 };
 
 Kurve.Curve.prototype.die = function() {

@@ -61,4 +61,37 @@ Kurve.Utility.setClassName = function(className, elementId) {
     element.className = className;        
 };
 
+/**
+ *  y = mx + d
+ */
+Kurve.Utility.interpolateTwoPoints = function(fromPoint, toPoint) {
+    var interpolatedPoints = [];
+    var pointsUniqueChecker = [];
+    var precision = Kurve.Config.Utility.interpolatedPixelsPrecision;
+
+    var dX      = toPoint.getPosX() - fromPoint.getPosX();
+    var dY      = toPoint.getPosY() - fromPoint.getPosY();
+    var m       = dY / dX;
+    var d       = toPoint.getPosY() - m * toPoint.getPosX();
+    var absDX   = u.round(Math.abs(dX) * precision, 0);
+    var steps   = absDX < 1 ? 1 : absDX; //at least interpolate one point
+
+    for (var i=0; i < steps; i++) {
+        var step = dX > 0 ? (i / precision) : -(i / precision);
+        var posX = fromPoint.getPosX() + step;
+        var posY = m * posX + d;
+        var point = new Kurve.Point(posX, posY);
+        var posX0 = point.getPosX(0);
+        var posY0 = point.getPosY(0);
+
+        if ( pointsUniqueChecker[posX0] === undefined ) pointsUniqueChecker[posX0] = [];
+        if ( pointsUniqueChecker[posX0][posY0] === true ) continue;
+
+        pointsUniqueChecker[posX0][posY0] = true;
+        interpolatedPoints.push(point);
+    }
+
+    return interpolatedPoints;
+};
+
 var u = Kurve.Utility;

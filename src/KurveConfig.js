@@ -28,7 +28,8 @@ Kurve.Config = {
 
     Debug: {
         curvePosition:      false,
-        fieldDrawnPixels:   false,
+        curveTrace:         false,
+        fieldDrawnPixels:   true,
     },
     
     Field: {
@@ -36,7 +37,6 @@ Kurve.Config = {
         defaultLineWidth:   4,
         borderColor:        '#ACAC9D',
         width:              0.7, //70% percent of the screen
-        drawnPixelPrecision:5,
     },
     
     Curve: {
@@ -44,11 +44,16 @@ Kurve.Config = {
         lineWidth:      4,
         dAngle:         0.08,
         holeInterval:   150,
+        selfCollisionTimeout: 200,
     },
     
     Game: {
         startDelay:     2000,
         fps:            25,
+    },
+
+    Utility: {
+        interpolatedPixelsPrecision: 100,
     },
     
     players: [

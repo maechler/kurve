@@ -96,52 +96,47 @@ Kurve.Field = {
 
         this.ctx.stroke();
 
-        this.addLineToDrawnPixel(fromPoint, toPoint);
+        this.addLineToDrawnPixel(fromPoint, toPoint, color);
     },
 
-    drawPoint: function(point, color) {
+    drawUntrackedPoint: function(point, color) {
         if ( color === undefined ) color = this.defaultColor;
 
         this.ctx.beginPath();
         this.ctx.fillStyle = color;
         this.ctx.arc(point.getPosX(), point.getPosY(), 2, 0, 2 * Math.PI, false);
         this.ctx.fill();
-
-        this.addPointToDrawnPixel(point);
     },
 
-    /**
-     *  y = mx + d
-     */
-    addLineToDrawnPixel: function(fromPoint, toPoint) {
-        var dX      = toPoint.getPosX() - fromPoint.getPosX();
-        var dY      = toPoint.getPosY() - fromPoint.getPosY();
-        var m       = dY / dX;
-        var d       = toPoint.getPosY() - m * toPoint.getPosX();
-        var absDX   = u.round(Math.abs(dX) * this.drawnPixelPrecision, 0);
-        var steps   = absDX < 1 ? 1 : absDX;
-
-        for (var i=0; i < steps; i++) {
-            var step = dX > 0 ? (i / this.drawnPixelPrecision) : -(i / this.drawnPixelPrecision);
-            var posX = fromPoint.getPosX() + step;
-            var posY = m * posX + d;
-
-            this.addPointsToDrawnPixel(this.getPointSurroundings(new Kurve.Point(posX, posY)));
-        }
+    drawPoint: function(point, color) {
+        this.drawUntrackedPoint(point, color);
+        this.addPointToDrawnPixel(point, color);
     },
-    
-    addPointsToDrawnPixel: function(points) {
-        points.forEach(function(point) {
-            Kurve.Field.addPointToDrawnPixel(point);
+
+    addLineToDrawnPixel: function(fromPoint, toPoint, color) {
+        var interpolatedPoints = u.interpolateTwoPoints(fromPoint, toPoint);
+        var that = this;
+
+        interpolatedPoints.forEach(function(point) {
+            that.addPointsToDrawnPixel(that.getPointSurroundings(point), color);
         });
     },
     
-    addPointToDrawnPixel: function(point) {
+    addPointsToDrawnPixel: function(points, color) {
+        points.forEach(function(point) {
+            Kurve.Field.addPointToDrawnPixel(point, color);
+        });
+    },
+    
+    addPointToDrawnPixel: function(point, color) {
         if ( this.drawnPixels[point.getPosX(0)] === undefined ) {
             this.drawnPixels[point.getPosX(0)] = [];
         }
 
-        this.drawnPixels[point.getPosX(0)][point.getPosY(0)] = true;
+        this.drawnPixels[point.getPosX(0)][point.getPosY(0)] = {
+            color: color,
+            time: new Date()
+        };
 
         if ( Kurve.Config.Debug.fieldDrawnPixels ) {
             this.ctx.fillStyle = "#37FDFC";
@@ -152,9 +147,24 @@ Kurve.Field = {
     isPointOutOfBounds: function(point) {
         return point.getPosX() <= 0 || point.getPosY() <= 0 || point.getPosX() >= this.width || point.getPosY() >= this.height;
     },
-    
+
     isPointDrawn: function(point) {
-        return this.drawnPixels[point.getPosX(0)] !== undefined && this.drawnPixels[point.getPosX(0)][point.getPosY(0)] === true;
+        return this.drawnPixels[point.getPosX(0)] !== undefined &&
+               this.drawnPixels[point.getPosX(0)][point.getPosY(0)] !== undefined;
+    },
+
+    isPointDrawnInColor: function(point, color) {
+        return this.drawnPixels[point.getPosX(0)] !== undefined &&
+               this.drawnPixels[point.getPosX(0)][point.getPosY(0)].color === color;
+    },
+
+    getDrawnPoint: function(point) {
+        if ( this.drawnPixels[point.getPosX(0)] !== undefined &&
+             this.drawnPixels[point.getPosX(0)][point.getPosY(0)] !== undefined ) {
+            return this.drawnPixels[point.getPosX(0)][point.getPosY(0)];
+        } else {
+            return false;
+        }
     },
     
     getRandomPosition: function(borderPadding) {
