@@ -155,6 +155,9 @@ Kurve.Game = {
     startRun: function() {        
         this.isRunning        = true;
         this.runIntervalId  = setInterval(this.run.bind(this), this.intervalTimeOut);
+        this.curves.forEach(function(curve) {
+            curve.setJustStarted(true);
+        });
     },
     
     stopRun: function() {        

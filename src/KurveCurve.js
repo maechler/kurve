@@ -28,6 +28,7 @@ Kurve.Curve = function(player, game, field, config, superpower) {
     
     var position        = null;
     var nextPosition    = null;
+    var justStarted     = false;
 
     this.invisible      = false;
     this.previousMiddlePoint = null;
@@ -50,7 +51,10 @@ Kurve.Curve = function(player, game, field, config, superpower) {
     this.setNextPosition    = function(newPosition) { nextPosition = newPosition; };
     this.setRandomPosition  = function(newPosition) { position = nextPosition = this.previousMiddlePosition = this.previousMiddlePoint = newPosition; };
     this.setAngle           = function(newAngle)    { options.angle = newAngle; };
-    
+    this.setPosition        = function(newPosition) { position = newPosition; };
+    this.setJustStarted     = function(newJustStarted) { justStarted = newJustStarted; };
+
+    this.hasJustStarted     = function() { return justStarted; };
     this.getPlayer          = function() { return player; };
     this.getGame            = function() { return game; };
     this.getField           = function() { return field; };
@@ -119,6 +123,10 @@ Kurve.Curve.prototype.getMovedPosition = function(step) {
 };
 
 Kurve.Curve.prototype.checkForCollision = function() {
+    if ( this.hasJustStarted() ) {
+        this.setJustStarted(false);
+        return;
+    }
     var trace = u.interpolateTwoPoints(this.getPosition(), this.getNextPosition());
     var isCollided = false;
     var that = this;
