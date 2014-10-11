@@ -152,6 +152,8 @@ Kurve.Menu = {
     },
 
     activatePlayer: function(playerId) {
+        if ( Kurve.getPlayer(playerId).isActive ) return;
+
         Kurve.getPlayer(playerId).isActive = true;
 
         u.removeClass('inactive', playerId);
@@ -159,6 +161,8 @@ Kurve.Menu = {
     },
 
     deactivatePlayer: function(playerId) {
+        if ( !Kurve.getPlayer(playerId).isActive ) return;
+
         Kurve.getPlayer(playerId).isActive = false;
 
         u.removeClass('active', playerId);
