@@ -110,13 +110,39 @@ Kurve.Player.prototype.isKeySuperpower = function(keyCode) {
 };
 
 Kurve.Player.prototype.getKeyLeftChar = function() {
+    if ( this.isArrowKey(this.getKeyLeft()) ) return this.arrowKeyChar(this.getKeyLeft());
+
     return String.fromCharCode(this.getKeyLeft());
 };
 
 Kurve.Player.prototype.getKeyRightChar = function() {
+    if ( this.isArrowKey(this.getKeyRight()) ) return this.arrowKeyChar(this.getKeyRight());
+
     return String.fromCharCode(this.getKeyRight());
 };
 
 Kurve.Player.prototype.getKeySuperpowerChar = function() {
+    if ( this.isArrowKey(this.getKeySuperpower()) ) return this.arrowKeyChar(this.getKeySuperpower());
+
     return String.fromCharCode(this.getKeySuperpower());
+};
+
+Kurve.Player.prototype.isArrowKey = function(keyCode) {
+    return keyCode === 37 || keyCode === 39 || keyCode === 40;
+};
+
+Kurve.Player.prototype.arrowKeyChar = function(keyCode) {
+    switch (keyCode) {
+        case 37:
+            return '<span class="arrow arrow-left"></span>';
+            break;
+        case 39:
+            return '<span class="arrow arrow-right"></span>';
+            break;
+        case 40:
+            return '<span class="arrow arrow-down"></span>';
+            break;
+        default:
+            return "";
+    }
 };

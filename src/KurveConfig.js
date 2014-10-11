@@ -58,10 +58,10 @@ Kurve.Config = {
     
     players: [
         { id:'red',      color:'#D4373E',   keyLeft:49,   keyRight:81,   keySuperpower:65  },
-        { id:'orange',   color:'#FFA039',   keyLeft:90,   keyRight:85,   keySuperpower:73  },
+        { id:'orange',   color:'#FFA039',   keyLeft:37,   keyRight:40,   keySuperpower:39  },
         { id:'green',    color:'#3BCB69',   keyLeft:89,   keyRight:88,   keySuperpower:67  },
-        { id:'blue',     color:'#3B90C3',   keyLeft:86,   keyRight:66,   keySuperpower:78  },
-        { id:'purple',   color:'#7D11CD',   keyLeft:79,   keyRight:48,   keySuperpower:80  },
+        { id:'blue',     color:'#3B90C3',   keyLeft:66,   keyRight:78,   keySuperpower:77  },
+        { id:'purple',   color:'#7D11CD',   keyLeft:76,   keyRight:79,   keySuperpower:80  },
         { id:'pink',     color:'#DC72FF',   keyLeft:53,   keyRight:54,   keySuperpower:55  },
     ]
 

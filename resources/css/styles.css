@@ -223,14 +223,14 @@ canvas {
 #menu-players .superpowerType .left {
     width: 15px;
     height: 32px;
-    background: url('../images/arrow-left.png');
+    background: url('../images/graphics.png') 35px 0px;
     margin-top: 5px;
 }
 
 #menu-players .superpowerType .right {
     width: 15px;
     height: 32px;
-    background: url('../images/arrow-right.png');
+    background: url('../images/graphics.png') 15px 0px;
     margin-top: 5px;
     float: right;
 }
@@ -251,7 +251,7 @@ canvas {
     top: 0;
     width: 100%;
     height: 100%;
-    background: url('../images/overlay.png');
+    background: rgba(0, 0, 0, 0.7);
 }
 
 #lightbox-wrap{
@@ -355,4 +355,41 @@ canvas {
     padding: 10px 30px;
     background: #333;
     color: #cac9c5;
+}
+
+.key .arrow {
+    width: 0;
+    height: 0;
+    display: block;
+    border-style: solid;
+}
+
+.key .arrow-left {
+    margin: 5px 0 0 7px;
+    border-width: 16px 22px 16px 0;
+    border-color: transparent #FFA039 transparent transparent;
+}
+
+.key .arrow-right {
+    margin: 5px 0 0 11px;
+    border-width: 16px 0 16px 22px;
+    border-color: transparent transparent transparent #FFA039;
+}
+
+.key .arrow-down {
+    margin: 10px 0 0 5px;
+    border-width: 22px 16px 0 16px;
+    border-color: #FFA039 transparent transparent transparent;
+}
+
+.inactive .key .arrow-left {
+    border-color: transparent #969696 transparent transparent;
+}
+
+.inactive .key .arrow-right {
+    border-color: transparent transparent transparent #969696;
+}
+
+.inactive .key .arrow-down {
+    border-color: #969696 transparent transparent transparent;
 }
