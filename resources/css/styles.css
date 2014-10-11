@@ -365,20 +365,20 @@ canvas {
 }
 
 .key .arrow-left {
-    margin: 5px 0 0 7px;
-    border-width: 16px 22px 16px 0;
+    margin: 9px 0 0 9px;
+    border-width: 12px 18px 12px 0;
     border-color: transparent #FFA039 transparent transparent;
 }
 
 .key .arrow-right {
-    margin: 5px 0 0 11px;
-    border-width: 16px 0 16px 22px;
+    margin: 9px 0 0 13px;
+    border-width: 12px 0 12px 18px;
     border-color: transparent transparent transparent #FFA039;
 }
 
 .key .arrow-down {
-    margin: 10px 0 0 5px;
-    border-width: 22px 16px 0 16px;
+    margin: 14px 0 0 8px;
+    border-width: 18px 12px 0 12px;
     border-color: #FFA039 transparent transparent transparent;
 }
 
@@ -392,4 +392,9 @@ canvas {
 
 .inactive .key .arrow-down {
     border-color: #969696 transparent transparent transparent;
+}
+
+#button-menu {
+    position: absolute;
+    bottom: 70px;
 }
