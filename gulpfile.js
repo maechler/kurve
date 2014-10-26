@@ -1,9 +1,9 @@
 var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
-    concat = require('gulp-concat-util');
+    concat = require('gulp-concat-util'),
+    watch = require('gulp-watch');
 
-
-gulp.task('default', function() {
+gulp.task('build', function() {
     gulp.src([
         './src/window.js',
         './src/Kurve.js',
@@ -26,4 +26,14 @@ gulp.task('default', function() {
         }))
         .pipe(concat('kurve.min.js', {sep: ''}))
         .pipe(gulp.dest('./resources/js/'));
+});
+
+gulp.task('watch', function(){
+    watch('src/*', function(){
+        gulp.start('build')
+    })
+});
+
+gulp.task('default', function(){
+    gulp.start('build');
 });
