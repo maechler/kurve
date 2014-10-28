@@ -19,13 +19,12 @@ gulp.task('build', function() {
         './src/KurvePoint.js',
         './src/KurvePlayer.js',
         './src/KurveLightbox.js',
-        './src/KurveLightbox.js',
     ])
-        .pipe(uglify({
-            preserveComments: 'some'
-        }))
-        .pipe(concat('kurve.min.js', {sep: ''}))
-        .pipe(gulp.dest('./resources/js/'));
+    .pipe(uglify({
+        preserveComments: 'some'
+    }))
+    .pipe(concat('kurve.min.js', {sep: ''}))
+    .pipe(gulp.dest('./resources/js/'));
 });
 
 gulp.task('watch', function(){
