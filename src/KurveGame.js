@@ -172,19 +172,21 @@ Kurve.Game = {
             curve.setRandomPosition(Kurve.Field.getRandomPosition());
             curve.setRandomAngle();
             curve.drawCurrentPosition(Kurve.Field);
-            curve.getPlayer().getSuperpower().close(curve);
             curve.getPlayer().getSuperpower().init(curve);
         });
     },
     
     terminateRound: function() {
+        this.curves.forEach(function(curve) {
+            curve.getPlayer().getSuperpower().close(curve);
+        });
+
         if ( this.deathMatch ) {
             var curve = this.runningCurves[Object.keys(this.runningCurves)[0]];
             this.gameOver(curve.getPlayer());
         }
 
         this.isRoundStarted = false;
-        
         this.stopRun();
         this.runningCurves  = {};
         this.incrementSuperpowers();

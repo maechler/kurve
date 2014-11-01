@@ -32,7 +32,8 @@ Kurve.Superpowerconfig.types = {
     JUMP: 'JUMP',
     INVISIBLE: 'INVISIBLE',
     VERTICAL_BAR: 'VERTICAL_BAR',
-    CROSS_WALLS:'CROSS_WALLS'
+    CROSS_WALLS: 'CROSS_WALLS',
+    DARK_KNIGHT: 'DARK_KNIGHT'
 };
 
 Kurve.Superpowerconfig.hooks = {
@@ -185,7 +186,6 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
         } else if ( hook === Kurve.Superpowerconfig.hooks.IS_COLLIDED && this.isActive ) {
             return false;
         }
-
     },
 
     close: function(curve) {
@@ -289,6 +289,48 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
 
     close: function(curve) {
         this.isActive = false;
+    }
+};
+
+Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.DARK_KNIGHT] = {
+    label: 'dark knight',
+
+    hooks: [
+        Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME
+    ],
+
+    helpers: {
+        executionTime: 0,
+        darkNightDivId: 'dark-knight',
+        initAct: function() {
+            if ( !u.hasClass('hidden', this.helpers.darkNightDivId) ) return;
+
+            u.removeClass('hidden', this.helpers.darkNightDivId);
+            this.decrementCount();
+            this.isActive  = true;
+            this.helpers.executionTime = 3 * Kurve.Game.fps; //3s
+        },
+        closeAct: function() {
+            u.addClass('hidden', this.helpers.darkNightDivId);
+            this.isActive = false;
+        }
+    },
+
+    init: function(curve) {
+
+    },
+
+    act: function(hook, curve) {
+        if ( !this.isActive )                   this.helpers.initAct.call(this);
+        if ( this.helpers.executionTime < 1 )   this.helpers.closeAct.call(this);
+
+        this.helpers.executionTime--;
+    },
+
+    close: function(curve) {
+        this.isActive = false;
+
+        if ( !u.hasClass('hidden', this.helpers.darkNightDivId) ) u.addClass('hidden', this.helpers.darkNightDivId);
     }
 };
  

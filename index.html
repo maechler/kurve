@@ -2,8 +2,8 @@
 <html>
     <head>
         <meta charset='utf-8' />
-        <meta name="description" content="An open source HTML5 and javascript implementation of the game Achtung, die Kurve!" />
-        <meta name="author" content="Markus Mächler, https://github.com/maechler" />
+        <meta name='description' content='An open source HTML5 and javascript implementation of the game Achtung, die Kurve!' />
+        <meta name='author' content='Markus Mächler, https://github.com/maechler' />
 
         <title>Achtung, die Kurve!</title>
                 
@@ -12,7 +12,7 @@
     </head>
     <body>
         <div id='content'>
-            <div id="layer-menu" class="layer">
+            <div id='layer-menu' class='layer'>
                 <table>
                     <tr>
                         <td>
@@ -45,15 +45,16 @@
                     </tr>
                 </table>
             </div>
-            <div id="layer-game" class="layer hidden">
+            <div id='layer-game' class='layer hidden'>
                 <div id='content-left'>
                     <canvas id='field'></canvas>
+                    <div id='dark-knight' class='hidden'></div>
                 </div>
 
                 <div id='content-right' class='light'>
                     <div id='player-scores'></div>
 
-                    <a id="button-menu" href='/' class='button'>menu</a>
+                    <a id='button-menu' href='/' class='button'>menu</a>
 
                     <div id='author'>
                         <a href='https://github.com/maechler/kurve' target='_blank'>GitHub</a>
@@ -80,22 +81,22 @@
             </div>
         </div>
 
-        <div class="beta">beta version</div>
+        <div class='beta'>beta version</div>
 
         <script type='text/javascript' src='resources/js/kurve.min.js'></script>
 
-        <script type="text/javascript">
+        <script type='text/javascript'>
             var _paq = _paq || [];
             _paq.push(['trackPageView']);
             _paq.push(['enableLinkTracking']);
             (function() {
-                var u=(("https:" == document.location.protocol) ? "https" : "http") + "://piwik.markusmaechler.ch/";
+                var u=(('https:' == document.location.protocol) ? 'https' : 'http') + '://piwik.markusmaechler.ch/';
                 _paq.push(['setTrackerUrl', u+'piwik.php']);
                 _paq.push(['setSiteId', 1]);
                 var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
                 g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
             })();
         </script>
-        <noscript><p><img src="http://piwik.markusmaechler.ch/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
+        <noscript><p><img src='http://piwik.markusmaechler.ch/piwik.php?idsite=1' style='border:0;' alt='' /></p></noscript>
     </body>
 </html>

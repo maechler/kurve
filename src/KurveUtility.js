@@ -61,6 +61,15 @@ Kurve.Utility.setClassName = function(className, elementId) {
     element.className = className;        
 };
 
+Kurve.Utility.hasClass = function(className, elementId) {
+    var element = document.getElementById(elementId);
+    if (element === null) return false;
+
+    var regExp = new RegExp('(^|\\s)' + className + '($|\\s)', 'g');
+
+    return regExp.test(element.className);
+};
+
 /**
  *  y = mx + d
  */

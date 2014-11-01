@@ -398,3 +398,12 @@ canvas {
     position: absolute;
     bottom: 70px;
 }
+
+#dark-knight {
+    background: #222;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 70%;
+    height: 100%;
+}
