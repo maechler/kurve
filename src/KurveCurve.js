@@ -92,7 +92,7 @@ Kurve.Curve.prototype.drawLine = function(field) {
     }
 
     if ( this.invisible ) {
-        if ( this.getOptions().holeCountDown < -1 ) this.resetHoleCountDown();
+        if ( this.getOptions().holeCountDown < -2 ) this.resetHoleCountDown();
     } else {
         field.drawLine(this.previousMiddlePosition, this.getNextPosition(), this.getPlayer().getColor());
     }
