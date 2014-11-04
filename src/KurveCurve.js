@@ -26,42 +26,47 @@
 
 Kurve.Curve = function(player, game, field, config, superpower) {
     
-    var position        = null;
-    var nextPosition    = null;
-    var justStarted     = false;
+    var position = null;
+    var nextPosition = null;
+    var justStarted = false;
+    var isInvisible = false;
+    var previousMiddlePoint = null;
+    var previousMiddlePosition = null;
 
-    this.invisible      = false;
-    this.previousMiddlePoint = null;
-    this.previousMiddlePosition = null;
-    this.selfCollisionTimeout = config.selfCollisionTimeout;
-
-    var options         = {
-        stepLength:     config.stepLength,
-        lineWidth:      config.lineWidth,
-        angle:          0,
-        dAngle:         config.dAngle,
-        holeInterval:   config.holeInterval,
-        holeCountDown:  config.holeInterval
+    var options = {
+        stepLength: config.stepLength,
+        lineWidth: config.lineWidth,
+        angle: 0,
+        dAngle: config.dAngle,
+        holeInterval: config.holeInterval,
+        holeCountDown: config.holeInterval,
+        selfCollisionTimeout: config.selfCollisionTimeout
     };
     
-    this.incrementAngle     = function() { options.angle += options.dAngle };
-    this.decrementAngle     = function() { options.angle -= options.dAngle };
+    this.incrementAngle = function() { options.angle += options.dAngle };
+    this.decrementAngle = function() { options.angle -= options.dAngle };
     
-    this.setPosition        = function(newPosition) { position = newPosition; };
-    this.setNextPosition    = function(newPosition) { nextPosition = newPosition; };
-    this.setRandomPosition  = function(newPosition) { position = nextPosition = this.previousMiddlePosition = this.previousMiddlePoint = newPosition; };
-    this.setAngle           = function(newAngle)    { options.angle = newAngle; };
-    this.setPosition        = function(newPosition) { position = newPosition; };
-    this.setJustStarted     = function(newJustStarted) { justStarted = newJustStarted; };
+    this.setPosition = function(newPosition) { position = newPosition; };
+    this.setNextPosition = function(newPosition) { nextPosition = newPosition; };
+    this.setRandomPosition = function(newPosition) { position = nextPosition = previousMiddlePosition = previousMiddlePoint = newPosition; };
+    this.setAngle = function(newAngle) { options.angle = newAngle; };
+    this.setPosition = function(newPosition) { position = newPosition; };
+    this.setJustStarted = function(newJustStarted) { justStarted = newJustStarted; };
+    this.setIsInvisible = function(newIsInvisible) { isInvisible = newIsInvisible; };
+    this.setPreviousMiddlePoint = function(newPreviousMiddlePoint) { previousMiddlePoint = newPreviousMiddlePoint; };
+    this.setPreviousMiddlePosition = function(newPreviousMiddlePosition) { previousMiddlePosition = newPreviousMiddlePosition; };
 
-    this.hasJustStarted     = function() { return justStarted; };
-    this.getPlayer          = function() { return player; };
-    this.getGame            = function() { return game; };
-    this.getField           = function() { return field; };
-    this.getSuperpower      = function() { return superpower };
-    this.getPosition        = function() { return position; };
-    this.getNextPosition    = function() { return nextPosition; };
-    this.getOptions         = function() { return options; };
+    this.hasJustStarted = function() { return justStarted; };
+    this.getPlayer = function() { return player; };
+    this.getGame = function() { return game; };
+    this.getField = function() { return field; };
+    this.getSuperpower = function() { return superpower };
+    this.getPosition = function() { return position; };
+    this.getNextPosition = function() { return nextPosition; };
+    this.getOptions = function() { return options; };
+    this.isInvisible = function() { return isInvisible; };
+    this.getPreviousMiddlePoint = function() { return previousMiddlePoint };
+    this.getPreviousMiddlePosition = function() { return previousMiddlePosition };
 
 };
 
@@ -85,16 +90,16 @@ Kurve.Curve.prototype.drawCurrentPosition = function(field) {
 };
 
 Kurve.Curve.prototype.drawLine = function(field) {
-    this.invisible = this.getOptions().holeCountDown < 0;
+    this.setIsInvisible(this.getOptions().holeCountDown < 0);
 
     if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.DRAW_LINE) ) {
         this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.DRAW_LINE, this);
     }
 
-    if ( this.invisible ) {
+    if ( this.isInvisible() ) {
         if ( this.getOptions().holeCountDown < -2 ) this.resetHoleCountDown();
     } else {
-        field.drawLine(this.previousMiddlePosition, this.getNextPosition(), this.getPlayer().getColor());
+        field.drawLine(this.getPreviousMiddlePosition(), this.getNextPosition(), this.getPlayer().getColor());
     }
 
     this.getOptions().holeCountDown--;
@@ -106,13 +111,12 @@ Kurve.Curve.prototype.moveToNextFrame = function() {
     var middlePoint = this.getMovedPosition(this.getOptions().stepLength / 2);
     var nextPoint   = this.getMovedPosition(this.getOptions().stepLength);
 
-    if ( this.previousMiddlePoint === null ) this.previousMiddlePoint = middlePoint;
+    if ( this.getPreviousMiddlePoint() === null ) this.setPreviousMiddlePoint(middlePoint);
 
-    this.previousMiddlePosition = this.previousMiddlePoint;
+    this.setPreviousMiddlePosition(this.getPreviousMiddlePoint());
     this.setPosition(this.getNextPosition());
     this.setNextPosition(nextPoint);
-
-    this.previousMiddlePoint = middlePoint;
+    this.setPreviousMiddlePoint(middlePoint);
 };
 
 Kurve.Curve.prototype.getMovedPosition = function(step) {
@@ -158,7 +162,7 @@ Kurve.Curve.prototype.isPointInImmediateTrace = function(position) {
     var now = new Date();
     var point = this.getField().getDrawnPoint(position);
 
-    if ( now.getTime() - point.time.getTime() < this.selfCollisionTimeout ) return true;
+    if ( now.getTime() - point.time.getTime() < this.getOptions().selfCollisionTimeout ) return true;
 
     return false;
 };

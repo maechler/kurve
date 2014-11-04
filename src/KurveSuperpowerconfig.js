@@ -139,7 +139,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
         if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
             var jumpedPosition = curve.getMovedPosition(curve.getOptions().stepLength * this.helpers.jumpWidth);
             curve.setNextPosition(jumpedPosition);
-            curve.previousMiddlePoint = jumpedPosition;
+            curve.setPreviousMiddlePoint(jumpedPosition);
 
             this.helpers.previousExecution = now;
             this.decrementCount();
@@ -180,7 +180,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
             if ( !this.isActive )                   this.helpers.initAct.call(this);
             if ( this.helpers.executionTime < 1 )   this.helpers.closeAct.call(this); 
 
-            curve.invisible = true;
+            curve.setIsInvisible(true);
 
             this.helpers.executionTime--;          
         } else if ( hook === Kurve.Superpowerconfig.hooks.IS_COLLIDED && this.isActive ) {
@@ -275,10 +275,11 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
             this.decrementCount();
             var movedPosition = this.helpers.getWallCrossedPosition(curve);
 
+            //todo refactor in a away that from outside only one call is needed to change position
             curve.setPosition(movedPosition);
             curve.setNextPosition(movedPosition);
-            curve.previousMiddlePosition = movedPosition;
-            curve.previousMiddlePoint = movedPosition;
+            curve.setPreviousMiddlePoint(movedPosition);
+            curve.setPreviousMiddlePosition(movedPosition);
 
             return false;
         } else {
