@@ -50,12 +50,12 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
     helpers: {
        executionTime: 0,
        initAct: function() {
-          this.decrementCount();
-          this.isActive  = true;
-          this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
+           this.decrementCount();
+           this.setIsActive(true);
+           this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
        },
        closeAct: function() {
-           this.isActive = false;
+           this.setIsActive(false);
        }
     },
 
@@ -64,8 +64,8 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
     },
 
     act: function(hook, curve) {
-       if ( !this.isActive )                   this.helpers.initAct.call(this);
-       if ( this.helpers.executionTime < 1 )   this.helpers.closeAct.call(this);
+       if ( !this.isActive() ) this.helpers.initAct.call(this);
+       if ( this.helpers.executionTime < 1 ) this.helpers.closeAct.call(this);
 
        curve.moveToNextFrame();
        curve.checkForCollision();
@@ -75,7 +75,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
     },
 
     close: function(curve) {
-        this.isActive = false;
+        this.setIsActive(false);
     }
  };
 
@@ -89,14 +89,14 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
         executionTime: 0,
         initAct: function(curve) {
             this.decrementCount();
-            this.isActive  = true;
+            this.setIsActive(true);
             this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
             this.helpers.initialStepLength = curve.getOptions().stepLength;
 
             curve.getOptions().stepLength = this.helpers.initialStepLength / 2;
         },
         closeAct: function(curve) {
-            this.isActive = false;
+            this.setIsActive(false);
             curve.getOptions().stepLength = this.helpers.initialStepLength;
         }
     },
@@ -106,14 +106,14 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
     },
 
     act: function(hook, curve) {
-        if ( !this.isActive )                   this.helpers.initAct.call(this, curve);
-        if ( this.helpers.executionTime < 1 )   this.helpers.closeAct.call(this, curve);
+        if ( !this.isActive() ) this.helpers.initAct.call(this, curve);
+        if ( this.helpers.executionTime < 1 ) this.helpers.closeAct.call(this, curve);
 
         this.helpers.executionTime--;
     },
 
     close: function(curve) {
-        this.isActive = false;
+        this.setIsActive(false);
         if ( this.helpers.initialStepLength !== null ) curve.getOptions().stepLength = this.helpers.initialStepLength;
     }
 };
@@ -124,8 +124,8 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
     hooks: [Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME],
      
     helpers: {
-        jumpWidth:         10,
-        timeOut:           250, //until superpower can be called again
+        jumpWidth: 10,
+        timeOut: 250, //until superpower can be called again
         previousExecution: new Date()
     },
 
@@ -147,7 +147,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
     },
 
     close: function(curve) {
-        this.isActive = false;
+
     }
  };
   
@@ -163,11 +163,11 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
         executionTime: 0,
         initAct: function() {
            this.decrementCount();
-           this.isActive  = true;
+            this.setIsActive(true);
            this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
         },
         closeAct: function() {
-            this.isActive = false;
+            this.setIsActive(false);
         }
     },
 
@@ -177,19 +177,19 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
 
     act: function(hook, curve) {
         if ( hook === Kurve.Superpowerconfig.hooks.DRAW_LINE ) {
-            if ( !this.isActive )                   this.helpers.initAct.call(this);
-            if ( this.helpers.executionTime < 1 )   this.helpers.closeAct.call(this); 
+            if ( !this.isActive() ) this.helpers.initAct.call(this);
+            if ( this.helpers.executionTime < 1 ) this.helpers.closeAct.call(this);
 
             curve.setIsInvisible(true);
 
             this.helpers.executionTime--;          
-        } else if ( hook === Kurve.Superpowerconfig.hooks.IS_COLLIDED && this.isActive ) {
+        } else if ( hook === Kurve.Superpowerconfig.hooks.IS_COLLIDED && this.isActive() ) {
             return false;
         }
     },
 
     close: function(curve) {
-        this.isActive = false;
+        this.setIsActive(false);
     }
  };
 
@@ -201,9 +201,9 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
     ],
 
     helpers: {
-        timeOut:            250, //until superpower can be called again
-        previousExecution:  new Date(),
-        barWidth:           40
+        timeOut: 250, //until superpower can be called again
+        previousExecution: new Date(),
+        barWidth: 40
     },
 
     init: function(curve) {
@@ -228,7 +228,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
     },
 
     close: function(curve) {
-        this.isActive = false;
+
     }
 };
 
@@ -265,7 +265,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
     },
 
     init: function(curve) {
-        this.isActive = true;
+        this.setIsActive(true);
     },
 
     act: function(hook, curve) {
@@ -289,7 +289,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
     },
 
     close: function(curve) {
-        this.isActive = false;
+        this.setIsActive(false);
     }
 };
 
@@ -308,12 +308,12 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.DARK_KNIGHT] = {
 
             u.removeClass('hidden', this.helpers.darkNightDivId);
             this.decrementCount();
-            this.isActive  = true;
+            this.setIsActive(true);
             this.helpers.executionTime = 3 * Kurve.Game.fps; //3s
         },
         closeAct: function() {
             u.addClass('hidden', this.helpers.darkNightDivId);
-            this.isActive = false;
+            this.setIsActive(false);
         }
     },
 
@@ -322,14 +322,14 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.DARK_KNIGHT] = {
     },
 
     act: function(hook, curve) {
-        if ( !this.isActive )                   this.helpers.initAct.call(this);
-        if ( this.helpers.executionTime < 1 )   this.helpers.closeAct.call(this);
+        if ( !this.isActive() ) this.helpers.initAct.call(this);
+        if ( this.helpers.executionTime < 1 ) this.helpers.closeAct.call(this);
 
         this.helpers.executionTime--;
     },
 
     close: function(curve) {
-        this.isActive = false;
+        this.setIsActive(false);
 
         if ( !u.hasClass('hidden', this.helpers.darkNightDivId) ) u.addClass('hidden', this.helpers.darkNightDivId);
     }

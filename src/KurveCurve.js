@@ -185,8 +185,8 @@ Kurve.Curve.prototype.setRandomAngle = function() {
 
 Kurve.Curve.prototype.useSuperpower = function(hook) {
     if ( !this.getPlayer().getSuperpower().usesHook(hook) ) return false;
-    if ( this.getPlayer().getSuperpower().isActive ) return true;
-    if ( Kurve.Game.isKeyDown(this.getPlayer().getKeySuperpower()) && this.getPlayer().getSuperpower().count > 0 ) return true;
+    if ( this.getPlayer().getSuperpower().isActive() ) return true;
+    if ( Kurve.Game.isKeyDown(this.getPlayer().getKeySuperpower()) && this.getPlayer().getSuperpower().getCount() > 0 ) return true;
 
     return false;
 };

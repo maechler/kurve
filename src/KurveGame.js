@@ -196,12 +196,13 @@ Kurve.Game = {
     incrementSuperpowers: function() {
         var numberOfPlayers = this.players.length;
 
-        this.players[numberOfPlayers - 1].getSuperpower().count += 2;
+        this.players[numberOfPlayers - 1].getSuperpower().incrementCount();
+        this.players[numberOfPlayers - 1].getSuperpower().incrementCount();
 
         var numberOfOtherPlayersGettingSomething = u.round((numberOfPlayers - 2) / 2, 0);
 
         for (var i = numberOfOtherPlayersGettingSomething; i > 0; i--) {
-            this.players[numberOfPlayers - 1 - i].getSuperpower().count++;
+            this.players[numberOfPlayers - 1 - i].getSuperpower().incrementCount();
         }
     },
     

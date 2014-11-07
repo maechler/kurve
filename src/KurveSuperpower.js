@@ -26,28 +26,37 @@
 
 Kurve.Superpower = function(hooks, act, helpers, type, init, close) {
 
-    this.count          = 1;
-    this.isActive       = false;
-    this.act            = act;
-    this.helpers        = helpers;
-    this.init           = init;
-    this.close          = close;
+    var count = 1;
+    var isActive = false;
+
+    this.act = act;
+    this.helpers = helpers;
+    this.init = init;
+    this.close = close;
     
     this.incrementCount = function() { 
-        this.count++;
+        count++;
         Kurve.Game.renderPlayerScores();
     };
     
     this.decrementCount = function() { 
-        this.count--;
+        count--;
         Kurve.Game.renderPlayerScores();
     };
-    
-    this.usesHook       = function(hook) {
-        return hooks.indexOf(hook) > -1;
-    };
 
-    this.getType        = function() { return type; };
-    this.getLabel       = function() { return Kurve.Superpowerconfig[this.getType()].label; }
+    this.getHooks = function() { return hooks; };
+    this.getType = function() { return type; };
+    this.getCount = function() { return count; };
+    this.isActive = function() { return isActive; };
+
+    this.setIsActive = function(newIsActive) { isActive = newIsActive; };
 
 };
+
+Kurve.Superpower.prototype.getLabel = function() {
+    return Kurve.Superpowerconfig[this.getType()].label;
+};
+
+Kurve.Superpower.prototype.usesHook = function(hook) {
+    return this.getHooks().indexOf(hook) > -1;
+}

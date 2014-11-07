@@ -35,9 +35,7 @@ Kurve.Factory = {
         var init    = Kurve.Superpowerconfig[type].init;
         var close   = Kurve.Superpowerconfig[type].close;
 
-        var superPower =  new Kurve.Superpower(hooks, act, helpers, type, init, close);
-
-        return superPower;
+        return new Kurve.Superpower(hooks, act, helpers, type, init, close);
     }
 
 };
