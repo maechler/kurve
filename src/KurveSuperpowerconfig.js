@@ -271,7 +271,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
     act: function(hook, curve) {
         var position = curve.getNextPosition();
 
-        if ( curve.getField().isPointOutOfBounds(position) && this.count > 0 ) {
+        if ( curve.getField().isPointOutOfBounds(position) && this.getCount() > 0 ) {
             this.decrementCount();
             var movedPosition = this.helpers.getWallCrossedPosition(curve);
 
@@ -282,10 +282,10 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
             curve.setPreviousMiddlePosition(movedPosition);
 
             return false;
-        } else {
-            //standard collision detection todo refactor not to use same logic twice
-            return curve.getField().isPointOutOfBounds(position) || curve.getField().isPointDrawn(position);
         }
+
+        //use standard collision detection
+        return null;
     },
 
     close: function(curve) {

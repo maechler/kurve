@@ -127,10 +127,17 @@ Kurve.Curve.prototype.getMovedPosition = function(step) {
 };
 
 Kurve.Curve.prototype.checkForCollision = function() {
-    if ( this.hasJustStarted() ) {
+    if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.IS_COLLIDED) ) {
+        var superpowerIsCollided = this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.IS_COLLIDED, this);
+
+        //use === to make sure it is not null, null leads to default collision detection
+        if ( superpowerIsCollided === true ) return this.die();
+        if ( superpowerIsCollided === false ) return;
+    } else if ( this.hasJustStarted() ) {
         this.setJustStarted(false);
         return;
     }
+
     var trace = u.interpolateTwoPoints(this.getPosition(), this.getNextPosition());
     var isCollided = false;
     var that = this;
@@ -149,8 +156,6 @@ Kurve.Curve.prototype.checkForCollision = function() {
 };
 
 Kurve.Curve.prototype.isCollided = function(position) {
-    if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.IS_COLLIDED) ) return this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.IS_COLLIDED, this);
-
     if ( this.getField().isPointOutOfBounds(position) ) return true;
     if ( !this.getField().isPointDrawn(position) ) return false;
     if ( !this.getField().isPointDrawnInColor(position, this.getPlayer().getColor()) ) return true;
