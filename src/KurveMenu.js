@@ -81,7 +81,7 @@ Kurve.Menu = {
     
     onSpaceDown: function() {
         Kurve.players.forEach(function(player) {
-            if ( player.isActive ) {
+            if ( player.isActive() ) {
                 Kurve.Game.curves.push(
                     new Kurve.Curve(player, Kurve.Game, Kurve.Field, Kurve.Config.Curve)
                 );    
@@ -152,25 +152,25 @@ Kurve.Menu = {
     },
 
     activatePlayer: function(playerId) {
-        if ( Kurve.getPlayer(playerId).isActive ) return;
+        if ( Kurve.getPlayer(playerId).isActive() ) return;
 
-        Kurve.getPlayer(playerId).isActive = true;
+        Kurve.getPlayer(playerId).setIsActive(true);
 
         u.removeClass('inactive', playerId);
         u.addClass('active', playerId);
     },
 
     deactivatePlayer: function(playerId) {
-        if ( !Kurve.getPlayer(playerId).isActive ) return;
+        if ( !Kurve.getPlayer(playerId).isActive() ) return;
 
-        Kurve.getPlayer(playerId).isActive = false;
+        Kurve.getPlayer(playerId).setIsActive(false);
 
         u.removeClass('active', playerId);
         u.addClass('inactive', playerId);
     },
 
     togglePlayerActivation: function(playerId) {
-        if ( Kurve.getPlayer(playerId).isActive ) {
+        if ( Kurve.getPlayer(playerId).isActive() ) {
             Kurve.Menu.deactivatePlayer(playerId);
         } else {
             Kurve.Menu.activatePlayer(playerId);

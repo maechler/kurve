@@ -26,35 +26,36 @@
 
 Kurve.Player = function(id, color, keyLeft, keyRight, keySuperpower) {
 
-    var points              = 0;
-    var superpower          = Kurve.Factory.getSuperpower(Kurve.Superpowerconfig.types.RUN_FASTER);
-    var superPowerElement   = null;
-
-    this.isActive   = false;
+    var points = 0;
+    var superpower = Kurve.Factory.getSuperpower(Kurve.Superpowerconfig.types.RUN_FASTER);
+    var superPowerElement = null;
+    var isActive = false;
     
     this.incrementPoints = function() {
         points++;
     };
 
-    this.setSuperpower      = function(newSuperpower) {
+    this.setSuperpower = function(newSuperpower) {
         superpower = newSuperpower;
 
-        if (superPowerElement === null) {
+        if ( superPowerElement === null ) {
             superPowerElement = document.getElementById(this.getId() + '-superpower');
         }
 
         superPowerElement.innerHTML = this.getSuperpower().getLabel();
     };
 
-    this.setColor           = function(newColor) { color = newColor; };
+    this.setColor = function(newColor) { color = newColor; };
+    this.setIsActive = function(newIsActive) { isActive = newIsActive; };
     
-    this.getPoints          = function() { return points; };
-    this.getId              = function() { return id; };
-    this.getColor           = function() { return color; };
-    this.getSuperpower      = function() { return superpower; };
-    this.getKeyLeft         = function() { return keyLeft; };
-    this.getKeyRight        = function() { return keyRight; };
-    this.getKeySuperpower   = function() { return keySuperpower; };
+    this.getPoints = function() { return points; };
+    this.getId = function() { return id; };
+    this.getColor = function() { return color; };
+    this.getSuperpower = function() { return superpower; };
+    this.getKeyLeft = function() { return keyLeft; };
+    this.getKeyRight = function() { return keyRight; };
+    this.getKeySuperpower = function() { return keySuperpower; };
+    this.isActive = function() { return isActive; };
 
 };
 
@@ -95,7 +96,7 @@ Kurve.Player.prototype.renderNumberOfSuperPowers = function() {
     }
 
     return superpowers;
-}
+};
 
 Kurve.Player.prototype.isKeyRight = function(keyCode) {
     return this.getKeyRight() === keyCode;
