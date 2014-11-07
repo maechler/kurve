@@ -131,7 +131,6 @@ Kurve.Game = {
     
     notifyDeath: function(curve) {
         delete this.runningCurves[curve.getPlayer().getId()];
-        this.losers.push(curve);
         
         for (var i in this.runningCurves) {
             this.runningCurves[i].getPlayer().incrementPoints();
@@ -144,8 +143,7 @@ Kurve.Game = {
     
     startNewRound: function() {
         this.isRoundStarted = true;
-        this.losers         = [];
-        
+
         Kurve.Field.drawField();
         this.initRun();
         this.renderPlayerScores();
