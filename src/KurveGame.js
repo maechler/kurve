@@ -45,10 +45,6 @@ Kurve.Game = {
         this.fps                    = Kurve.Config.Game.fps;
         this.intervalTimeOut        = Math.round(1000 / this.fps);
         this.playerScoresElement    = document.getElementById('player-scores');
-
-        //var contentRight            = document.getElementById('content-right');
-        //contentRight.style.width    = contentRight.clientWidth;
-        //contentRight.style.height   = contentRight.clientHeight;
     },
     
     run: function() {
@@ -106,6 +102,8 @@ Kurve.Game = {
         this.addPlayers();
         this.addWindowListeners();
         this.renderPlayerScores();
+
+        Kurve.Piwik.trackPageVariable('Number of players', this.players.length);
         
         this.startNewRound.bind(this);
     },
@@ -241,6 +239,8 @@ Kurve.Game = {
     },
     
     gameOver: function(winner) {
+        Kurve.Piwik.trackPageVariable('Finished game', 'yes');
+
         Kurve.Lightbox.show(
             '<h1 class="active ' + winner.getId() + '">' + winner.getId() + ' wins!</h1>' +
             '<a href="/" class="button">Start new game</a>'

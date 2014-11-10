@@ -19,6 +19,7 @@ gulp.task('build', function() {
         './src/KurvePoint.js',
         './src/KurvePlayer.js',
         './src/KurveLightbox.js',
+        './src/KurvePiwik.js',
     ])
     .pipe(uglify({
         preserveComments: 'some'

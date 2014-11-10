@@ -24,36 +24,17 @@
 
 'use strict';
 
-var Kurve = {
-    
-    players: [],
-    playersById: {},
-    
-    init: function() {
-        this.initPlayers();
-        this.Field.init();
-        this.Menu.init();
-        this.Game.init();
-        this.Lightbox.init();
-    },
-        
-    initPlayers: function() {
-        Kurve.Config.players.forEach(function(player) {
-            var player = new Kurve.Player(player.id, player.color, player.keyLeft, player.keyRight, player.keySuperpower);
+Kurve.Piwik = {
 
-            Kurve.players.push(player);
-            Kurve.playersById[player.getId()] = player;
-        });
+    trackPageVariable: function(name, value) {
+        //todo requests get blocked by the WAF
+        //_paq.push(['setCustomVariable', 1, name, value, 'page']);
+        //_paq.push(['trackPageView']);
     },
 
-    getPlayer: function(playerId) {
-        return this.playersById[playerId];
-    },
-
-    onUnload: function() {
-        Kurve.Piwik.trackPageView();
+    trackPageView: function() {
+        //todo implement method to track visitor time onunload
+        //location.reload();
     }
 
 };
-
-document.addEventListener('DOMContentLoaded', Kurve.init.bind(Kurve));
