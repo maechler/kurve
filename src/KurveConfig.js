@@ -40,16 +40,16 @@ Kurve.Config = {
     },
     
     Curve: {
-        stepLength: 3,
+        stepLength: 2.7,
         lineWidth: 4,
-        dAngle: 0.08,
-        holeInterval: 150,
-        selfCollisionTimeout: 200,
+        dAngle: 0.07,
+        holeInterval: 200,
+        selfCollisionTimeout: 150,
     },
     
     Game: {
         startDelay: 2000,
-        fps: 25,
+        fps: 30,
     },
 
     Utility: {
