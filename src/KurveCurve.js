@@ -26,12 +26,16 @@
 
 Kurve.Curve = function(player, game, field, config, superpower) {
     
-    var position = null;
-    var nextPosition = null;
+    var positionY = null;
+    var positionX = null;
+    var nextPositionY = null;
+    var nextPositionX = null;
     var justStarted = false;
     var isInvisible = false;
-    var previousMiddlePoint = null;
-    var previousMiddlePosition = null;
+    var previousMiddlePointY = null;
+    var previousMiddlePointX = null;
+    var previousMiddlePositionY = null;
+    var previousMiddlePositionX = null;
 
     var options = {
         stepLength: config.stepLength,
@@ -42,31 +46,43 @@ Kurve.Curve = function(player, game, field, config, superpower) {
         holeCountDown: config.holeInterval,
         selfCollisionTimeout: config.selfCollisionTimeout
     };
+
+
+    this.setRandomPosition = function(newPositionY, newPositionX) {
+        positionY = nextPositionY = previousMiddlePositionY = previousMiddlePointY = newPositionY;
+        positionX = nextPositionX = previousMiddlePositionX = previousMiddlePointX = newPositionX;
+    };
     
     this.incrementAngle = function() { options.angle += options.dAngle };
     this.decrementAngle = function() { options.angle -= options.dAngle };
     
-    this.setPosition = function(newPosition) { position = newPosition; };
-    this.setNextPosition = function(newPosition) { nextPosition = newPosition; };
-    this.setRandomPosition = function(newPosition) { position = nextPosition = previousMiddlePosition = previousMiddlePoint = newPosition; };
+    this.setPositionY = function(newPosition) { positionY = newPosition; };
+    this.setPositionX = function(newPosition) { positionX = newPosition; };
+    this.setNextPositionY = function(newPosition) { nextPositionY = newPosition; };
+    this.setNextPositionX = function(newPosition) { nextPositionX = newPosition; };
     this.setAngle = function(newAngle) { options.angle = newAngle; };
-    this.setPosition = function(newPosition) { position = newPosition; };
     this.setJustStarted = function(newJustStarted) { justStarted = newJustStarted; };
     this.setIsInvisible = function(newIsInvisible) { isInvisible = newIsInvisible; };
-    this.setPreviousMiddlePoint = function(newPreviousMiddlePoint) { previousMiddlePoint = newPreviousMiddlePoint; };
-    this.setPreviousMiddlePosition = function(newPreviousMiddlePosition) { previousMiddlePosition = newPreviousMiddlePosition; };
+    this.setPreviousMiddlePointY = function(newPreviousMiddlePoint) { previousMiddlePointY = newPreviousMiddlePoint; };
+    this.setPreviousMiddlePointX = function(newPreviousMiddlePoint) { previousMiddlePointX = newPreviousMiddlePoint; };
+    this.setPreviousMiddlePositionY = function(newPreviousMiddlePosition) { previousMiddlePositionY = newPreviousMiddlePosition; };
+    this.setPreviousMiddlePositionX = function(newPreviousMiddlePosition) { previousMiddlePositionX = newPreviousMiddlePosition; };
 
     this.hasJustStarted = function() { return justStarted; };
     this.getPlayer = function() { return player; };
     this.getGame = function() { return game; };
     this.getField = function() { return field; };
     this.getSuperpower = function() { return superpower };
-    this.getPosition = function() { return position; };
-    this.getNextPosition = function() { return nextPosition; };
+    this.getPositionY = function() { return positionY; };
+    this.getPositionX = function() { return positionX; };
+    this.getNextPositionY = function() { return nextPositionY; };
+    this.getNextPositionX = function() { return nextPositionX; };
     this.getOptions = function() { return options; };
     this.isInvisible = function() { return isInvisible; };
-    this.getPreviousMiddlePoint = function() { return previousMiddlePoint };
-    this.getPreviousMiddlePosition = function() { return previousMiddlePosition };
+    this.getPreviousMiddlePointY = function() { return previousMiddlePointY; };
+    this.getPreviousMiddlePointX = function() { return previousMiddlePointX; };
+    this.getPreviousMiddlePositionY = function() { return previousMiddlePositionY; };
+    this.getPreviousMiddlePositionX = function() { return previousMiddlePositionX; };
 
 };
 
@@ -86,7 +102,7 @@ Kurve.Curve.prototype.drawNextFrame = function() {
 };
 
 Kurve.Curve.prototype.drawCurrentPosition = function(field) {
-    field.drawUntrackedPoint(this.getPosition(), this.getPlayer().getColor());
+    field.drawUntrackedPoint(this.getPositionX(), this.getPositionY(), this.getPlayer().getColor());
 };
 
 Kurve.Curve.prototype.drawLine = function(field) {
@@ -99,7 +115,7 @@ Kurve.Curve.prototype.drawLine = function(field) {
     if ( this.isInvisible() ) {
         if ( this.getOptions().holeCountDown < -2 ) this.resetHoleCountDown();
     } else {
-        field.drawLine(this.getPreviousMiddlePosition(), this.getNextPosition(), this.getPlayer().getColor());
+        field.drawLine(this.getPreviousMiddlePositionX(), this.getPreviousMiddlePositionY(), this.getNextPositionX(), this.getNextPositionY(), this.getPlayer().getColor());
     }
 
     this.getOptions().holeCountDown--;
@@ -108,22 +124,32 @@ Kurve.Curve.prototype.drawLine = function(field) {
 Kurve.Curve.prototype.moveToNextFrame = function() {
     this.computeNewAngle();
     
-    var middlePoint = this.getMovedPosition(this.getOptions().stepLength / 2);
-    var nextPoint   = this.getMovedPosition(this.getOptions().stepLength);
+    var middlePointY = this.getMovedPositionY(this.getOptions().stepLength / 2);
+    var middlePointX = this.getMovedPositionX(this.getOptions().stepLength / 2);
+    var nextPointY   = this.getMovedPositionY(this.getOptions().stepLength);
+    var nextPointX   = this.getMovedPositionX(this.getOptions().stepLength);
 
-    if ( this.getPreviousMiddlePoint() === null ) this.setPreviousMiddlePoint(middlePoint);
+    if ( this.getPreviousMiddlePointY() === null || this.getPreviousMiddlePointX() === null ) {
+        this.setPreviousMiddlePointY(middlePointY);
+        this.setPreviousMiddlePointX(middlePointX);
+    }
 
-    this.setPreviousMiddlePosition(this.getPreviousMiddlePoint());
-    this.setPosition(this.getNextPosition());
-    this.setNextPosition(nextPoint);
-    this.setPreviousMiddlePoint(middlePoint);
+    this.setPreviousMiddlePositionY(this.getPreviousMiddlePointY());
+    this.setPreviousMiddlePositionX(this.getPreviousMiddlePointX());
+    this.setPositionY(this.getNextPositionY());
+    this.setPositionX(this.getNextPositionX());
+    this.setNextPositionY(nextPointY);
+    this.setNextPositionX(nextPointX);
+    this.setPreviousMiddlePointY(middlePointY);
+    this.setPreviousMiddlePointX(middlePointX);
 };
 
-Kurve.Curve.prototype.getMovedPosition = function(step) {
-    var posX = this.getNextPosition().getPosX() + step * Math.cos(this.getOptions().angle);
-    var posY = this.getNextPosition().getPosY() + step * Math.sin(this.getOptions().angle);
+Kurve.Curve.prototype.getMovedPositionX = function(step) {
+    return this.getNextPositionX() + step * Math.cos(this.getOptions().angle);
+};
 
-    return new Kurve.Point(posX, posY);
+Kurve.Curve.prototype.getMovedPositionY = function(step) {
+    return this.getNextPositionY() + step * Math.sin(this.getOptions().angle);
 };
 
 Kurve.Curve.prototype.checkForCollision = function() {
@@ -138,7 +164,7 @@ Kurve.Curve.prototype.checkForCollision = function() {
         return;
     }
 
-    var trace = u.interpolateTwoPoints(this.getPosition(), this.getNextPosition());
+    var trace = u.interpolateTwoPoints(this.getPositionX(), this.getPositionY(), this.getNextPositionX(), this.getNextPositionY());
     var isCollided = false;
     var that = this;
 
@@ -155,17 +181,17 @@ Kurve.Curve.prototype.checkForCollision = function() {
     if ( isCollided ) this.die();
 };
 
-Kurve.Curve.prototype.isCollided = function(position) {
-    if ( this.getField().isPointOutOfBounds(position) ) return true;
-    if ( !this.getField().isPointDrawn(position) ) return false;
-    if ( !this.getField().isPointDrawnInColor(position, this.getPlayer().getColor()) ) return true;
+Kurve.Curve.prototype.isCollided = function(positionX, positionY) {
+    if ( this.getField().isPointOutOfBounds(positionX, positionY) ) return true;
+    if ( !this.getField().isPointDrawn(positionX, positionY) ) return false;
+    if ( !this.getField().isPointDrawnInColor(positionX, positionY, this.getPlayer().getColor()) ) return true;
 
-    return !this.isPointInImmediateTrace(position);
+    return !this.isPointInImmediateTrace(positionX, positionY);
 };
 
-Kurve.Curve.prototype.isPointInImmediateTrace = function(position) {
+Kurve.Curve.prototype.isPointInImmediateTrace = function(positionX, positionY) {
     var now = new Date();
-    var point = this.getField().getDrawnPoint(position);
+    var point = this.getField().getDrawnPoint(positionX, positionY);
 
     if ( now.getTime() - point.time.getTime() < this.getOptions().selfCollisionTimeout ) return true;
 

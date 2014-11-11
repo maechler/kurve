@@ -83,7 +83,7 @@ Kurve.Field = {
         this.drawnPixels = [];
     },
 
-    drawLine: function(fromPoint, toPoint, color) {
+    drawLine: function(fromPointX, fromPointY, toPointX, toPointY, color) {
         if ( color === undefined ) color = this.defaultColor;
 
         this.ctx.beginPath();
@@ -91,30 +91,30 @@ Kurve.Field = {
         this.ctx.strokeStyle = color;
         this.ctx.lineWidth   = this.defaultLineWidth;
 
-        this.ctx.moveTo(fromPoint.getPosX(), fromPoint.getPosY());
-        this.ctx.lineTo(toPoint.getPosX(), toPoint.getPosY());
+        this.ctx.moveTo(fromPointX, fromPointY);
+        this.ctx.lineTo(toPointX, toPointY);
 
         this.ctx.stroke();
 
-        this.addLineToDrawnPixel(fromPoint, toPoint, color);
+        this.addLineToDrawnPixel(fromPointX, fromPointY, toPointX, toPointY, color);
     },
 
-    drawUntrackedPoint: function(point, color) {
+    drawUntrackedPoint: function(pointX, pointY, color) {
         if ( color === undefined ) color = this.defaultColor;
 
         this.ctx.beginPath();
         this.ctx.fillStyle = color;
-        this.ctx.arc(point.getPosX(), point.getPosY(), 2, 0, 2 * Math.PI, false);
+        this.ctx.arc(pointX, pointY, 2, 0, 2 * Math.PI, false);
         this.ctx.fill();
     },
 
-    drawPoint: function(point, color) {
-        this.drawUntrackedPoint(point, color);
-        this.addPointToDrawnPixel(point, color);
+    drawPoint: function(pointX, pointY, color) {
+        this.drawUntrackedPoint(pointX, pointY, color);
+        this.addPointToDrawnPixel(pointX, pointY, color);
     },
 
-    addLineToDrawnPixel: function(fromPoint, toPoint, color) {
-        var interpolatedPoints = u.interpolateTwoPoints(fromPoint, toPoint);
+    addLineToDrawnPixel: function(fromPointX, fromPointY, toPointX, toPointY, color) {
+        var interpolatedPoints = u.interpolateTwoPoints(fromPointX, fromPointY, toPointX, toPointY);
         var that = this;
 
         interpolatedPoints.forEach(function(point) {
