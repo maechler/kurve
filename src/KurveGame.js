@@ -40,6 +40,7 @@ Kurve.Game = {
     isPaused:               false,
     isRoundStarted:         false,
     playerScoresElement:    null,
+    isGameOver:             false,
     
     init: function() {
         this.fps                    = Kurve.Config.Game.fps;
@@ -79,6 +80,7 @@ Kurve.Game = {
     },
     
     onSpaceDown: function() {
+        if ( this.isGameOver ) return location.reload();
         if ( this.isRunning || this.isPaused ) return this.togglePause();
         if ( !this.isRoundStarted && !this.deathMatch) return this.startNewRound();
         if ( !this.isRoundStarted && this.deathMatch) return this.startDeathMatch();
@@ -219,7 +221,7 @@ Kurve.Game = {
 
     initDeathMatch: function(winners) {
         this.deathMatch = true;
-        Kurve.Lightbox.show('<h1>DEATHMATCH!</h1>');
+        Kurve.Lightbox.show('<div class="deathmatch"><h1>DEATHMATCH!</h1></div>');
 
         var winnerCurves = [];
         this.curves.forEach(function(curve) {
@@ -241,6 +243,7 @@ Kurve.Game = {
     
     gameOver: function(winner) {
         Kurve.Piwik.trackPageVariable('Finished game', 'yes');
+        this.isGameOver = true;
 
         Kurve.Lightbox.show(
             '<h1 class="active ' + winner.getId() + '">' + winner.getId() + ' wins!</h1>' +

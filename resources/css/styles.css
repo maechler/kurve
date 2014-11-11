@@ -254,7 +254,7 @@ canvas {
     background: rgba(0, 0, 0, 0.7);
 }
 
-#lightbox-wrap{
+#lightbox-wrap {
     height: 100%;
 }
 
@@ -271,6 +271,18 @@ canvas {
     text-align: left;
     max-width: 60%;
     margin: auto;
+}
+
+#lightbox-content .button {
+    padding: 15px;
+    display: block;
+    text-align: center;
+}
+
+#lightbox-content .deathmatch h1 {
+    padding: 100px;
+    font-size: 60px;
+    margin: 0;
 }
 
 #player-scores {
@@ -406,4 +418,42 @@ canvas {
     top: 0;
     width: 70%;
     height: 100%;
+}
+
+#lightbox-content .deathmatch h1 {
+    -webkit-animation-name: blinker;
+    -webkit-animation-duration: 0.3s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+
+    -moz-animation-name: blinker;
+    -moz-animation-duration: 0.3s;
+    -moz-animation-timing-function: linear;
+    -moz-animation-iteration-count: infinite;
+
+    animation-name: blinker;
+    animation-duration: 0.3s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@-moz-keyframes blinker {
+    0% { color: #3F3E37; background: #FFF; }
+    49% { color: #3F3E37; background: #FFF; }
+    50% { color: #FFF; background: #3F3E37; }
+    100% { color: #FFF; background: #3F3E37; }
+}
+
+@-webkit-keyframes blinker {
+    0% { color: #3F3E37; background: #FFF; }
+    49% { color: #3F3E37; background: #FFF; }
+    50% { color: #FFF; background: #3F3E37; }
+    100% { color: #FFF; background: #3F3E37; }
+}
+
+@keyframes blinker {
+    0% { color: #3F3E37; background: #FFF; }
+    49% { color: #3F3E37; background: #FFF; }
+    50% { color: #FFF; background: #3F3E37; }
+    100% { color: #FFF; background: #3F3E37; }
 }
