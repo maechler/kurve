@@ -25,13 +25,13 @@
 'use strict';
 
 Kurve.Curve = function(player, game, field, config, superpower) {
-    
+
+    var justStarted = false;
+    var isInvisible = false;
     var positionY = null;
     var positionX = null;
     var nextPositionY = null;
     var nextPositionX = null;
-    var justStarted = false;
-    var isInvisible = false;
     var previousMiddlePointY = null;
     var previousMiddlePointX = null;
     var previousMiddlePositionY = null;
@@ -48,9 +48,9 @@ Kurve.Curve = function(player, game, field, config, superpower) {
     };
 
 
-    this.setRandomPosition = function(newPositionY, newPositionX) {
-        positionY = nextPositionY = previousMiddlePositionY = previousMiddlePointY = newPositionY;
+    this.setRandomPosition = function(newPositionX, newPositionY) {
         positionX = nextPositionX = previousMiddlePositionX = previousMiddlePointX = newPositionX;
+        positionY = nextPositionY = previousMiddlePositionY = previousMiddlePointY = newPositionY;
     };
     
     this.incrementAngle = function() { options.angle += options.dAngle };
@@ -96,8 +96,8 @@ Kurve.Curve.prototype.drawNextFrame = function() {
     }
 
     if ( Kurve.Config.Debug.curvePosition ) {
-        this.getField().ctx.fillStyle = "#000";
-        this.getField().ctx.fillRect(this.getPosition().getPosX(0), this.getPosition().getPosY(0), 1, 1);
+        this.getField().ctx.fillStyle = '#000';
+        this.getField().ctx.fillRect(u.round(this.getPositionX(), 0), u.round(this.getPositionY(), 0), 1, 1);
     }
 };
 
@@ -168,15 +168,17 @@ Kurve.Curve.prototype.checkForCollision = function() {
     var isCollided = false;
     var that = this;
 
-    trace.forEach(function(point) {
-        if ( that.isCollided(point) ) isCollided = true;
+    for (var pointX in trace) {
+        for (var pointY in trace[pointX]) {
+            if ( this.isCollided(pointX, pointY) ) isCollided = true;
 
-        if ( Kurve.Config.Debug.curveTrace ) {
-            that.getField().ctx.globalAlpha = 0.5;
-            that.getField().ctx.fillStyle = "#000";
-            that.getField().ctx.fillRect(point.getPosX(0), point.getPosY(0), 1, 1);
+            if ( Kurve.Config.Debug.curveTrace ) {
+                that.getField().ctx.globalAlpha = 0.5;
+                that.getField().ctx.fillStyle = '#000';
+                that.getField().ctx.fillRect(pointX, pointY, 1, 1);
+            }
         }
-    });
+    }
 
     if ( isCollided ) this.die();
 };

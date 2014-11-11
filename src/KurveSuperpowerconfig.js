@@ -137,9 +137,13 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
         var now = new Date();
          
         if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
-            var jumpedPosition = curve.getMovedPosition(curve.getOptions().stepLength * this.helpers.jumpWidth);
-            curve.setNextPosition(jumpedPosition);
-            curve.setPreviousMiddlePoint(jumpedPosition);
+            var jumpedPositionX = curve.getMovedPositionX(curve.getOptions().stepLength * this.helpers.jumpWidth);
+            var jumpedPositionY = curve.getMovedPositionY(curve.getOptions().stepLength * this.helpers.jumpWidth);
+
+            curve.setNextPositionX(jumpedPositionX);
+            curve.setNextPositionY(jumpedPositionY);
+            curve.setPreviousMiddlePointX(jumpedPositionX);
+            curve.setPreviousMiddlePointY(jumpedPositionY);
 
             this.helpers.previousExecution = now;
             this.decrementCount();
@@ -215,12 +219,12 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
 
         if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
 
-            var leftEndX     = Math.cos(curve.getOptions().angle - Math.PI / 2) * this.helpers.barWidth + curve.getPosition().getPosX();
-            var leftEndY     = Math.sin(curve.getOptions().angle - Math.PI / 2) * this.helpers.barWidth + curve.getPosition().getPosY();
-            var rightEndX    = Math.cos(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPosition().getPosX();
-            var rightEndY    = Math.sin(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPosition().getPosY();
+            var leftEndX     = Math.cos(curve.getOptions().angle - Math.PI / 2) * this.helpers.barWidth + curve.getPositionX();
+            var leftEndY     = Math.sin(curve.getOptions().angle - Math.PI / 2) * this.helpers.barWidth + curve.getPositionY();
+            var rightEndX    = Math.cos(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPositionX();
+            var rightEndY    = Math.sin(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPositionY();
 
-            Kurve.Field.drawLine(new Kurve.Point(leftEndX, leftEndY), new Kurve.Point(rightEndX, rightEndY), curve.getPlayer().getColor());
+            Kurve.Field.drawLine(leftEndX, leftEndY, rightEndX, rightEndY, curve.getPlayer().getColor());
 
             this.helpers.previousExecution = now;
             this.decrementCount();
@@ -241,23 +245,24 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
 
     helpers: {
         getWallCrossedPosition: function(curve) {
-            var position = curve.getNextPosition();
+            var positionX = curve.getNextPositionX();
+            var positionY = curve.getNextPositionY();
             var field = curve.getField();
             var posX, posY = 0;
 
-            if ( position.getPosX() > field.width ) {
-                posX = position.getPosX() - field.width;
-                posY = position.getPosY();
-            } else if ( position.getPosX() < 0 ) {
-                posX = position.getPosX() + field.width;
-                posY = position.getPosY();
-            } else if ( position.getPosY() > field.height ) {
-                posX = position.getPosX();
-                posY = position.getPosY() - field.height;
+            if ( positionX > field.width ) {
+                posX = positionX - field.width;
+                posY = positionY;
+            } else if ( positionX < 0 ) {
+                posX = positionX + field.width;
+                posY = positionY;
+            } else if ( positionY > field.height ) {
+                posX = positionX;
+                posY = positionY - field.height;
             } else {
                 //position.getPosY() < 0 or an error occured
-                posX = position.getPosX();
-                posY = position.getPosY() + field.height;
+                posX = positionX;
+                posY = positionY + field.height;
             }
 
             return new Kurve.Point(posX, posY);
@@ -269,17 +274,22 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
     },
 
     act: function(hook, curve) {
-        var position = curve.getNextPosition();
+        var positionX = curve.getNextPositionX();
+        var positionY = curve.getNextPositionY();
 
-        if ( curve.getField().isPointOutOfBounds(position) && this.getCount() > 0 ) {
+        if ( curve.getField().isPointOutOfBounds(positionX, positionY) && this.getCount() > 0 ) {
             this.decrementCount();
             var movedPosition = this.helpers.getWallCrossedPosition(curve);
 
             //todo refactor in a away that from outside only one call is needed to change position
-            curve.setPosition(movedPosition);
-            curve.setNextPosition(movedPosition);
-            curve.setPreviousMiddlePoint(movedPosition);
-            curve.setPreviousMiddlePosition(movedPosition);
+            curve.setPositionX(movedPosition.getPosX());
+            curve.setPositionY(movedPosition.getPosY());
+            curve.setNextPositionX(movedPosition.getPosX());
+            curve.setNextPositionY(movedPosition.getPosY());
+            curve.setPreviousMiddlePointX(movedPosition.getPosX());
+            curve.setPreviousMiddlePointY(movedPosition.getPosY());
+            curve.setPreviousMiddlePositionX(movedPosition.getPosX());
+            curve.setPreviousMiddlePositionY(movedPosition.getPosY());
 
             return false;
         }

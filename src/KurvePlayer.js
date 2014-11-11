@@ -144,6 +144,6 @@ Kurve.Player.prototype.arrowKeyChar = function(keyCode) {
             return '<span class="arrow arrow-down"></span>';
             break;
         default:
-            return "";
+            return '';
     }
 };

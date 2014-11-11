@@ -149,8 +149,9 @@ Kurve.Game = {
     },
     
     startRun: function() {        
-        this.isRunning        = true;
-        this.runIntervalId  = setInterval(this.run.bind(this), this.intervalTimeOut);
+        this.isRunning = true;
+        this.runIntervalId = setInterval(this.run.bind(this), this.intervalTimeOut);
+
         this.curves.forEach(function(curve) {
             curve.setJustStarted(true);
         });
@@ -165,7 +166,7 @@ Kurve.Game = {
         this.curves.forEach(function(curve) {
             Kurve.Game.runningCurves[curve.getPlayer().getId()] = curve;
             
-            curve.setRandomPosition(Kurve.Field.getRandomPosition());
+            curve.setRandomPosition(Kurve.Field.getRandomPosition().getPosX(), Kurve.Field.getRandomPosition().getPosY());
             curve.setRandomAngle();
             curve.drawCurrentPosition(Kurve.Field);
             curve.getPlayer().getSuperpower().init(curve);

@@ -74,7 +74,7 @@ Kurve.Utility.hasClass = function(className, elementId) {
  *  y = mx + d
  */
 Kurve.Utility.interpolateTwoPoints = function(fromPointX, fromPointY, toPointX, toPointY) {
-    var pointsUniqueChecker = [];
+    var interpolatedPoints = [];
     var precision = Kurve.Config.Utility.interpolatedPixelsPrecision;
 
     var dX      = toPointX - fromPointX;
@@ -90,13 +90,20 @@ Kurve.Utility.interpolateTwoPoints = function(fromPointX, fromPointY, toPointX, 
         var posX0 = u.round(posX, 0);
         var posY0 = u.round(posY, 0);
 
-        if ( pointsUniqueChecker[posX0] === undefined ) pointsUniqueChecker[posX0] = [];
-        if ( pointsUniqueChecker[posX0][posY0] === true ) continue;
+        if ( interpolatedPoints[posX0] === undefined ) interpolatedPoints[posX0] = [];
+        if ( interpolatedPoints[posX0][posY0] === true ) continue;
 
-        pointsUniqueChecker[posX0][posY0] = true;
+        interpolatedPoints[posX0][posY0] = true;
     }
 
-    return pointsUniqueChecker;
+    return interpolatedPoints;
+};
+
+Kurve.Utility.addPointToArray = function(array, pointX, pointY) {
+    var pointX0 = u.round(pointX, 0);
+    if ( array[pointX0] === undefined ) array[pointX0] = [];
+
+    array[pointX0][u.round(pointY, 0)] = true;
 };
 
 var u = Kurve.Utility;
