@@ -72,8 +72,10 @@ Kurve.Field = {
     },
 
     drawField: function() {
-        this.ctx.strokeStyle    = Kurve.Config.Field.borderColor;
-        this.ctx.lineWidth      = 3;
+        this.ctx.beginPath();
+
+        this.ctx.strokeStyle = Kurve.Config.Field.borderColor;
+        this.ctx.lineWidth   = 3;
         
         this.ctx.clearRect(0, 0, this.width, this.height);
         this.ctx.rect(0, 0, this.width, this.height);
