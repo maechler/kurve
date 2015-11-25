@@ -50,6 +50,10 @@ var Kurve = {
         return this.playersById[playerId];
     },
 
+    reload: function() {
+        location.reload();
+    },
+
     onUnload: function() {
         Kurve.Piwik.trackPageView();
     }

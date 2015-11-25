@@ -247,7 +247,7 @@ Kurve.Game = {
 
         Kurve.Lightbox.show(
             '<h1 class="active ' + winner.getId() + '">' + winner.getId() + ' wins!</h1>' +
-            '<a href="/" class="button">Start new game</a>'
+            '<a href="#" onclick="Kurve.reload(); return false;" title="Go back to the menu"  class="button">Start new game</a>'
         );
     }
 
