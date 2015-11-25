@@ -3,24 +3,26 @@ var gulp = require('gulp'),
     concat = require('gulp-concat-util'),
     watch = require('gulp-watch');
 
+var kurveSources = [
+    './src/window.js',
+    './src/Kurve.js',
+    './src/KurveFactory.js',
+    './src/KurveConfig.js',
+    './src/KurveUtility.js',
+    './src/KurveMenu.js',
+    './src/KurveGame.js',
+    './src/KurveField.js',
+    './src/KurveSuperpowerconfig.js',
+    './src/KurveSuperpower.js',
+    './src/KurveCurve.js',
+    './src/KurvePoint.js',
+    './src/KurvePlayer.js',
+    './src/KurveLightbox.js',
+    './src/KurvePiwik.js',
+];
+
 gulp.task('build', function() {
-    gulp.src([
-        './src/window.js',
-        './src/Kurve.js',
-        './src/KurveFactory.js',
-        './src/KurveConfig.js',
-        './src/KurveUtility.js',
-        './src/KurveMenu.js',
-        './src/KurveGame.js',
-        './src/KurveField.js',
-        './src/KurveSuperpowerconfig.js',
-        './src/KurveSuperpower.js',
-        './src/KurveCurve.js',
-        './src/KurvePoint.js',
-        './src/KurvePlayer.js',
-        './src/KurveLightbox.js',
-        './src/KurvePiwik.js',
-    ])
+    gulp.src(kurveSources)
     .pipe(uglify({
         preserveComments: 'some'
     }))
@@ -28,12 +30,14 @@ gulp.task('build', function() {
     .pipe(gulp.dest('./resources/js/'));
 });
 
-gulp.task('watch', function(){
-    watch('src/*', function(){
-        gulp.start('build')
-    })
+gulp.task('develop', function() {
+    gulp.src(kurveSources)
+    .pipe(concat('kurve.min.js', {sep: '\n\n'}))
+    .pipe(gulp.dest('./resources/js/'));
 });
 
-gulp.task('default', function(){
-    gulp.start('build');
+gulp.task('watch', function(){
+    watch('src/*', function(){
+        gulp.start('develop')
+    })
 });
