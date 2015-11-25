@@ -6,7 +6,7 @@
  * License:     http://www.gnu.org/licenses/gpl.txt
  * Link:        http://achtungkurve.com
  *
- * Copyright © 2014 Markus Mächler
+ * Copyright © 2014, 2015 Markus Mächler
  *
  * Kurve is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
