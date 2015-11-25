@@ -21,4 +21,4 @@ gulp build
 ```
 
 # Want to download Achtung, die Kurve and play offline?
-No problem! Just download the [sources](https://github.com/maechler/kurve/archive/develop.zip) and double click the file index.html to open it in your favourite browser.
+No problem! Just download the [sources](https://github.com/maechler/kurve/archive/v1.0.0.zip) and double click the file index.html to open it in your favourite browser.
