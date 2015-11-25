@@ -354,21 +354,6 @@ canvas {
     text-decoration: underline;
 }
 
-.beta {
-    -moz-transform: rotate(-90deg);
-    -ms-transform: rotate(-90deg);
-    -o-transform: rotate(-90deg);
-    -webkit-transform: rotate(-90deg);
-    transform: rotate(-90deg);
-    position: fixed;
-    top: 200px;
-    right: -88px;
-    font-size: 30px;
-    padding: 10px 30px;
-    background: #333;
-    color: #cac9c5;
-}
-
 .key .arrow {
     width: 0;
     height: 0;
