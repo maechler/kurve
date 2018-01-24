@@ -105,7 +105,7 @@ Kurve.Game = {
         this.addWindowListeners();
         this.renderPlayerScores();
 
-        Kurve.Piwik.trackPageVariable('Number of players', this.players.length);
+        Kurve.Piwik.trackPageVariable('number_of_players', this.players.length);
         
         this.startNewRound.bind(this);
     },
@@ -242,7 +242,7 @@ Kurve.Game = {
     },
     
     gameOver: function(winner) {
-        Kurve.Piwik.trackPageVariable('Finished game', 'yes');
+        Kurve.Piwik.trackPageVariable('finished_game', 'yes');
         this.isGameOver = true;
 
         Kurve.Lightbox.show(

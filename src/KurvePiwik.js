@@ -27,9 +27,8 @@
 Kurve.Piwik = {
 
     trackPageVariable: function(name, value) {
-        //todo requests get blocked by the WAF
-        //_paq.push(['setCustomVariable', 1, name, value, 'page']);
-        //_paq.push(['trackPageView']);
+        _paq.push(['setCustomVariable', 1, name, value, 'page']);
+        _paq.push(['trackPageView']);
     },
 
     trackPageView: function() {
