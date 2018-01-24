@@ -237,6 +237,7 @@ Kurve.Game = {
     },
     
     startDeathMatch: function(winners) {
+        Kurve.Piwik.trackPageVariable('death_match', 'yes');
         Kurve.Lightbox.hide();
         this.startNewRound();
     },
