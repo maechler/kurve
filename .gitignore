@@ -1,3 +1,4 @@
-.*
-!.gitignore
-node_modules
+/.idea
+
+/node_modules
+/dist

@@ -1,7 +1,8 @@
 var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat-util'),
-    watch = require('gulp-watch');
+    watch = require('gulp-watch'),
+    sass = require('gulp-sass');
 
 var kurveSources = [
     './src/window.js',
@@ -21,23 +22,34 @@ var kurveSources = [
     './src/KurvePiwik.js',
 ];
 
-gulp.task('build', function() {
+gulp.task('js', function() {
     gulp.src(kurveSources)
-    .pipe(uglify({
-        preserveComments: 'some'
-    }))
-    .pipe(concat('kurve.min.js', {sep: ''}))
-    .pipe(gulp.dest('./resources/js/'));
+        .pipe(uglify({
+            preserveComments: 'some'
+        }))
+        .pipe(concat('kurve.min.js', {sep: ''}))
+        .pipe(gulp.dest('./dist/js/'));
 });
 
-gulp.task('develop', function() {
-    gulp.src(kurveSources)
-    .pipe(concat('kurve.min.js', {sep: '\n\n'}))
-    .pipe(gulp.dest('./resources/js/'));
+gulp.task('sass', function(done) {
+    gulp.src('./scss/main.scss')
+        .pipe(sass({
+            errLogToConsole: true
+        }))
+        .pipe(gulp.dest('./dist/css/'))
+        .on('end', done);
 });
+
+gulp.task('images', function () {
+    return gulp.src('./images/*').pipe(gulp.dest('./dist/images'));
+});
+
+gulp.task('build', ['js', 'sass', 'images']);
+gulp.task('default', ['build']);
 
 gulp.task('watch', function(){
-    watch('src/*', function(){
-        gulp.start('develop')
-    })
+    gulp.watch([
+        'src/*',
+        'scss/*'
+    ], ['build'])
 });
