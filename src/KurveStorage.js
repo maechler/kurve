@@ -24,43 +24,24 @@
 
 'use strict';
 
-var Kurve = {
-    
-    players: [],
-    playersById: {},
-    
-    init: function() {
-        this.Theming.init();
-        this.initPlayers();
-        this.Field.init();
-        this.Menu.init();
-        this.Game.init();
-        this.Lightbox.init();
-
-        u.removeClass('hidden', 'app');
-    },
-        
-    initPlayers: function() {
-        Kurve.Config.Players.forEach(function(player) {
-            var player = new Kurve.Player(player.id, player.keyLeft, player.keyRight, player.keySuperpower);
-
-            Kurve.players.push(player);
-            Kurve.playersById[player.getId()] = player;
-        });
+Kurve.Storage = {
+    get: function(itemId) {
+        return JSON.parse(localStorage.getItem(itemId));
     },
 
-    getPlayer: function(playerId) {
-        return this.playersById[playerId];
+    set: function(itemId, item) {
+        localStorage.setItem(itemId, JSON.stringify(item));
     },
 
-    reload: function() {
-        location.reload();
+    remove: function(itemId) {
+        localStorage.removeItem(itemId);
     },
 
-    onUnload: function() {
-        Kurve.Piwik.trackPageView();
+    has: function(itemId) {
+        return localStorage.getItem(itemId) !== null;
+    },
+
+    clear: function() {
+        localStorage.clear();
     }
-
 };
-
-document.addEventListener('DOMContentLoaded', Kurve.init.bind(Kurve));

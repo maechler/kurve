@@ -56,13 +56,46 @@ Kurve.Config = {
         interpolatedPixelsPrecision: 100,
     },
     
-    players: [
-        { id:'red',      color:'#D4373E',   keyLeft:49,   keyRight:81,   keySuperpower:65  },
-        { id:'orange',   color:'#FFA039',   keyLeft:37,   keyRight:40,   keySuperpower:39  },
-        { id:'green',    color:'#3BCB69',   keyLeft:89,   keyRight:88,   keySuperpower:67  },
-        { id:'blue',     color:'#3B90C3',   keyLeft:66,   keyRight:78,   keySuperpower:77  },
-        { id:'purple',   color:'#7D11CD',   keyLeft:76,   keyRight:79,   keySuperpower:80  },
-        { id:'pink',     color:'#DC72FF',   keyLeft:53,   keyRight:54,   keySuperpower:55  },
-    ]
+    Players: [
+        { id:'red',      keyLeft:49,   keyRight:81,   keySuperpower:65  },
+        { id:'orange',   keyLeft:37,   keyRight:40,   keySuperpower:39  },
+        { id:'green',    keyLeft:89,   keyRight:88,   keySuperpower:67  },
+        { id:'blue',     keyLeft:66,   keyRight:78,   keySuperpower:77  },
+        { id:'purple',   keyLeft:76,   keyRight:79,   keySuperpower:80  },
+        { id:'pink',     keyLeft:53,   keyRight:54,   keySuperpower:55  },
+    ],
+
+    Theming: {
+        default: {
+            players: {
+                red: '#D4373E',
+                orange: '#FFA039',
+                green: '#3BCB69',
+                blue: '#3B90C3',
+                purple: '#7D11CD',
+                pink: '#DC72FF'
+            },
+            field: {
+                defaultColor: '#333',
+                borderColor: '#ACAC9D',
+                deathMatchColor: '#333',
+            }
+        },
+        dark: {
+            players: {
+                red: 'red',
+                orange: 'orange',
+                green: 'lawngreen',
+                blue: 'dodgerblue',
+                purple: 'mediumpurple',
+                pink: 'deeppink'
+            },
+            field: {
+                defaultColor: '#DDD',
+                borderColor: '#999',
+                deathMatchColor: '#DDD',
+            }
+        }
+    }
 
 };

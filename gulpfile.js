@@ -2,11 +2,14 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat-util'),
     watch = require('gulp-watch'),
-    sass = require('gulp-sass');
+    sass = require('gulp-sass'),
+    sourcemaps = require('gulp-sourcemaps');
 
 var kurveSources = [
     './src/window.js',
     './src/Kurve.js',
+    './src/KurveStorage.js',
+    './src/KurveTheming.js',
     './src/KurveFactory.js',
     './src/KurveConfig.js',
     './src/KurveUtility.js',
@@ -22,12 +25,23 @@ var kurveSources = [
     './src/KurvePiwik.js',
 ];
 
+gulp.task('javascript', function() {
+    gulp.src('src/**/*.js')
+        .pipe(sourcemaps.init())
+        .pipe(plugin1())
+        .pipe(plugin2())
+        .pipe(sourcemaps.write('../maps'))
+        .pipe(gulp.dest('dist'));
+});
+
 gulp.task('js', function() {
     gulp.src(kurveSources)
+        .pipe(sourcemaps.init())
         .pipe(uglify({
             preserveComments: 'some'
         }))
         .pipe(concat('kurve.min.js', {sep: ''}))
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest('./dist/js/'));
 });
 

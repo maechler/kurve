@@ -24,12 +24,13 @@
 
 'use strict';
 
-Kurve.Player = function(id, color, keyLeft, keyRight, keySuperpower) {
+Kurve.Player = function(id, keyLeft, keyRight, keySuperpower) {
 
     var points = 0;
     var superpower = Kurve.Factory.getSuperpower(Kurve.Superpowerconfig.types.RUN_FASTER);
     var superPowerElement = null;
     var isActive = false;
+    var color = null;
     
     this.incrementPoints = function() {
         points++;
@@ -50,7 +51,7 @@ Kurve.Player = function(id, color, keyLeft, keyRight, keySuperpower) {
     
     this.getPoints = function() { return points; };
     this.getId = function() { return id; };
-    this.getColor = function() { return color; };
+    this.getColor = function() { return color === null ? Kurve.Theming.getThemedValue('players', id) : color };
     this.getSuperpower = function() { return superpower; };
     this.getKeyLeft = function() { return keyLeft; };
     this.getKeyRight = function() { return keyRight; };
@@ -67,11 +68,11 @@ Kurve.Player.prototype.renderMenuItem = function() {
                 '<div class="superpower">' +
                     '<div class="key light">' + this.getKeySuperpowerChar() + '</div>' +
                     '<div class="superpowerType light">' +
-                        '<div class="left" onclick="Kurve.Menu.onPreviousSuperPowerClicked(event, \'' + this.getId() + '\')"></div>' +
+                        '<div class="left" onclick="Kurve.Menu.onPreviousSuperPowerClicked(event, \'' + this.getId() + '\')"><i class="arrow arrow-left"></i></div>' +
                         '<div class="superpowers">' +
                             '<div id="' + this.getId() + '-superpower">' + this.getSuperpower().getLabel() + '</div>' +
                         '</div> ' +
-                        '<div class="right" onclick="Kurve.Menu.onNextSuperPowerClicked(event, \'' + this.getId() + '\')"></div>' +
+                        '<div class="right" onclick="Kurve.Menu.onNextSuperPowerClicked(event, \'' + this.getId() + '\')"><i class="arrow arrow-right"></i></div>' +
                     '</div> ' +
                 '</div>' +
                 '<div class="clear"></div>' +

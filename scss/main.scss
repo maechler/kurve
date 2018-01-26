@@ -1,4 +1,17 @@
-html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal}ol,ul{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:text-top}sub{vertical-align:text-bottom}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;*font-size:100%}legend{color:#000}#yui3-css-stamp.cssreset{display:none}
+@import 'reset';
+
+$default-theme-red: #D4373E;
+$dark-theme-red: red;
+$default-theme-green: #3BCB69;
+$dark-theme-green: lawngreen;
+$default-theme-blue: #3B90C3;
+$dark-theme-blue: dodgerblue;
+$default-theme-orange: #FFA039;
+$dark-theme-orange: orange;
+$default-theme-purple: #7D11CD;
+$dark-theme-purple: mediumpurple;
+$default-theme-pink: #DC72FF;
+$dark-theme-pink: deeppink;
 
 body {
     color: #3F3E37;
@@ -10,7 +23,7 @@ body {
     font-size: 18px;
     top: 0;
     left: 0;
-    background-image: none; /* url('../images/stripes.png') */
+    background-image: none;
     background-position: left bottom;
     background-repeat: no-repeat;
     -webkit-touch-callout: none;
@@ -92,27 +105,27 @@ canvas {
 }
 
 .red.active {
-    color: #D4373E;
+    color: $default-theme-red;
 }
 
 .green.active {
-    color: #3BCB69;
+    color: $default-theme-green;
 }
 
 .blue.active {
-    color: #3B90C3;
+    color: $default-theme-blue;
 }
 
 .orange.active {
-    color: #FFA039;
+    color: $default-theme-orange;
 }
 
 .purple.active {
-    color: #7D11CD;
+    color: $default-theme-purple;
 }
 
 .pink.active {
-    color: #DC72FF;
+    color: $default-theme-pink;
 }
 
 #content {
@@ -213,6 +226,7 @@ canvas {
     height: 40px;
     float: left;
     overflow: hidden;
+    position: relative;
 }
 
 #menu-players .superpowerType div {
@@ -221,23 +235,35 @@ canvas {
 }
 
 #menu-players .superpowerType .left {
-    width: 15px;
-    height: 32px;
-    background: url('../images/graphics.png') 35px 0px;
-    margin-top: 5px;
+    position: absolute;
+    padding: 10px;
+    top: 0;
+    left: 10px;
+
+    .arrow-left {
+        width: 16px;
+        height: 16px;
+        position: relative;
+        top: 8px;
+    }
 }
 
 #menu-players .superpowerType .right {
-    width: 15px;
-    height: 32px;
-    background: url('../images/graphics.png') 15px 0px;
-    margin-top: 5px;
-    float: right;
+    position: absolute;
+    padding: 10px;
+    top: 0;
+    right: 10px;
+
+    .arrow-right {
+        width: 16px;
+        height: 16px;
+        position: relative;
+        top: 8px;
+    }
 }
 
 #menu-players .superpowers {
-    width: 165px;
-    padding: 0 10px;
+    width: 100%;
 }
 
 #menu-players .superpowers div {
@@ -311,27 +337,27 @@ canvas {
 }
 
 .superpowerCircle.red {
-    border: 2px solid #D4373E;
+    border: 2px solid $default-theme-red;
 }
 
 .superpowerCircle.green {
-    border: 2px solid #3BCB69;
+    border: 2px solid $default-theme-green;
 }
 
 .superpowerCircle.blue {
-    border: 2px solid #3B90C3;
+    border: 2px solid $default-theme-blue;
 }
 
 .superpowerCircle.orange {
-    border: 2px solid #FFA039;
+    border: 2px solid $default-theme-orange;
 }
 
 .superpowerCircle.purple {
-    border: 2px solid #7D11CD;
+    border: 2px solid $default-theme-purple;
 }
 
 .superpowerCircle.pink {
-    border: 2px solid #DC72FF;
+    border: 2px solid $default-theme-pink;
 }
 
 #author {
@@ -364,19 +390,19 @@ canvas {
 .key .arrow-left {
     margin: 9px 0 0 9px;
     border-width: 12px 18px 12px 0;
-    border-color: transparent #FFA039 transparent transparent;
+    border-color: transparent $default-theme-orange transparent transparent;
 }
 
 .key .arrow-right {
     margin: 9px 0 0 13px;
     border-width: 12px 0 12px 18px;
-    border-color: transparent transparent transparent #FFA039;
+    border-color: transparent transparent transparent $default-theme-orange;
 }
 
 .key .arrow-down {
     margin: 14px 0 0 8px;
     border-width: 18px 12px 0 12px;
-    border-color: #FFA039 transparent transparent transparent;
+    border-color: $default-theme-orange transparent transparent transparent;
 }
 
 .inactive .key .arrow-left {
@@ -441,4 +467,180 @@ canvas {
     49% { color: #3F3E37; background: #FFF; }
     50% { color: #FFF; background: #3F3E37; }
     100% { color: #FFF; background: #3F3E37; }
+}
+
+i.arrow {
+    border: solid #969696;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+i.arrow-right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+i.arrow-left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+
+#change-theme {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    cursor: pointer;
+}
+
+body.dark-theme {
+    color: #DDD;
+    background-color: #222;
+
+    i.arrow {
+        border-color: #DDD;
+    }
+
+    .red.active {
+        color: $dark-theme-red;
+    }
+    .superpowerCircle.red {
+        border-color: $default-theme-red;
+    }
+
+    .green.active {
+        color: $dark-theme-green;
+    }
+    .superpowerCircle.green {
+        border: 2px solid $dark-theme-green;
+    }
+
+    .blue.active {
+        color: $dark-theme-blue;
+    }
+    .superpowerCircle.blue {
+        border: 2px solid $dark-theme-blue;
+    }
+
+    .orange.active {
+        color: $dark-theme-orange;
+    }
+    .superpowerCircle.orange {
+        border: 2px solid $dark-theme-orange;
+    }
+
+    .purple.active {
+        color: $dark-theme-purple;
+    }
+    .superpowerCircle.purple {
+        border: 2px solid $dark-theme-purple;
+    }
+
+    .pink.active {
+        color: $dark-theme-pink;
+    }
+    .superpowerCircle.pink {
+        border: 2px solid $dark-theme-pink;
+    }
+
+    .button {
+        background: #222;
+        color: #DDD;
+    }
+
+    .button:hover {
+        background: #444;
+    }
+
+    .light {
+        background-color: #333;
+    }
+
+    .inactive {
+        color: #969696;
+    }
+
+    #menu-players .head div {
+        background: #444;
+    }
+
+    #menu-players-list .title,
+    #menu-players-list .key.left,
+    #menu-players-list .key.right,
+    #menu-players-list .superpower .key,
+    #menu-players-list .superpower .superpowerType {
+        border-bottom: 1px solid #555;
+    }
+
+    #lightbox-overlay {
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+    #lightbox-content {
+        background: #DDD;
+        color: #222;
+    }
+
+    #author {
+        color: #888;
+    }
+
+    #author a,
+    #author a:visited{
+        color: #888;
+    }
+
+    #author a:hover{
+        color: #DDD;
+    }
+
+    .key .arrow-left {
+        border-color: transparent $default-theme-orange transparent transparent;
+    }
+
+    .key .arrow-right {
+        border-color: transparent transparent transparent $default-theme-orange;
+    }
+
+    .key .arrow-down {
+        border-color: $default-theme-orange transparent transparent transparent;
+    }
+
+    .inactive .key .arrow-left {
+        border-color: transparent #969696 transparent transparent;
+    }
+
+    .inactive .key .arrow-right {
+        border-color: transparent transparent transparent #969696;
+    }
+
+    .inactive .key .arrow-down {
+        border-color: #969696 transparent transparent transparent;
+    }
+
+    #dark-knight {
+        background: #222;
+    }
+
+
+    @-moz-keyframes blinker {
+        0% { color: #222; background: #DDD; }
+        49% { color: #222; background: #DDD; }
+        50% { color: #DDD; background: #222; }
+        100% { color: #DDD; background: #222; }
+    }
+
+    @-webkit-keyframes blinker {
+        0% { color: #222; background: #DDD; }
+        49% { color: #222; background: #DDD; }
+        50% { color: #DDD; background: #222; }
+        100% { color: #DDD; background: #222; }
+    }
+
+    @keyframes blinker {
+        0% { color: #222; background: #DDD; }
+        49% { color: #222; background: #DDD; }
+        50% { color: #DDD; background: #222; }
+        100% { color: #DDD; background: #222; }
+    }
 }

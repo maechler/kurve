@@ -10,7 +10,7 @@
         <link rel='stylesheet' type='text/css' href='dist/css/main.css' />
         <link rel='icon' type='image/ico' href='dist/images/favicon.ico'>
     </head>
-    <body>
+    <body id='app' class='hidden'>
         <div id='content'>
             <div id='layer-menu' class='layer'>
                 <table>
@@ -44,6 +44,7 @@
                         </td>
                     </tr>
                 </table>
+                <div id="change-theme" class="button" onclick="Kurve.Theming.toggleTheme()">Lights off</div>
             </div>
             <div id='layer-game' class='layer hidden'>
                 <div id='content-left'>

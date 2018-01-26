@@ -34,7 +34,6 @@ Kurve.Field = {
     
     drawnPixels:    [],
 
-    defaultColor:       null,
     defaultLineWidth:   null,
 
     drawnPixelPrecision: null,
@@ -66,7 +65,6 @@ Kurve.Field = {
     },
 
     initDrawing: function() {
-        this.defaultColor = Kurve.Config.Field.defaultColor;
         this.defaultLineWidth = Kurve.Config.Field.defaultLineWidth;
         this.drawnPixelPrecision = Kurve.Config.Field.drawnPixelPrecision;
     },
@@ -74,7 +72,7 @@ Kurve.Field = {
     drawField: function() {
         this.ctx.beginPath();
 
-        this.ctx.strokeStyle = Kurve.Config.Field.borderColor;
+        this.ctx.strokeStyle = Kurve.Theming.getThemedValue('field', 'borderColor');
         this.ctx.lineWidth   = 3;
         
         this.ctx.clearRect(0, 0, this.width, this.height);
@@ -86,7 +84,7 @@ Kurve.Field = {
     },
 
     drawLine: function(fromPointX, fromPointY, toPointX, toPointY, color) {
-        if ( color === undefined ) color = this.defaultColor;
+        if ( color === undefined ) color = Kurve.Theming.getThemedValue('field', 'defaultColor');
 
         this.ctx.beginPath();
 
@@ -102,7 +100,7 @@ Kurve.Field = {
     },
 
     drawUntrackedPoint: function(pointX, pointY, color) {
-        if ( color === undefined ) color = this.defaultColor;
+        if ( color === undefined ) color = Kurve.Theming.getThemedValue('field', 'defaultColor');
 
         this.ctx.beginPath();
         this.ctx.fillStyle = color;

@@ -105,6 +105,7 @@ Kurve.Game = {
         this.addWindowListeners();
         this.renderPlayerScores();
 
+        Kurve.Piwik.trackPageVariable('theme', Kurve.Theming.currentTheme);
         Kurve.Piwik.trackPageVariable('number_of_players', this.players.length);
         
         this.startNewRound.bind(this);
@@ -211,7 +212,7 @@ Kurve.Game = {
         var winners = [];
         
         this.players.forEach(function(player) {
-            if (player.getPoints() >= Kurve.Game.maxPoints) winners.push(player); 
+            if (player.getPoints() >= Kurve.Game.maxPoints) winners.push(player);
         });
         
         if (winners.length === 0) return;
@@ -228,7 +229,7 @@ Kurve.Game = {
             winners.forEach(function(player){
                 if (curve.getPlayer() === player) {
                     winnerCurves.push(curve);
-                    player.setColor('#333');
+                    player.setColor(Kurve.Theming.getThemedValue('field', 'deathMatchColor'));
                 }
             });
         });
