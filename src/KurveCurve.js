@@ -113,7 +113,7 @@ Kurve.Curve.prototype.drawLine = function(field) {
     }
 
     if ( this.isInvisible() ) {
-        if ( this.getOptions().holeCountDown < -2 ) this.resetHoleCountDown();
+        if ( this.getOptions().holeCountDown < -3 ) this.resetHoleCountDown();
     } else {
         field.drawLine(this.getPreviousMiddlePositionX(), this.getPreviousMiddlePositionY(), this.getNextPositionX(), this.getNextPositionY(), this.getPlayer().getColor());
     }
