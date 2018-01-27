@@ -21,6 +21,7 @@ body {
     height: 100%;
     font-family: "Trebuchet MS", Helvetica, sans-serif;
     font-size: 18px;
+    line-height: 1.5;
     top: 0;
     left: 0;
     background-image: none;
@@ -569,7 +570,7 @@ body.dark-theme {
     #menu-players-list .key.right,
     #menu-players-list .superpower .key,
     #menu-players-list .superpower .superpowerType {
-        border-bottom: 1px solid #555;
+        border-bottom: 1px solid #444;
     }
 
     #lightbox-overlay {
@@ -577,8 +578,8 @@ body.dark-theme {
     }
 
     #lightbox-content {
-        background: #DDD;
-        color: #222;
+        background: #333;
+        color: #888;
     }
 
     #author {
