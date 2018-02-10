@@ -105,8 +105,9 @@ Kurve.Game = {
         this.addWindowListeners();
         this.renderPlayerScores();
 
-        Kurve.Piwik.trackPageVariable('theme', Kurve.Theming.currentTheme);
-        Kurve.Piwik.trackPageVariable('number_of_players', this.players.length);
+        Kurve.Piwik.trackPageVariable(1, 'theme', Kurve.Theming.currentTheme);
+        Kurve.Piwik.trackPageVariable(2, 'number_of_players', this.players.length);
+        Kurve.Piwik.trackPageView('Game');
         
         this.startNewRound.bind(this);
     },
@@ -238,13 +239,14 @@ Kurve.Game = {
     },
     
     startDeathMatch: function(winners) {
-        Kurve.Piwik.trackPageVariable('death_match', 'yes');
+        Kurve.Piwik.trackPageVariable(3, 'death_match', 'yes');
         Kurve.Lightbox.hide();
         this.startNewRound();
     },
     
     gameOver: function(winner) {
-        Kurve.Piwik.trackPageVariable('finished_game', 'yes');
+        Kurve.Piwik.trackPageVariable(4, 'finished_game', 'yes');
+        Kurve.Piwik.trackPageView('GameOver');
         this.isGameOver = true;
 
         Kurve.Lightbox.show(

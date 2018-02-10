@@ -26,14 +26,14 @@
 
 Kurve.Piwik = {
 
-    trackPageVariable: function(name, value) {
-        _paq.push(['setCustomVariable', 1, name, value, 'page']);
-        _paq.push(['trackPageView']);
+    trackPageVariable: function(index, name, value) {
+        _paq.push(['setCustomVariable', index, name, value, 'page']);
     },
 
-    trackPageView: function() {
+    trackPageView: function(title) {
         //todo implement method to track visitor time onunload
-        //location.reload();
+        _paq.push(['setDocumentTitle', title]);
+        _paq.push(['trackPageView']);
     }
 
 };
