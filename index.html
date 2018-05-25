@@ -18,7 +18,7 @@
                         <td>
                             <div id='menu'>
                                 <div id='menu-intro' class='light'>
-                                    <h3>Choose players using your mouse or the keyboard and hit <strong>SPACE</strong> to start the game!</h3>
+                                    <h4>Choose players using your mouse or the keyboard and hit <strong>SPACE</strong> to start the game!</h4>
                                 </div>
 
                                 <div id='menu-players'>
@@ -61,12 +61,61 @@
                         <a href='https://github.com/maechler/kurve' target='_blank'>GitHub</a>
                         <span>&nbsp;&Iota;&nbsp;</span>
                         <a href='https://github.com/maechler/kurve/issues' target='_blank'>Report a Bug or Feature Request</a>
+                        <span>&nbsp;&Iota;&nbsp;</span>
+                        <a href='#' onclick='Kurve.Privacypolicy.showPrivacyPolicy();'>Privacy policy</a>
                         <br>
-                        <span>Copyright &copy; 2015 </span>
+                        <span>Copyright &copy; 2014 </span>
                         <a href='http://markusmaechler.ch' target='_blank' rel='author'>Markus Mächler</a>
                     </div>
                 </div>
                 <div class='clear'></div>
+            </div>
+            <div id='privacy-policy-accept' class='hidden'>
+                <p>This website uses cookies to improve the services provided to you. By visiting this site you accept its <a href='#' onclick='Kurve.Privacypolicy.showPrivacyPolicy();'>privacy policy</a> and the usage of cookies.</p>
+                <br>
+                <a href='#' title='Accept privacy policy' onclick='Kurve.Privacypolicy.onPrivacyPolicyAccepted();' class='button'>OK</a>
+            </div>
+            <div id='privacy-policy' class='hidden'>
+                <h3>Privacy policy</h3>
+                <p>Protecting your privacy is very important to us. In this privacy policy we explain what personal information we process.</p>
+                <h3>Information collection and use</h3>
+                <p>When you visit this website data such as your IP address, the address of the last site you visited, the browser and operating system
+                    you use, the date and time are registered.
+                <p>We also process information about the usage of the game Achtung, die Kurve! This
+                    information includes the number of players, the selected theme, whether the game was finished or aborted earlier and whether a death match occurred or not.
+                </p>
+                <p>The recorded data does not allow to personally identify you. The anonymised data allows us to improve the service we are providing.
+                    Your personal data will not be shared with third parties.
+                </p>
+                <h3>Cookies</h3>
+                <p>Cookies are small text files that are sent from our server to your computer and are saved there temporarily or permanently.
+                    We use cookies to analyse general visitor behaviour such as what sites are visited and for how long.
+                    Browsers can be configured to show a warning every time a cookie is saved to your computer.
+                </p>
+                <h3>Piwik</h3>
+                <p>This website uses Piwik (that is now called Matomo), an open source web analysis tool. Piwik also uses cookies.
+                    You can prevent the generated data from being transmitted (this includes information such as the number of players or selected theme) by the following Piwik preferences:
+                </p>
+                <iframe src="https://piwik.markusmaechler.ch/index.php?module=CoreAdminHome&action=optOut&language=en" width="100%" height="150px"></iframe>
+                <br><br>
+                <h3>Security</h3>
+                <p>We treat all collected data as confidential. We employ appropriate technical precautionary measures to protect your
+                    data from manipulation as well as from unauthorised access by third parties. Data is only stored for as long as is necessary for processing purposes.
+                </p>
+                <h3>Links</h3>
+                <p>This privacy policy does not apply to external websites that you access via links on this website.
+                    We do not monitor external websites and accept no liability for how external websites place their own cookies
+                    or process personal data. You should always consult the privacy policy and terms and conditions of the website in question.
+                </p>
+                <h3>Changes to this privacy policy</h3>
+                <p>The contents of this privacy policy may be changed at irregular intervals. It is always the current version at the time of use that applies.
+                    We advise you to regularly consult this privacy policy.
+                </p>
+                <h3>Questions</h3>
+                <p>If you have any questions concerning this privacy policy please contact us using the following e-mail address: <a href="mailto:achtungkurve.com@gmail.com">achtungkurve.com@gmail.com</a>.</p>
+                <h3>Legal basis</h3>
+                <p>The Swiss Federal Act on Data Protection (FADP) forms the basis of this privacy policy.</p>
+                <a href='#' title='Accept privacy policy' class='button'>Close</a>
             </div>
         </div>
 

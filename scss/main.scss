@@ -46,7 +46,21 @@ h2 {
 }
 
 h3 {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+h4 {
     font-size: 18px;
+}
+
+a {
+    color: #666666;
+    text-decoration: underline;
+
+    &:hover {
+        text-decoration: none;
+    }
 }
 
 strong {
@@ -55,6 +69,15 @@ strong {
 
 canvas {
     position: absolute;
+}
+
+iframe {
+    border: none;
+    background: #F7F6F2;
+}
+
+p {
+    margin-bottom: 12px;
 }
 
 .button {
@@ -283,6 +306,7 @@ canvas {
 
 #lightbox-wrap {
     height: 100%;
+    overflow-y: scroll;
 }
 
 #lightbox-wrap table {
@@ -296,7 +320,7 @@ canvas {
     display: table-cell;
     padding: 20px;
     text-align: left;
-    max-width: 60%;
+    max-width: 600px;
     margin: auto;
 }
 
@@ -497,6 +521,10 @@ i.arrow-left {
 body.dark-theme {
     color: #DDD;
     background-color: #222;
+
+    a {
+        color: #DDD;
+    }
 
     i.arrow {
         border-color: #DDD;

@@ -23,6 +23,7 @@ var kurveSources = [
     './src/KurvePlayer.js',
     './src/KurveLightbox.js',
     './src/KurvePiwik.js',
+    './src/KurvePrivacypolicy.js',
 ];
 
 gulp.task('javascript', function() {

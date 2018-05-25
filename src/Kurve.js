@@ -36,6 +36,7 @@ var Kurve = {
         this.Menu.init();
         this.Game.init();
         this.Lightbox.init();
+        this.Privacypolicy.init();
 
         u.removeClass('hidden', 'app');
     },
