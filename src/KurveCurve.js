@@ -26,7 +26,8 @@
 
 Kurve.Curve = function(player, game, field, config, superpower) {
 
-    var justStarted = false;
+    var immunityFor = 0;  // Collision-immune frames.
+    var immunityTo = [];  // Curves we are immune to.
     var isInvisible = false;
     var positionY = null;
     var positionX = null;
@@ -61,14 +62,15 @@ Kurve.Curve = function(player, game, field, config, superpower) {
     this.setNextPositionY = function(newPosition) { nextPositionY = newPosition; };
     this.setNextPositionX = function(newPosition) { nextPositionX = newPosition; };
     this.setAngle = function(newAngle) { options.angle = newAngle; };
-    this.setJustStarted = function(newJustStarted) { justStarted = newJustStarted; };
+    this.setImmunity = function(curves, duration) { immunityTo = curves; immunityFor = duration; };
+    this.decrementImmunity = function() { if ( immunityFor > 0 ) immunityFor -= 1; }
     this.setIsInvisible = function(newIsInvisible) { isInvisible = newIsInvisible; };
     this.setPreviousMiddlePointY = function(newPreviousMiddlePoint) { previousMiddlePointY = newPreviousMiddlePoint; };
     this.setPreviousMiddlePointX = function(newPreviousMiddlePoint) { previousMiddlePointX = newPreviousMiddlePoint; };
     this.setPreviousMiddlePositionY = function(newPreviousMiddlePosition) { previousMiddlePositionY = newPreviousMiddlePosition; };
     this.setPreviousMiddlePositionX = function(newPreviousMiddlePosition) { previousMiddlePositionX = newPreviousMiddlePosition; };
 
-    this.hasJustStarted = function() { return justStarted; };
+    this.isImmuneTo = function(curve) { return immunityFor > 0 && (immunityTo === 'all' || immunityTo.includes(curve)); };
     this.getPlayer = function() { return player; };
     this.getGame = function() { return game; };
     this.getField = function() { return field; };
@@ -115,7 +117,7 @@ Kurve.Curve.prototype.drawLine = function(field) {
     if ( this.isInvisible() ) {
         if ( this.getOptions().holeCountDown < -3 ) this.resetHoleCountDown();
     } else {
-        field.drawLine(this.getPreviousMiddlePositionX(), this.getPreviousMiddlePositionY(), this.getNextPositionX(), this.getNextPositionY(), this.getPlayer().getColor());
+        field.drawLine(this.getPreviousMiddlePositionX(), this.getPreviousMiddlePositionY(), this.getNextPositionX(), this.getNextPositionY(), this.getPlayer().getColor(), this);
     }
 
     this.getOptions().holeCountDown--;
@@ -159,9 +161,6 @@ Kurve.Curve.prototype.checkForCollision = function() {
         //use === to make sure it is not null, null leads to default collision detection
         if ( superpowerIsCollided === true ) return this.die();
         if ( superpowerIsCollided === false ) return;
-    } else if ( this.hasJustStarted() ) {
-        this.setJustStarted(false);
-        return;
     }
 
     var trace = u.interpolateTwoPoints(this.getPositionX(), this.getPositionY(), this.getNextPositionX(), this.getNextPositionY());
@@ -180,24 +179,22 @@ Kurve.Curve.prototype.checkForCollision = function() {
         }
     }
 
+    this.decrementImmunity();
     if ( isCollided ) this.die();
 };
 
 Kurve.Curve.prototype.isCollided = function(positionX, positionY) {
     if ( this.getField().isPointOutOfBounds(positionX, positionY) ) return true;
-    if ( !this.getField().isPointDrawn(positionX, positionY) ) return false;
-    if ( !this.getField().isPointDrawnInColor(positionX, positionY, this.getPlayer().getColor()) ) return true;
-
-    return !this.isPointInImmediateTrace(positionX, positionY);
+    var p = this.getField().getDrawnPoint(positionX, positionY);
+    if ( !p ) return false;  // No collision.
+    if ( p.curve && this.isImmuneTo(p.curve) ) return false;
+    if ( p.curve === this && this.isWithinSelfCollisionTimeout(p.time) ) return false;
+    return true;
 };
 
-Kurve.Curve.prototype.isPointInImmediateTrace = function(positionX, positionY) {
+Kurve.Curve.prototype.isWithinSelfCollisionTimeout = function(time) {
     var now = new Date();
-    var point = this.getField().getDrawnPoint(positionX, positionY);
-
-    if ( now.getTime() - point.time.getTime() < this.getOptions().selfCollisionTimeout ) return true;
-
-    return false;
+    return now.getTime() - time.getTime() < this.getOptions().selfCollisionTimeout;
 };
 
 Kurve.Curve.prototype.die = function() {

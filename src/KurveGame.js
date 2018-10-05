@@ -54,7 +54,9 @@ Kurve.Game = {
     
     drawFrame: function() {
         for (var i in this.runningCurves) {
-            if ( this.runningCurves[i] !== undefined ) this.runningCurves[i].drawNextFrame();
+            for (var j = 0; this.runningCurves[i] && j < this.runningCurves[i].length; ++j) {
+                this.runningCurves[i][j].drawNextFrame();
+            }
         }
     },
     
@@ -132,15 +134,20 @@ Kurve.Game = {
     },
     
     notifyDeath: function(curve) {
-        delete this.runningCurves[curve.getPlayer().getId()];
+        var pid = curve.getPlayer().getId();
+        // Drop this curve.
+        this.runningCurves[pid].splice(this.runningCurves[pid].indexOf(curve), 1);
+        if ( this.runningCurves[pid].length === 0 ) {
+            // Drop this player.
+            delete this.runningCurves[curve.getPlayer().getId()];
+            for (var i in this.runningCurves) {
+                this.runningCurves[i][0].getPlayer().incrementPoints();
+            }
         
-        for (var i in this.runningCurves) {
-            this.runningCurves[i].getPlayer().incrementPoints();
+            this.renderPlayerScores();
+        
+            if ( Object.keys(this.runningCurves).length === 1 ) this.terminateRound();
         }
-        
-        this.renderPlayerScores();
-        
-        if ( Object.keys(this.runningCurves).length === 1 ) this.terminateRound();
     },
     
     startNewRound: function() {
@@ -157,7 +164,7 @@ Kurve.Game = {
         this.runIntervalId = setInterval(this.run.bind(this), this.intervalTimeOut);
 
         this.curves.forEach(function(curve) {
-            curve.setJustStarted(true);
+            curve.setImmunity('all', 1);
         });
     },
     
@@ -168,7 +175,7 @@ Kurve.Game = {
     
     initRun: function() {
         this.curves.forEach(function(curve) {
-            Kurve.Game.runningCurves[curve.getPlayer().getId()] = curve;
+            Kurve.Game.runningCurves[curve.getPlayer().getId()] = [curve];
             
             curve.setRandomPosition(Kurve.Field.getRandomPosition().getPosX(), Kurve.Field.getRandomPosition().getPosY());
             curve.setRandomAngle();
@@ -183,7 +190,7 @@ Kurve.Game = {
         });
 
         if ( this.deathMatch ) {
-            var curve = this.runningCurves[Object.keys(this.runningCurves)[0]];
+            var curve = this.runningCurves[Object.keys(this.runningCurves)[0]][0];
             this.gameOver(curve.getPlayer());
         }
 
