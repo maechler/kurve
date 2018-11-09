@@ -29,11 +29,17 @@ Kurve.Factory = {
     getSuperpower: function(type) {
         if ( !Kurve.Superpowerconfig.hasOwnProperty(type) ) throw 'Superpower type ' + type + ' is not yet registered.';
         
-        var hooks   = Kurve.Superpowerconfig[type].hooks;
-        var act     = Kurve.Superpowerconfig[type].act;
-        var helpers = Kurve.Superpowerconfig[type].helpers;
-        var init    = Kurve.Superpowerconfig[type].init;
-        var close   = Kurve.Superpowerconfig[type].close;
+        var hooks = Kurve.Superpowerconfig[type].hooks;
+        var act = Kurve.Superpowerconfig[type].act;
+        var init = Kurve.Superpowerconfig[type].init;
+        var close = Kurve.Superpowerconfig[type].close;
+        var helpers = {};
+
+        for (var attribute in Kurve.Superpowerconfig[type].helpers) {
+            if (Kurve.Superpowerconfig[type].helpers.hasOwnProperty(attribute)) {
+                helpers[attribute] = Kurve.Superpowerconfig[type].helpers[attribute];
+            }
+        }
 
         return new Kurve.Superpower(hooks, act, helpers, type, init, close);
     }

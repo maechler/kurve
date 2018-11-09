@@ -185,10 +185,13 @@ Kurve.Curve.prototype.checkForCollision = function() {
 
 Kurve.Curve.prototype.isCollided = function(positionX, positionY) {
     if ( this.getField().isPointOutOfBounds(positionX, positionY) ) return true;
-    var p = this.getField().getDrawnPoint(positionX, positionY);
-    if ( !p ) return false;  // No collision.
-    if ( p.curve && this.isImmuneTo(p.curve) ) return false;
-    if ( p.curve === this && this.isWithinSelfCollisionTimeout(p.time) ) return false;
+
+    var drawnPoint = this.getField().getDrawnPoint(positionX, positionY);
+
+    if ( !drawnPoint ) return false;  // No collision.
+    if ( drawnPoint.curve && this.isImmuneTo(drawnPoint.curve) ) return false;
+    if ( drawnPoint.curve === this && this.isWithinSelfCollisionTimeout(drawnPoint.time) ) return false;
+
     return true;
 };
 

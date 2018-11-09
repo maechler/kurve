@@ -220,7 +220,6 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
         var now = new Date();
 
         if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
-
             var leftEndX     = Math.cos(curve.getOptions().angle - Math.PI / 2) * this.helpers.barWidth + curve.getPositionX();
             var leftEndY     = Math.sin(curve.getOptions().angle - Math.PI / 2) * this.helpers.barWidth + curve.getPositionY();
             var rightEndX    = Math.cos(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPositionX();
@@ -367,6 +366,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
 
     act: function(hook, curve) {
         var now = new Date();
+
         if ( now.getTime() - curve.hydraData.previousExecution.getTime() > this.helpers.timeOut ) {
             curve.hydraData.previousExecution = now;
             this.decrementCount();
@@ -381,9 +381,11 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
             copy.setPreviousMiddlePointY(curve.getPreviousMiddlePointY());
             copy.setPreviousMiddlePositionX(curve.getPreviousMiddlePositionX());
             copy.setPreviousMiddlePositionY(curve.getPreviousMiddlePositionY());
+
             for ( var k in curve.getOptions() ) {
                 copy.getOptions()[k] = curve.getOptions()[k];
             }
+
             copy.hydraData = { previousExecution: curve.hydraData.previousExecution };
             curve.getOptions().angle += this.helpers.angle / 2;
             copy.getOptions().angle -= this.helpers.angle / 2;
@@ -392,6 +394,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
     },
 
     close: function(curve) {
+
     }
 };
 
@@ -427,6 +430,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.REVERSE] = {
             var otherX = curve.getPositionX();
             var otherY = curve.getPositionY();
             var otherAngle = curve.getOptions().angle;
+
             curve.setPreviousMiddlePointX(curve.reverseData.otherX);
             curve.setPreviousMiddlePointY(curve.reverseData.otherY);
             curve.setNextPositionX(curve.reverseData.otherX);
