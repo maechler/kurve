@@ -245,6 +245,8 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
     ],
 
     helpers: {
+        collisionFreeFrames: 2,
+        isCrossingWall: false,
         getWallCrossedPosition: function(curve) {
             var positionX = curve.getNextPositionX();
             var positionY = curve.getNextPositionY();
@@ -278,8 +280,21 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
         var positionX = curve.getNextPositionX();
         var positionY = curve.getNextPositionY();
 
-        if ( curve.getField().isPointOutOfBounds(positionX, positionY) && this.getCount() > 0 ) {
+        if (this.helpers.isCrossingWall) {
+            if (this.helpers.collisionFreeFrames > 1) {
+                this.helpers.collisionFreeFrames--;
+
+                return false;
+            } else {
+                this.helpers.isCrossingWall = false;
+                this.helpers.collisionFreeFrames = 2;
+            }
+        }
+
+        if ( curve.getField().isPointOutOfBounds(positionX, positionY) && this.getCount() > 0) {
             this.decrementCount();
+
+            this.helpers.isCrossingWall = true;
             var movedPosition = this.helpers.getWallCrossedPosition(curve);
 
             //todo refactor in a away that from outside only one call is needed to change position
@@ -292,6 +307,13 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
             curve.setPreviousMiddlePositionX(movedPosition.getPosX());
             curve.setPreviousMiddlePositionY(movedPosition.getPosY());
 
+            return false;
+        }
+
+        var movedPositionX = curve.getMovedPositionX(curve.getOptions().stepLength);
+        var movedPositionY = curve.getMovedPositionY(curve.getOptions().stepLength);
+
+        if (curve.getField().isPointOutOfBounds(movedPositionX, movedPositionY) && this.getCount() > 0) {
             return false;
         }
 
