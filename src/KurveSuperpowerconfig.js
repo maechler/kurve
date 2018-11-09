@@ -35,6 +35,7 @@ Kurve.Superpowerconfig.types = {
     CROSS_WALLS: 'CROSS_WALLS',
     DARK_KNIGHT: 'DARK_KNIGHT',
     HYDRA: 'HYDRA',
+    REVERSE: 'REVERSE',
 };
 
 Kurve.Superpowerconfig.hooks = {
@@ -42,7 +43,7 @@ Kurve.Superpowerconfig.hooks = {
     DRAW_LINE: 'DRAW_LINE',
     IS_COLLIDED: 'IS_COLLIDED'
 };
- 
+
 Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
     label: 'run faster',
 
@@ -118,12 +119,12 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
         if ( this.helpers.initialStepLength !== null ) curve.getOptions().stepLength = this.helpers.initialStepLength;
     }
 };
-  
+
 Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
     label: 'jump',
 
     hooks: [Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME],
-     
+
     helpers: {
         jumpWidth: 10,
         timeOut: 250, //until superpower can be called again
@@ -133,10 +134,10 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
     init: function(curve) {
 
     },
-     
+
     act: function(hook, curve) {
         var now = new Date();
-         
+
         if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
             var jumpedPositionX = curve.getMovedPositionX(curve.getOptions().stepLength * this.helpers.jumpWidth);
             var jumpedPositionY = curve.getMovedPositionY(curve.getOptions().stepLength * this.helpers.jumpWidth);
@@ -155,7 +156,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
 
     }
  };
-  
+
 Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
     label: 'invisible',
 
@@ -187,7 +188,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
 
             curve.setIsInvisible(true);
 
-            this.helpers.executionTime--;          
+            this.helpers.executionTime--;
         } else if ( hook === Kurve.Superpowerconfig.hooks.IS_COLLIDED && this.isActive() ) {
             return false;
         }
@@ -392,4 +393,60 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
 
     close: function(curve) {
     }
+};
+
+Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.REVERSE] = {
+    label: 'reverse',
+    hooks: [Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME],
+
+    helpers: {
+        otherX: undefined,
+        otherY: undefined,
+        otherAngle: undefined,
+        previousExecution: new Date(),
+        timeOut: 250, //until superpower can be called again
+    },
+
+    init: function(curve) {
+        // Save initial position of each player.
+        curve.reverseData = {
+            otherX: curve.getPositionX(),
+            otherY: curve.getPositionY(),
+            otherAngle: curve.getOptions().angle + Math.PI,
+            selfCollisionTimeout: curve.getOptions().selfCollisionTimeout,
+        };
+    },
+
+    act: function(hook, curve) {
+        var now = new Date();
+
+        if ( this.isActive() ) {
+            this.setIsActive(false);
+            curve.getOptions().selfCollisionTimeout = curve.reverseData.selfCollisionTimeout;
+        } else if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
+            var otherX = curve.getPositionX();
+            var otherY = curve.getPositionY();
+            var otherAngle = curve.getOptions().angle;
+            curve.setPreviousMiddlePointX(curve.reverseData.otherX);
+            curve.setPreviousMiddlePointY(curve.reverseData.otherY);
+            curve.setNextPositionX(curve.reverseData.otherX);
+            curve.setNextPositionY(curve.reverseData.otherY);
+            curve.getOptions().angle = curve.reverseData.otherAngle;
+            curve.moveToNextFrame();
+            curve.reverseData.otherX = otherX;
+            curve.reverseData.otherY = otherY;
+            curve.reverseData.otherAngle = otherAngle;
+            // Disable self-collision for one frame.
+            curve.getOptions().selfCollisionTimeout = 1000000000;
+            this.setIsActive(true);
+
+            this.helpers.previousExecution = now;
+            this.decrementCount();
+        }
+    },
+
+    close: function(curve) {
+        this.setIsActive(false);
+        curve.getOptions().selfCollisionTimeout = curve.reverseData.selfCollisionTimeout;
+    },
 };
