@@ -34,6 +34,7 @@ Kurve.Superpowerconfig.types = {
     VERTICAL_BAR: 'VERTICAL_BAR',
     CROSS_WALLS: 'CROSS_WALLS',
     DARK_KNIGHT: 'DARK_KNIGHT',
+    HYDRA: 'HYDRA',
     REVERSE: 'REVERSE',
 };
 
@@ -346,6 +347,53 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.DARK_KNIGHT] = {
     }
 };
 
+Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
+    label: 'hydra',
+
+    hooks: [
+        Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME
+    ],
+
+    helpers: {
+      angle: 0.1 * Math.PI,
+      timeOut: 250,
+    },
+
+    init: function(curve) {
+        curve.hydraData = {
+            previousExecution: new Date(),
+        };
+    },
+
+    act: function(hook, curve) {
+        var now = new Date();
+        if ( now.getTime() - curve.hydraData.previousExecution.getTime() > this.helpers.timeOut ) {
+            curve.hydraData.previousExecution = now;
+            this.decrementCount();
+            var copy = new Kurve.Curve(curve.getPlayer(), curve.getGame(), curve.getField(), Kurve.Config.Curve, curve.getSuperpower());
+            curve.setImmunity([copy], 5);
+            copy.setImmunity([curve], 5);
+            copy.setPositionX(curve.getPositionX());
+            copy.setPositionY(curve.getPositionY());
+            copy.setNextPositionX(curve.getNextPositionX());
+            copy.setNextPositionY(curve.getNextPositionY());
+            copy.setPreviousMiddlePointX(curve.getPreviousMiddlePointX());
+            copy.setPreviousMiddlePointY(curve.getPreviousMiddlePointY());
+            copy.setPreviousMiddlePositionX(curve.getPreviousMiddlePositionX());
+            copy.setPreviousMiddlePositionY(curve.getPreviousMiddlePositionY());
+            for ( var k in curve.getOptions() ) {
+                copy.getOptions()[k] = curve.getOptions()[k];
+            }
+            copy.hydraData = { previousExecution: curve.hydraData.previousExecution };
+            curve.getOptions().angle += this.helpers.angle / 2;
+            copy.getOptions().angle -= this.helpers.angle / 2;
+            curve.getGame().runningCurves[curve.getPlayer().getId()].push(copy);
+        }
+    },
+
+    close: function(curve) {
+    }
+};
 
 Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.REVERSE] = {
     label: 'reverse',

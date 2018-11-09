@@ -83,7 +83,7 @@ Kurve.Field = {
         this.drawnPixels = [];
     },
 
-    drawLine: function(fromPointX, fromPointY, toPointX, toPointY, color) {
+    drawLine: function(fromPointX, fromPointY, toPointX, toPointY, color, curve) {
         if ( color === undefined ) color = Kurve.Theming.getThemedValue('field', 'defaultColor');
 
         this.ctx.beginPath();
@@ -96,7 +96,7 @@ Kurve.Field = {
 
         this.ctx.stroke();
 
-        this.addLineToDrawnPixel(fromPointX, fromPointY, toPointX, toPointY, color);
+        this.addLineToDrawnPixel(fromPointX, fromPointY, toPointX, toPointY, color, curve);
     },
 
     drawUntrackedPoint: function(pointX, pointY, color) {
@@ -108,31 +108,31 @@ Kurve.Field = {
         this.ctx.fill();
     },
 
-    drawPoint: function(pointX, pointY, color) {
+    drawPoint: function(pointX, pointY, color, curve) {
         this.drawUntrackedPoint(pointX, pointY, color);
-        this.addPointToDrawnPixel(pointX, pointY, color);
+        this.addPointToDrawnPixel(pointX, pointY, color, curve);
     },
 
-    addLineToDrawnPixel: function(fromPointX, fromPointY, toPointX, toPointY, color) {
+    addLineToDrawnPixel: function(fromPointX, fromPointY, toPointX, toPointY, color, curve) {
         var interpolatedPoints = u.interpolateTwoPoints(fromPointX, fromPointY, toPointX, toPointY);
 
 
         for( var pointX in interpolatedPoints ) {
             for( var pointY in interpolatedPoints[pointX]) {
-                this.addPointsToDrawnPixel(this.getPointSurroundings(pointX, pointY), color);
+                this.addPointsToDrawnPixel(this.getPointSurroundings(pointX, pointY), color, curve);
             }
         }
     },
     
-    addPointsToDrawnPixel: function(points, color) {
+    addPointsToDrawnPixel: function(points, color, curve) {
         for( var pointX in points ) {
             for( var pointY in points[pointX]) {
-                this.addPointToDrawnPixel(pointX, pointY, color);
+                this.addPointToDrawnPixel(pointX, pointY, color, curve);
             }
         }
     },
     
-    addPointToDrawnPixel: function(pointX, pointY, color) {
+    addPointToDrawnPixel: function(pointX, pointY, color, curve) {
         var pointX0 = u.round(pointX, 0);
         var pointY0 = u.round(pointY, 0);
 
@@ -142,6 +142,7 @@ Kurve.Field = {
 
         this.drawnPixels[pointX0][pointY0] = {
             color: color,
+            curve: curve,
             time: new Date()
         };
 
@@ -158,11 +159,6 @@ Kurve.Field = {
     isPointDrawn: function(pointX, pointY) {
         return this.drawnPixels[u.round(pointX, 0)] !== undefined &&
                this.drawnPixels[u.round(pointX, 0)][u.round(pointY, 0)] !== undefined;
-    },
-
-    isPointDrawnInColor: function(pointX, pointY, color) {
-        return this.drawnPixels[u.round(pointX, 0)] !== undefined &&
-               this.drawnPixels[u.round(pointX, 0)][u.round(pointY, 0)].color === color;
     },
 
     getDrawnPoint: function(pointX, pointY) {
