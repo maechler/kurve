@@ -70,30 +70,19 @@ Kurve.Utility.hasClass = function(className, elementId) {
     return regExp.test(element.className);
 };
 
-/**
- *  y = mx + d
- */
 Kurve.Utility.interpolateTwoPoints = function(fromPointX, fromPointY, toPointX, toPointY) {
     var interpolatedPoints = [];
-    var precision = Kurve.Config.Utility.interpolatedPixelsPrecision;
+    var dX = toPointX - fromPointX;
+    var dY = toPointY - fromPointY;
+    var maxD = Math.max(Math.abs(dX), Math.abs(dY), 1);
+    var stepX = dX / maxD;
+    var stepY = dY / maxD;
 
-    var dX      = toPointX - fromPointX;
-    var m       = (toPointY - fromPointY) / dX;
-    var d       = toPointY - m * toPointX;
-    var absDX   = u.round(Math.abs(dX) * precision, 0);
-    var steps   = absDX < 1 ? 1 : absDX; //at least interpolate one point
+    for (var i=0; i < maxD; i++) {
+        var posX = fromPointX + i * stepX;
+        var posY = fromPointY + i * stepY;
 
-    for (var i=0; i < steps; i++) {
-        var step = dX > 0 ? (i / precision) : -(i / precision);
-        var posX = fromPointX + step;
-        var posY = m * posX + d;
-        var posX0 = u.round(posX, 0);
-        var posY0 = u.round(posY, 0);
-
-        if ( interpolatedPoints[posX0] === undefined ) interpolatedPoints[posX0] = [];
-        if ( interpolatedPoints[posX0][posY0] === true ) continue;
-
-        interpolatedPoints[posX0][posY0] = true;
+        u.addPointToArray(interpolatedPoints, posX, posY);
     }
 
     return interpolatedPoints;

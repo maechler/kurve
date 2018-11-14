@@ -51,10 +51,6 @@ Kurve.Config = {
         startDelay: 2000,
         fps: 30,
     },
-
-    Utility: {
-        interpolatedPixelsPrecision: 100,
-    },
     
     Players: [
         { id:'red',      keyLeft:49,   keyRight:81,   keySuperpower:65  },
