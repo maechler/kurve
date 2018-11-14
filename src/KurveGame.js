@@ -136,6 +136,8 @@ Kurve.Game = {
     notifyDeath: function(curve) {
         var playerId = curve.getPlayer().getId();
         // Drop this curve.
+        if ( this.runningCurves[playerId] === undefined ) return;
+
         this.runningCurves[playerId].splice(this.runningCurves[playerId].indexOf(curve), 1);
 
         if ( this.runningCurves[playerId].length === 0 ) {
@@ -180,8 +182,8 @@ Kurve.Game = {
             
             curve.setRandomPosition(Kurve.Field.getRandomPosition().getPosX(), Kurve.Field.getRandomPosition().getPosY());
             curve.setRandomAngle();
-            curve.drawCurrentPosition(Kurve.Field);
             curve.getPlayer().getSuperpower().init(curve);
+            curve.drawCurrentPosition(Kurve.Field);
         });
     },
     

@@ -36,7 +36,8 @@ Kurve.Superpowerconfig.types = {
     DARK_KNIGHT: 'DARK_KNIGHT',
     HYDRA: 'HYDRA',
     REVERSE: 'REVERSE',
-    SQUARE_HEAD: 'SQUARE_HEAD'
+    SQUARE_HEAD: 'SQUARE_HEAD',
+    CHUCK_NORRIS: 'CHUCK_NORRIS'
 };
 
 Kurve.Superpowerconfig.hooks = {
@@ -536,5 +537,40 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.SQUARE_HEAD] = {
 
     close: function(curve) {
         this.helpers.closeAct.call(this, curve);
+    },
+};
+
+Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CHUCK_NORRIS] = {
+    label: 'chuck norris',
+    hooks: [],
+    helpers: {
+        initCalled: false
+    },
+
+    init: function(curve) {
+        //Chuck Norris does not need no superpower
+        while (curve.getPlayer().getSuperpower().getCount() > 0) {
+            this.decrementCount();
+        }
+
+        if (!this.helpers.initCalled) {
+            var chuckNorrisColor = Kurve.Theming.getThemedValue('field', 'deathMatchColor');
+            var styleNode = document.createElement('style');
+            var style = document.createTextNode('.' + curve.getPlayer().getId() + ' { color:' + chuckNorrisColor + ' !important; border-color:' + chuckNorrisColor + ' !important; }');
+
+            styleNode.appendChild(style);
+            document.body.appendChild(styleNode);
+            curve.getPlayer().setColor(chuckNorrisColor);
+
+            this.helpers.initCalled = true;
+        }
+    },
+
+    act: function(hook, curve) {
+
+    },
+
+    close: function(curve) {
+
     },
 };
