@@ -92,11 +92,12 @@ Kurve.Menu = {
             Kurve.Game.curves = [];
             return; //not enough players are ready
         }
-        
+
+        Kurve.Field.init();
+        Kurve.Game.startGame();
+
         u.addClass('hidden', 'layer-menu');
         u.removeClass('hidden', 'layer-game');
-        
-        Kurve.Game.startGame();
     },
 
     onNextSuperPowerClicked: function(event, playerId) {

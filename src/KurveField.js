@@ -39,10 +39,17 @@ Kurve.Field = {
     drawnPixelPrecision: null,
     
     init: function() {
+        this.initWindow();
         this.initCanvas();
         this.initContext();
         this.initDrawing();
         this.initField();
+    },
+
+    initWindow: function() {
+        //Fix window width in order to prevent window resize to change field size
+        document.body.style.height = window.innerHeight + 'px';
+        document.body.style.width = window.innerWidth + 'px';
     },
         
     initCanvas: function() {
@@ -116,7 +123,6 @@ Kurve.Field = {
     addLineToDrawnPixel: function(fromPointX, fromPointY, toPointX, toPointY, color, curve) {
         var interpolatedPoints = u.interpolateTwoPoints(fromPointX, fromPointY, toPointX, toPointY);
 
-
         for( var pointX in interpolatedPoints ) {
             for( var pointY in interpolatedPoints[pointX]) {
                 this.addPointsToDrawnPixel(this.getPointSurroundings(pointX, pointY), color, curve);
@@ -174,7 +180,7 @@ Kurve.Field = {
     },
     
     getRandomPosition: function(borderPadding) {
-        if ( borderPadding === undefined ) borderPadding = 20;
+        if ( borderPadding === undefined ) borderPadding = 25;
         
         var posX = borderPadding + Math.round( (this.width - 2*borderPadding)*Math.random() );
         var posY = borderPadding + Math.round( (this.height - 2*borderPadding)*Math.random() );
