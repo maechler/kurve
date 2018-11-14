@@ -95,4 +95,8 @@ Kurve.Utility.addPointToArray = function(array, pointX, pointY) {
     array[pointX0][u.round(pointY, 0)] = true;
 };
 
+Kurve.Utility.stringToHex = function(string) {
+    return parseInt(string.substring(1), 16)
+};
+
 var u = Kurve.Utility;

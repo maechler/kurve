@@ -98,8 +98,8 @@ Kurve.Curve.prototype.drawNextFrame = function() {
     }
 
     if ( Kurve.Config.Debug.curvePosition ) {
-        this.getField().ctx.fillStyle = '#000';
-        this.getField().ctx.fillRect(u.round(this.getPositionX(), 0), u.round(this.getPositionY(), 0), 1, 1);
+        this.getField().pixiDebug.lineStyle(1, 0x000000);
+        this.getField().pixiDebug.drawRect(u.round(this.getPositionX(), 0), u.round(this.getPositionY(), 0), 1, 1);
     }
 };
 
@@ -115,7 +115,7 @@ Kurve.Curve.prototype.drawLine = function(field) {
     }
 
     if ( this.isInvisible() ) {
-        if ( this.getOptions().holeCountDown < -3 ) this.resetHoleCountDown();
+        if ( this.getOptions().holeCountDown < -6 ) this.resetHoleCountDown();
     } else {
         field.drawLine(this.getPreviousMiddlePositionX(), this.getPreviousMiddlePositionY(), this.getNextPositionX(), this.getNextPositionY(), this.getPlayer().getColor(), this);
     }
@@ -165,16 +165,14 @@ Kurve.Curve.prototype.checkForCollision = function() {
 
     var trace = u.interpolateTwoPoints(this.getPositionX(), this.getPositionY(), this.getNextPositionX(), this.getNextPositionY());
     var isCollided = false;
-    var that = this;
 
     for (var pointX in trace) {
         for (var pointY in trace[pointX]) {
-            if ( this.isCollided(pointX, pointY) ) isCollided = true;
+            if ( this.isCollided(pointX, pointY) ) isCollided = true; //todo break?
 
             if ( Kurve.Config.Debug.curveTrace ) {
-                that.getField().ctx.globalAlpha = 0.5;
-                that.getField().ctx.fillStyle = '#000';
-                that.getField().ctx.fillRect(pointX, pointY, 1, 1);
+                this.getField().pixiDebug.lineStyle(1, 0x000000, 0.5);
+                this.getField().pixiDebug.drawRect(pointX, pointY, 1, 1);
             }
         }
     }

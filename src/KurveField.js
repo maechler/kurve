@@ -26,22 +26,22 @@
 
 Kurve.Field = {
     
-    canvas:         null,
-    ctx:            null,
+    canvas: null,
+    pixiApp: null,
+    pixiCurves: null,
+    pixiDebug: null,
     
-    width:          null,
-    height:         null,
+    width: null,
+    height: null,
     
-    drawnPixels:    [],
-
-    defaultLineWidth:   null,
-
+    drawnPixels: [],
+    defaultLineWidth: null,
     drawnPixelPrecision: null,
     
     init: function() {
         this.initWindow();
         this.initCanvas();
-        this.initContext();
+        this.initPixi();
         this.initDrawing();
         this.initField();
     },
@@ -53,18 +53,31 @@ Kurve.Field = {
     },
         
     initCanvas: function() {
-        var width           = window.innerWidth * Kurve.Config.Field.width;
-        var height          = window.innerHeight;
-        
-        this.canvas         = document.getElementById('field');
-        this.canvas.width   = width;
-        this.canvas.height  = height;
-        this.width          = width;
-        this.height         = height;
+        this.width = window.innerWidth * Kurve.Config.Field.width;
+        this.height = window.innerHeight;
+        this.canvas = document.getElementById('field');
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
     },
     
-    initContext: function() {
-        this.ctx = this.canvas.getContext('2d');
+    initPixi: function() {
+        this.pixiApp = new PIXI.Application({width: this.canvas.width, height: this.canvas.height});
+        this.pixiApp.renderer = new PIXI.autoDetectRenderer(
+            this.canvas.width,
+            this.canvas.height,
+            {
+                view: this.canvas,
+                transparent: true,
+                antialias: true
+            }
+        );
+        this.pixiCurves = new PIXI.Graphics();
+        this.pixiField = new PIXI.Graphics();
+        this.pixiDebug = new PIXI.Graphics();
+
+        this.pixiApp.stage.addChild(this.pixiCurves);
+        this.pixiApp.stage.addChild(this.pixiField);
+        this.pixiApp.stage.addChild(this.pixiDebug);
     },
     
     initField: function() {
@@ -76,32 +89,27 @@ Kurve.Field = {
         this.drawnPixelPrecision = Kurve.Config.Field.drawnPixelPrecision;
     },
 
-    drawField: function() {
-        this.ctx.beginPath();
-
-        this.ctx.strokeStyle = Kurve.Theming.getThemedValue('field', 'borderColor');
-        this.ctx.lineWidth   = 3;
-        
-        this.ctx.clearRect(0, 0, this.width, this.height);
-        this.ctx.rect(0, 0, this.width, this.height);
-      
-        this.ctx.stroke();
-        
+    clearFieldContent: function() {
         this.drawnPixels = [];
+
+        this.pixiCurves.clear();
+        this.pixiDebug.clear();
+    },
+
+    drawField: function() {
+        var borderColor = u.stringToHex(Kurve.Theming.getThemedValue('field', 'borderColor'));
+
+        this.pixiField.clear();
+        this.pixiField.lineStyle(2, borderColor);
+        this.pixiField.drawRect(0, 0, this.width, this.height);
     },
 
     drawLine: function(fromPointX, fromPointY, toPointX, toPointY, color, curve) {
         if ( color === undefined ) color = Kurve.Theming.getThemedValue('field', 'defaultColor');
 
-        this.ctx.beginPath();
-
-        this.ctx.strokeStyle = color;
-        this.ctx.lineWidth   = this.defaultLineWidth;
-
-        this.ctx.moveTo(fromPointX, fromPointY);
-        this.ctx.lineTo(toPointX, toPointY);
-
-        this.ctx.stroke();
+        this.pixiCurves.lineStyle(this.defaultLineWidth, u.stringToHex(color));
+        this.pixiCurves.moveTo(fromPointX, fromPointY);
+        this.pixiCurves.lineTo(toPointX, toPointY);
 
         this.addLineToDrawnPixel(fromPointX, fromPointY, toPointX, toPointY, color, curve);
     },
@@ -109,10 +117,10 @@ Kurve.Field = {
     drawUntrackedPoint: function(pointX, pointY, color) {
         if ( color === undefined ) color = Kurve.Theming.getThemedValue('field', 'defaultColor');
 
-        this.ctx.beginPath();
-        this.ctx.fillStyle = color;
-        this.ctx.arc(pointX, pointY, 2, 0, 2 * Math.PI, false);
-        this.ctx.fill();
+        this.pixiCurves.beginFill(u.stringToHex(color));
+        this.pixiCurves.lineStyle(0);
+        this.pixiCurves.drawCircle(pointX, pointY, 2);
+        this.pixiCurves.endFill();
     },
 
     drawPoint: function(pointX, pointY, color, curve) {
@@ -153,12 +161,13 @@ Kurve.Field = {
         };
 
         if ( Kurve.Config.Debug.fieldDrawnPixels ) {
-            this.ctx.fillStyle = '#37FDFC';
-            this.ctx.fillRect(pointX0, pointY0, 1, 1);
+            this.pixiDebug.lineStyle(1, 0x37FDFC);
+            this.pixiDebug.drawRect(pointX0, pointY0, 1, 1);
         }
     },
     
     isPointOutOfBounds: function(pointX, pointY) {
+        //todo subtract boundary width
         return pointX <= 0 || pointY <= 0 || pointX >= this.width || pointY >= this.height;
     },
 

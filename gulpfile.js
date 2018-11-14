@@ -26,31 +26,22 @@ var kurveSources = [
     './src/KurvePrivacypolicy.js',
 ];
 
-gulp.task('javascript', function() {
-    gulp.src('src/**/*.js')
-        .pipe(sourcemaps.init())
-        .pipe(plugin1())
-        .pipe(plugin2())
-        .pipe(sourcemaps.write('../maps'))
-        .pipe(gulp.dest('dist'));
-});
+var kurveLibs = [
+    './node_modules/pixi.js/dist/pixi.js',
+];
 
 gulp.task('js', function() {
-    gulp.src(kurveSources)
+    gulp.src(kurveLibs.concat(kurveSources))
         .pipe(sourcemaps.init())
-        .pipe(uglify({
-            preserveComments: 'some'
-        }))
+        .pipe(uglify({preserveComments: 'some'}))
         .pipe(concat('kurve.min.js', {sep: ''}))
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./dist/js/'));
 });
 
 gulp.task('sass', function(done) {
     gulp.src('./scss/main.scss')
-        .pipe(sass({
-            errLogToConsole: true
-        }))
+        .pipe(sass({errLogToConsole: true}))
         .pipe(gulp.dest('./dist/css/'))
         .on('end', done);
 });

@@ -156,7 +156,7 @@ Kurve.Game = {
     startNewRound: function() {
         this.isRoundStarted = true;
 
-        Kurve.Field.drawField();
+        Kurve.Field.clearFieldContent();
         this.initRun();
         this.renderPlayerScores();
         setTimeout(this.startRun.bind(this), Kurve.Config.Game.startDelay);
