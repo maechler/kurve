@@ -164,10 +164,14 @@ p {
 }
 
 #content-right {
-    padding: 1% 2%;
-    width: 26%;
+    width: 30%;
+    height: 100%;
     float: left;
-    height: 96%;
+    padding: 24px;
+    /* TODO: use border-box on all elements */
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 #menu {
