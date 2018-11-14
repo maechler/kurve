@@ -63,7 +63,7 @@ Kurve.Curve = function(player, game, field, config, superpower) {
     this.setNextPositionX = function(newPosition) { nextPositionX = newPosition; };
     this.setAngle = function(newAngle) { options.angle = newAngle; };
     this.setImmunity = function(curves, duration) { immunityTo = curves; immunityFor = duration; };
-    this.decrementImmunity = function() { if ( immunityFor > 0 ) immunityFor -= 1; }
+    this.decrementImmunity = function() { if ( immunityFor > 0 ) immunityFor -= 1; };
     this.setIsInvisible = function(newIsInvisible) { isInvisible = newIsInvisible; };
     this.setPreviousMiddlePointY = function(newPreviousMiddlePoint) { previousMiddlePointY = newPreviousMiddlePoint; };
     this.setPreviousMiddlePointX = function(newPreviousMiddlePoint) { previousMiddlePointX = newPreviousMiddlePoint; };

@@ -36,6 +36,7 @@ Kurve.Superpowerconfig.types = {
     DARK_KNIGHT: 'DARK_KNIGHT',
     HYDRA: 'HYDRA',
     REVERSE: 'REVERSE',
+    SQUARE_HEAD: 'SQUARE_HEAD'
 };
 
 Kurve.Superpowerconfig.hooks = {
@@ -54,7 +55,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
        initAct: function() {
            this.decrementCount();
            this.setIsActive(true);
-           this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
+           this.helpers.executionTime = 4 * Kurve.Game.fps;
        },
        closeAct: function() {
            this.setIsActive(false);
@@ -92,7 +93,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
         initAct: function(curve) {
             this.decrementCount();
             this.setIsActive(true);
-            this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
+            this.helpers.executionTime = 6 * Kurve.Game.fps;
             this.helpers.initialStepLength = curve.getOptions().stepLength;
 
             curve.getOptions().stepLength = this.helpers.initialStepLength / 2;
@@ -474,5 +475,66 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.REVERSE] = {
     close: function(curve) {
         this.setIsActive(false);
         curve.getOptions().selfCollisionTimeout = curve.reverseData.selfCollisionTimeout;
+    },
+};
+
+Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.SQUARE_HEAD] = {
+    label: 'square head',
+    hooks: [Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME],
+
+    helpers: {
+        executionTime: 0,
+        dAngleInitial: null,
+        previousKeyPressed: null,
+        initAct: function(curve) {
+            this.helpers.dAngleInitial = curve.getOptions().dAngle;
+            this.helpers.executionTime = 6 * Kurve.Game.fps;
+
+            curve.getOptions().angle = this.helpers.getSquaredAngle(curve.getOptions().angle);
+            curve.getOptions().dAngle = 0;
+
+            this.setIsActive(true);
+            this.decrementCount();
+        },
+        closeAct: function(curve) {
+            curve.getOptions().dAngle = this.helpers.dAngleInitial;
+
+            this.setIsActive(false);
+        },
+        getSquaredAngle: function(angle) {
+            return (Math.PI / 2) * Math.round(angle / (Math.PI / 2));
+        }
+    },
+
+    init: function(curve) {
+        //set initial angle always, even if superpower is never used
+        this.helpers.dAngleInitial = curve.getOptions().dAngle;
+    },
+
+    act: function(hook, curve) {
+        if ( !this.isActive() ) this.helpers.initAct.call(this, curve);
+        if ( this.helpers.executionTime < 1 ) return this.helpers.closeAct.call(this, curve);
+
+        var keyPressed = null;
+
+        if ( curve.getGame().isKeyDown(curve.getPlayer().getKeyRight()) ) {
+            keyPressed = 'right';
+        } else if ( curve.getGame().isKeyDown(curve.getPlayer().getKeyLeft()) ) {
+            keyPressed = 'left';
+        }
+
+        //to move two times in the same direction, the key must be released in between
+        if (keyPressed !== null && this.helpers.previousKeyPressed !== keyPressed) {
+            curve.getOptions().dAngle = Math.PI / 2;
+        } else {
+            curve.getOptions().dAngle = 0;
+        }
+
+        this.helpers.previousKeyPressed = keyPressed;
+        this.helpers.executionTime--;
+    },
+
+    close: function(curve) {
+        this.helpers.closeAct.call(this, curve);
     },
 };

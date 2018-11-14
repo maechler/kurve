@@ -134,10 +134,11 @@ Kurve.Game = {
     },
     
     notifyDeath: function(curve) {
-        var pid = curve.getPlayer().getId();
+        var playerId = curve.getPlayer().getId();
         // Drop this curve.
-        this.runningCurves[pid].splice(this.runningCurves[pid].indexOf(curve), 1);
-        if ( this.runningCurves[pid].length === 0 ) {
+        this.runningCurves[playerId].splice(this.runningCurves[playerId].indexOf(curve), 1);
+
+        if ( this.runningCurves[playerId].length === 0 ) {
             // Drop this player.
             delete this.runningCurves[curve.getPlayer().getId()];
             for (var i in this.runningCurves) {
