@@ -167,7 +167,7 @@ Kurve.Game = {
         this.runIntervalId = setInterval(this.run.bind(this), this.intervalTimeOut);
 
         this.curves.forEach(function(curve) {
-            curve.setImmunity('all', 1);
+            curve.setImmunity([curve], 5);
         });
     },
     
@@ -180,7 +180,7 @@ Kurve.Game = {
         this.curves.forEach(function(curve) {
             Kurve.Game.runningCurves[curve.getPlayer().getId()] = [curve];
             
-            curve.setRandomPosition(Kurve.Field.getRandomPosition().getPosX(), Kurve.Field.getRandomPosition().getPosY());
+            curve.setPosition(Kurve.Field.getRandomPosition().getPosX(), Kurve.Field.getRandomPosition().getPosY());
             curve.setRandomAngle();
             curve.getPlayer().getSuperpower().init(curve);
             curve.drawCurrentPosition(Kurve.Field);

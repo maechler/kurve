@@ -128,9 +128,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
     hooks: [Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME],
 
     helpers: {
-        jumpWidth: 10,
-        timeOut: 250, //until superpower can be called again
-        previousExecution: new Date()
+        jumpWidth: 24
     },
 
     init: function(curve) {
@@ -138,19 +136,19 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
     },
 
     act: function(hook, curve) {
-        var now = new Date();
-
-        if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
+        if ( !this.isActive() ) {
             var jumpedPositionX = curve.getMovedPositionX(curve.getOptions().stepLength * this.helpers.jumpWidth);
             var jumpedPositionY = curve.getMovedPositionY(curve.getOptions().stepLength * this.helpers.jumpWidth);
 
             curve.setNextPositionX(jumpedPositionX);
             curve.setNextPositionY(jumpedPositionY);
-            curve.setPreviousMiddlePointX(jumpedPositionX);
-            curve.setPreviousMiddlePointY(jumpedPositionY);
 
-            this.helpers.previousExecution = now;
             this.decrementCount();
+            this.setIsActive(true);
+        }
+
+        if ( !curve.getGame().isKeyDown(curve.getPlayer().getKeySuperpower()) ) {
+            this.setIsActive(false); //super power key has been released, can be used again
         }
     },
 
@@ -170,9 +168,9 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
     helpers: {
         executionTime: 0,
         initAct: function() {
-           this.decrementCount();
+            this.decrementCount();
             this.setIsActive(true);
-           this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
+            this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
         },
         closeAct: function() {
             this.setIsActive(false);
@@ -209,9 +207,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
     ],
 
     helpers: {
-        timeOut: 250, //until superpower can be called again
-        previousExecution: new Date(),
-        barWidth: 40
+        barWidth: 50
     },
 
     init: function(curve) {
@@ -219,18 +215,20 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
     },
 
     act: function(hook, curve) {
-        var now = new Date();
+        if ( !this.isActive() ) {
+            var leftEndX = Math.cos(curve.getOptions().angle - Math.PI / 2) * this.helpers.barWidth + curve.getPositionX();
+            var leftEndY = Math.sin(curve.getOptions().angle - Math.PI / 2) * this.helpers.barWidth + curve.getPositionY();
+            var rightEndX = Math.cos(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPositionX();
+            var rightEndY = Math.sin(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPositionY();
 
-        if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
-            var leftEndX     = Math.cos(curve.getOptions().angle - Math.PI / 2) * this.helpers.barWidth + curve.getPositionX();
-            var leftEndY     = Math.sin(curve.getOptions().angle - Math.PI / 2) * this.helpers.barWidth + curve.getPositionY();
-            var rightEndX    = Math.cos(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPositionX();
-            var rightEndY    = Math.sin(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPositionY();
+            Kurve.Field.drawLine(leftEndX, leftEndY, rightEndX, rightEndY, curve.getPlayer().getColor(), curve);
 
-            Kurve.Field.drawLine(leftEndX, leftEndY, rightEndX, rightEndY, curve.getPlayer().getColor());
-
-            this.helpers.previousExecution = now;
             this.decrementCount();
+            this.setIsActive(true);
+        }
+
+        if ( !curve.getGame().isKeyDown(curve.getPlayer().getKeySuperpower()) ) {
+            this.setIsActive(false); //super power key has been released, can be used again
         }
     },
 
@@ -247,7 +245,6 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
     ],
 
     helpers: {
-        collisionFreeFrames: 2,
         isCrossingWall: false,
         getWallCrossedPosition: function(curve) {
             var positionX = curve.getNextPositionX();
@@ -264,13 +261,29 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
             } else if ( positionY > field.height ) {
                 posX = positionX;
                 posY = positionY - field.height;
-            } else {
-                //position.getPosY() < 0 or an error occured
+            } else if (positionY < 0) {
                 posX = positionX;
                 posY = positionY + field.height;
+            } else {
+                //point not out of bounds, do not move
+                posX = positionX;
+                posY = positionY;
             }
 
             return new Kurve.Point(posX, posY);
+        },
+        isPointWithSurroundingsOutOfBounds: function(curve, positionX, positionY) {
+            var pointSurroundings = Kurve.Field.getPointSurroundings(positionX, positionY);
+
+            for (var pointSurroundingX in pointSurroundings) {
+                for (var pointSurroundingY in pointSurroundings[pointSurroundingX]) {
+                    if (curve.getField().isPointOutOfBounds(pointSurroundingX, pointSurroundingY)) {
+                        return true;
+                    }
+                 }
+            }
+
+            return false;
         }
     },
 
@@ -279,43 +292,31 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
     },
 
     act: function(hook, curve) {
-        var positionX = curve.getNextPositionX();
-        var positionY = curve.getNextPositionY();
+        var nextPositionX = curve.getNextPositionX();
+        var nextPositionY = curve.getNextPositionY();
+        var isNextPointWithSurroundingsOutOfBounds = this.helpers.isPointWithSurroundingsOutOfBounds(curve, nextPositionX, nextPositionY);
 
-        if (this.helpers.isCrossingWall) {
-            if (this.helpers.collisionFreeFrames > 1) {
-                this.helpers.collisionFreeFrames--;
+        if ( this.helpers.isCrossingWall ) {
+            var isPointWithSurroundingsOutOfBounds = this.helpers.isPointWithSurroundingsOutOfBounds(curve, curve.getPositionX(), curve.getPositionY());
 
-                return false;
+            if ( isPointWithSurroundingsOutOfBounds || isNextPointWithSurroundingsOutOfBounds ) {
+                return false; //we are still crossing the wall, do not collide
             } else {
                 this.helpers.isCrossingWall = false;
-                this.helpers.collisionFreeFrames = 2;
             }
         }
 
-        if ( curve.getField().isPointOutOfBounds(positionX, positionY) && this.getCount() > 0) {
-            this.decrementCount();
+        //isNextPointWithSurroundingsOutOfBounds => collision will be detected, if we have a superpower then deactivate collision detection
+        if ( isNextPointWithSurroundingsOutOfBounds && this.getCount() > 0) {
+            //if the current position is out of bounds, do make the transition
+            if ( Kurve.Field.isPointOutOfBounds(nextPositionX, nextPositionY) ) {
+                this.helpers.isCrossingWall = true;
+                var movedPosition = this.helpers.getWallCrossedPosition(curve);
 
-            this.helpers.isCrossingWall = true;
-            var movedPosition = this.helpers.getWallCrossedPosition(curve);
+                curve.setPosition(movedPosition.getPosX(), movedPosition.getPosY());
+                this.decrementCount();
+            }
 
-            //todo refactor in a away that from outside only one call is needed to change position
-            curve.setPositionX(movedPosition.getPosX());
-            curve.setPositionY(movedPosition.getPosY());
-            curve.setNextPositionX(movedPosition.getPosX());
-            curve.setNextPositionY(movedPosition.getPosY());
-            curve.setPreviousMiddlePointX(movedPosition.getPosX());
-            curve.setPreviousMiddlePointY(movedPosition.getPosY());
-            curve.setPreviousMiddlePositionX(movedPosition.getPosX());
-            curve.setPreviousMiddlePositionY(movedPosition.getPosY());
-
-            return false;
-        }
-
-        var movedPositionX = curve.getMovedPositionX(curve.getOptions().stepLength);
-        var movedPositionY = curve.getMovedPositionY(curve.getOptions().stepLength);
-
-        if (curve.getField().isPointOutOfBounds(movedPositionX, movedPositionY) && this.getCount() > 0) {
             return false;
         }
 
@@ -395,16 +396,9 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
             curve.hydraData.previousExecution = now;
             this.decrementCount();
             var copy = new Kurve.Curve(curve.getPlayer(), curve.getGame(), curve.getField(), Kurve.Config.Curve, curve.getSuperpower());
-            curve.setImmunity([copy], 5);
-            copy.setImmunity([curve], 5);
-            copy.setPositionX(curve.getPositionX());
-            copy.setPositionY(curve.getPositionY());
-            copy.setNextPositionX(curve.getNextPositionX());
-            copy.setNextPositionY(curve.getNextPositionY());
-            copy.setPreviousMiddlePointX(curve.getPreviousMiddlePointX());
-            copy.setPreviousMiddlePointY(curve.getPreviousMiddlePointY());
-            copy.setPreviousMiddlePositionX(curve.getPreviousMiddlePositionX());
-            copy.setPreviousMiddlePositionY(curve.getPreviousMiddlePositionY());
+            curve.setImmunity([copy], 10);
+            copy.setImmunity([curve], 10);
+            copy.setPosition(curve.getPositionX(), curve.getPositionY());
 
             for ( var k in curve.getOptions() ) {
                 copy.getOptions()[k] = curve.getOptions()[k];
@@ -430,8 +424,6 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.REVERSE] = {
         otherX: undefined,
         otherY: undefined,
         otherAngle: undefined,
-        previousExecution: new Date(),
-        timeOut: 250, //until superpower can be called again
     },
 
     init: function(curve) {
@@ -440,42 +432,34 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.REVERSE] = {
             otherX: curve.getPositionX(),
             otherY: curve.getPositionY(),
             otherAngle: curve.getOptions().angle + Math.PI,
-            selfCollisionTimeout: curve.getOptions().selfCollisionTimeout,
         };
     },
 
     act: function(hook, curve) {
-        var now = new Date();
-
-        if ( this.isActive() ) {
-            this.setIsActive(false);
-            curve.getOptions().selfCollisionTimeout = curve.reverseData.selfCollisionTimeout;
-        } else if ( now.getTime() - this.helpers.previousExecution.getTime() > this.helpers.timeOut ) {
+        if ( !this.isActive() ) {
             var otherX = curve.getPositionX();
             var otherY = curve.getPositionY();
             var otherAngle = curve.getOptions().angle;
 
-            curve.setPreviousMiddlePointX(curve.reverseData.otherX);
-            curve.setPreviousMiddlePointY(curve.reverseData.otherY);
-            curve.setNextPositionX(curve.reverseData.otherX);
-            curve.setNextPositionY(curve.reverseData.otherY);
+            curve.setPosition(curve.reverseData.otherX, curve.reverseData.otherY);
             curve.getOptions().angle = curve.reverseData.otherAngle;
             curve.moveToNextFrame();
             curve.reverseData.otherX = otherX;
             curve.reverseData.otherY = otherY;
             curve.reverseData.otherAngle = otherAngle;
-            // Disable self-collision for one frame.
-            curve.getOptions().selfCollisionTimeout = 1000000000;
-            this.setIsActive(true);
 
-            this.helpers.previousExecution = now;
+            curve.setImmunity([curve], 10);
             this.decrementCount();
+            this.setIsActive(true);
+        }
+
+        if ( !curve.getGame().isKeyDown(curve.getPlayer().getKeySuperpower()) ) {
+            this.setIsActive(false); //super power key has been released, can be used again
         }
     },
 
     close: function(curve) {
-        this.setIsActive(false);
-        curve.getOptions().selfCollisionTimeout = curve.reverseData.selfCollisionTimeout;
+
     },
 };
 

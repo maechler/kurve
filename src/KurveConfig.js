@@ -40,9 +40,9 @@ Kurve.Config = {
     },
     
     Curve: {
-        stepLength: 1.3,
+        stepLength: 1.4,
         lineWidth: 4,
-        dAngle: 0.03,
+        dAngle: 0.035,
         holeInterval: 400,
         selfCollisionTimeout: 150,
     },

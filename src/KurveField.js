@@ -34,7 +34,7 @@ Kurve.Field = {
     width: null,
     height: null,
     
-    drawnPixels: [],
+    drawnPixels: {},
     defaultLineWidth: null,
     drawnPixelPrecision: null,
     
@@ -61,6 +61,7 @@ Kurve.Field = {
     },
     
     initPixi: function() {
+        PIXI.utils.skipHello();
         this.pixiApp = new PIXI.Application({width: this.canvas.width, height: this.canvas.height});
         this.pixiApp.renderer = new PIXI.autoDetectRenderer(
             this.canvas.width,
@@ -90,7 +91,7 @@ Kurve.Field = {
     },
 
     clearFieldContent: function() {
-        this.drawnPixels = [];
+        this.drawnPixels = {};
 
         this.pixiCurves.clear();
         this.pixiDebug.clear();
@@ -133,14 +134,6 @@ Kurve.Field = {
 
         for( var pointX in interpolatedPoints ) {
             for( var pointY in interpolatedPoints[pointX]) {
-                this.addPointsToDrawnPixel(this.getPointSurroundings(pointX, pointY), color, curve);
-            }
-        }
-    },
-    
-    addPointsToDrawnPixel: function(points, color, curve) {
-        for( var pointX in points ) {
-            for( var pointY in points[pointX]) {
                 this.addPointToDrawnPixel(pointX, pointY, color, curve);
             }
         }
@@ -151,7 +144,7 @@ Kurve.Field = {
         var pointY0 = u.round(pointY, 0);
 
         if ( this.drawnPixels[pointX0] === undefined ) {
-            this.drawnPixels[pointX0] = [];
+            this.drawnPixels[pointX0] = {};
         }
 
         this.drawnPixels[pointX0][pointY0] = {
@@ -167,7 +160,6 @@ Kurve.Field = {
     },
     
     isPointOutOfBounds: function(pointX, pointY) {
-        //todo subtract boundary width
         return pointX <= 0 || pointY <= 0 || pointX >= this.width || pointY >= this.height;
     },
 
@@ -180,8 +172,7 @@ Kurve.Field = {
         var pointX0 = u.round(pointX, 0);
         var pointY0 = u.round(pointY, 0);
 
-        if ( this.drawnPixels[pointX0] !== undefined &&
-             this.drawnPixels[pointX0][pointY0] !== undefined ) {
+        if ( this.drawnPixels[pointX0] !== undefined && this.drawnPixels[pointX0][pointY0] !== undefined ) {
             return this.drawnPixels[pointX0][pointY0];
         } else {
             return false;
@@ -200,17 +191,17 @@ Kurve.Field = {
     getPointSurroundings: function(pointX, pointY) {
         var pointX0 = u.round(pointX, 0);
         var pointY0 = u.round(pointY, 0);
-        var pointSurroundings   = [];
+        var pointSurroundings   = {};
 
-        u.addPointToArray(pointSurroundings, pointX0,     pointY0);
-        u.addPointToArray(pointSurroundings, pointX0 + 1, pointY0);
-        u.addPointToArray(pointSurroundings, pointX0 + 1, pointY0 - 1);
-        u.addPointToArray(pointSurroundings, pointX0,     pointY0 - 1);
-        u.addPointToArray(pointSurroundings, pointX0 - 1, pointY0 - 1);
-        u.addPointToArray(pointSurroundings, pointX0 - 1, pointY0);
-        u.addPointToArray(pointSurroundings, pointX0 - 1, pointY0 + 1);
-        u.addPointToArray(pointSurroundings, pointX0,     pointY0 + 1);
-        u.addPointToArray(pointSurroundings, pointX0 + 1, pointY0 + 1);
+        u.addPointToMap(pointSurroundings, pointX0,     pointY0);
+        u.addPointToMap(pointSurroundings, pointX0 + 1, pointY0);
+        u.addPointToMap(pointSurroundings, pointX0 + 1, pointY0 - 1);
+        u.addPointToMap(pointSurroundings, pointX0,     pointY0 - 1);
+        u.addPointToMap(pointSurroundings, pointX0 - 1, pointY0 - 1);
+        u.addPointToMap(pointSurroundings, pointX0 - 1, pointY0);
+        u.addPointToMap(pointSurroundings, pointX0 - 1, pointY0 + 1);
+        u.addPointToMap(pointSurroundings, pointX0,     pointY0 + 1);
+        u.addPointToMap(pointSurroundings, pointX0 + 1, pointY0 + 1);
 
         return pointSurroundings;
     }

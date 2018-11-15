@@ -71,7 +71,7 @@ Kurve.Utility.hasClass = function(className, elementId) {
 };
 
 Kurve.Utility.interpolateTwoPoints = function(fromPointX, fromPointY, toPointX, toPointY) {
-    var interpolatedPoints = [];
+    var interpolatedPoints = {};
     var dX = toPointX - fromPointX;
     var dY = toPointY - fromPointY;
     var maxD = Math.max(Math.abs(dX), Math.abs(dY), 1);
@@ -82,15 +82,15 @@ Kurve.Utility.interpolateTwoPoints = function(fromPointX, fromPointY, toPointX, 
         var posX = fromPointX + i * stepX;
         var posY = fromPointY + i * stepY;
 
-        u.addPointToArray(interpolatedPoints, posX, posY);
+        u.addPointToMap(interpolatedPoints, posX, posY);
     }
 
     return interpolatedPoints;
 };
 
-Kurve.Utility.addPointToArray = function(array, pointX, pointY) {
+Kurve.Utility.addPointToMap = function(array, pointX, pointY) {
     var pointX0 = u.round(pointX, 0);
-    if ( array[pointX0] === undefined ) array[pointX0] = [];
+    if ( array[pointX0] === undefined ) array[pointX0] = {};
 
     array[pointX0][u.round(pointY, 0)] = true;
 };
