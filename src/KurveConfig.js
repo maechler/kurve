@@ -43,7 +43,8 @@ Kurve.Config = {
         stepLength: 1.4,
         lineWidth: 4,
         dAngle: 0.035,
-        holeInterval: 400,
+        holeInterval: 150,
+        holeIntervalRandomness: 300,
         selfCollisionTimeout: 150,
     },
     

@@ -40,6 +40,7 @@ Kurve.Curve = function(player, game, field, config, superpower) {
         angle: 0,
         dAngle: config.dAngle,
         holeInterval: config.holeInterval,
+        holeIntervalRandomness: config.holeIntervalRandomness,
         holeCountDown: config.holeInterval,
         selfCollisionTimeout: config.selfCollisionTimeout
     };
@@ -73,6 +74,8 @@ Kurve.Curve = function(player, game, field, config, superpower) {
     this.getNextPositionX = function() { return nextPositionX; };
     this.getOptions = function() { return options; };
     this.isInvisible = function() { return isInvisible; };
+
+    this.resetHoleCountDown(); //Randomize initial hole interval
 };
 
 Kurve.Curve.prototype.drawNextFrame = function() {
@@ -210,5 +213,5 @@ Kurve.Curve.prototype.useSuperpower = function(hook) {
 };
 
 Kurve.Curve.prototype.resetHoleCountDown = function() {
-    this.getOptions().holeCountDown = this.getOptions().holeInterval;
+    this.getOptions().holeCountDown = this.getOptions().holeInterval + u.round(Math.random() * this.getOptions().holeIntervalRandomness, 0);
 };
