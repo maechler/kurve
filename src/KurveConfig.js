@@ -33,7 +33,7 @@ Kurve.Config = {
     },
     
     Field: {
-        defaultColor: '#333',
+        defaultColor: '#333333',
         defaultLineWidth: 4,
         borderColor: '#ACAC9D',
         width: 0.7, //70% percent of the screen
@@ -73,24 +73,24 @@ Kurve.Config = {
                 pink: '#DC72FF'
             },
             field: {
-                defaultColor: '#333',
+                defaultColor: '#333333',
                 borderColor: '#ACAC9D',
-                deathMatchColor: '#333',
+                deathMatchColor: '#333333',
             }
         },
         dark: {
             players: {
-                red: 'red',
-                orange: 'orange',
-                green: 'lawngreen',
-                blue: 'dodgerblue',
-                purple: 'mediumpurple',
-                pink: 'deeppink'
+                red: '#FF0000',
+                orange: '#FFA500',
+                green: '#7CFC00',
+                blue: '#1E90FF',
+                purple: '#9370DB',
+                pink: '#FF1493'
             },
             field: {
-                defaultColor: '#DDD',
-                borderColor: '#999',
-                deathMatchColor: '#DDD',
+                defaultColor: '#DDDDDD',
+                borderColor: '#999999',
+                deathMatchColor: '#DDDDDD',
             }
         }
     }
