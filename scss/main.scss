@@ -13,6 +13,9 @@ $dark-theme-purple: mediumpurple;
 $default-theme-pink: #DC72FF;
 $dark-theme-pink: deeppink;
 
+$default-theme-superpower-circle-color: #C8C8B6;
+$dark-theme-superpower-circle-color: #666666;
+
 body {
     color: #3F3E37;
     background-color: #EBE7DC;
@@ -363,6 +366,7 @@ p {
     margin-top: 2px;
     margin-right: 2px;
     float: left;
+    border: 2px solid $default-theme-superpower-circle-color;
 }
 
 .superpowerCircle.red {
@@ -532,6 +536,10 @@ body.dark-theme {
 
     i.arrow {
         border-color: #DDD;
+    }
+
+    .superpowerCircle {
+        border-color: $dark-theme-superpower-circle-color;
     }
 
     .red.active {

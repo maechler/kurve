@@ -540,7 +540,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CHUCK_NORRIS] = {
         if (!this.helpers.initCalled) {
             var chuckNorrisColor = Kurve.Theming.getThemedValue('field', 'deathMatchColor');
             var styleNode = document.createElement('style');
-            var style = document.createTextNode('.' + curve.getPlayer().getId() + ' { color:' + chuckNorrisColor + ' !important; border-color:' + chuckNorrisColor + ' !important; }');
+            var style = document.createTextNode('.' + curve.getPlayer().getId() + ' { color:' + chuckNorrisColor + ' !important; } .' + curve.getPlayer().getId() + ' .superpowerCircle { border-color: ' + Kurve.Theming.getThemedValue('player', 'superpowerColor') + ' !important; }');
 
             styleNode.appendChild(style);
             document.body.appendChild(styleNode);

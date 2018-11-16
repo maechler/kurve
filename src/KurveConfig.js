@@ -52,6 +52,10 @@ Kurve.Config = {
         startDelay: 2000,
         fps: 60,
     },
+
+    Superpower: {
+        maxSuperpowers: 10,
+    },
     
     Players: [
         { id:'red',      keyLeft:49,   keyRight:81,   keySuperpower:65  },
@@ -76,6 +80,9 @@ Kurve.Config = {
                 defaultColor: '#333333',
                 borderColor: '#ACAC9D',
                 deathMatchColor: '#333333',
+            },
+            player: {
+                superpowerColor: '#C8C8B6',
             }
         },
         dark: {
@@ -91,6 +98,9 @@ Kurve.Config = {
                 defaultColor: '#DDDDDD',
                 borderColor: '#999999',
                 deathMatchColor: '#DDDDDD',
+            },
+            player: {
+                superpowerColor: '#666666',
             }
         }
     }

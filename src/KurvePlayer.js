@@ -92,8 +92,8 @@ Kurve.Player.prototype.renderScoreItem = function() {
 Kurve.Player.prototype.renderNumberOfSuperPowers = function() {
     var superpowers = '';
 
-    for (var i=0; i < this.getSuperpower().getCount(); i++ ) {
-        superpowers += '<div class="superpowerCircle ' + this.getId() + '"></div>';
+    for (var i=0; i < Kurve.Config.Superpower.maxSuperpowers; i++ ) {
+        superpowers += '<div class="superpowerCircle' + (i < this.getSuperpower().getCount() ? ' ' + this.getId() : '') + '"></div>';
     }
 
     return superpowers;

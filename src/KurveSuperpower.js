@@ -35,12 +35,14 @@ Kurve.Superpower = function(hooks, act, helpers, type, init, close) {
     this.close = close;
     
     this.incrementCount = function() { 
-        count++;
+        count = Math.min(count + 1, Kurve.Config.Superpower.maxSuperpowers);
+
         Kurve.Game.renderPlayerScores();
     };
     
-    this.decrementCount = function() { 
-        count--;
+    this.decrementCount = function() {
+        count = Math.max(count - 1, 0);
+
         Kurve.Game.renderPlayerScores();
     };
 
@@ -59,4 +61,4 @@ Kurve.Superpower.prototype.getLabel = function() {
 
 Kurve.Superpower.prototype.usesHook = function(hook) {
     return this.getHooks().indexOf(hook) > -1;
-}
+};
