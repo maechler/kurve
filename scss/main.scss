@@ -1,20 +1,5 @@
 @import 'reset';
-
-$default-theme-red: #D4373E;
-$dark-theme-red: red;
-$default-theme-green: #3BCB69;
-$dark-theme-green: lawngreen;
-$default-theme-blue: #3B90C3;
-$dark-theme-blue: dodgerblue;
-$default-theme-orange: #FFA039;
-$dark-theme-orange: orange;
-$default-theme-purple: #7D11CD;
-$dark-theme-purple: mediumpurple;
-$default-theme-pink: #DC72FF;
-$dark-theme-pink: deeppink;
-
-$default-theme-superpower-circle-color: #C8C8B6;
-$dark-theme-superpower-circle-color: #666666;
+@import 'variables';
 
 body {
     color: #3F3E37;
@@ -88,6 +73,7 @@ p {
     padding: 10px;
     color: #666666;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .button:hover {
@@ -120,15 +106,16 @@ p {
     height: 100%;
 }
 
-.player .title {
-    float: left;
-    width: 240px;
-}
-
-.player .keys {
-    float: left;
-    font-size: 28px;
-    margin: 19px;
+.player {
+    .title {
+        float: left;
+        width: 240px;
+    }
+    .keys {
+        float: left;
+        font-size: 28px;
+        margin: 19px;
+    }
 }
 
 .red.active {
@@ -187,47 +174,57 @@ p {
     margin-bottom: 20px;
 }
 
-#menu-players .player > div {
-    float: left;
-}
+#menu-players {
+    .player > div {
+        float: left;
+    }
 
-#menu-players .player > div > * {
-    padding: 10px;
-    height: 40px;
-    vertical-align: middle;
-    font-size: 28px;
-    line-height: 40px;
-}
+    .player > div > * {
+        padding: 10px;
+        height: 40px;
+        vertical-align: middle;
+        font-size: 28px;
+        line-height: 40px;
+    }
 
-#menu-players .head div {
-    float: left;
-    font-size: 18px;
-    background: #D9D6CC;
-    padding: 5px 0;
-}
+    .head div {
+        float: left;
+        font-size: 18px;
+        background: #D9D6CC;
+        padding: 5px 0;
+    }
 
-#menu-players .head div *{
-    padding: 5px 10px;
-}
+    .head div *{
+        padding: 5px 10px;
+    }
 
-#menu-players .title {
-    width: 160px;
-    margin: 0 1px 1px 0;
-}
+    .title {
+        width: 160px;
+        margin: 0 1px 1px 0;
+    }
 
-#menu-players .key {
-    text-align: center;
-}
+    .key {
+        text-align: center;
 
-#menu-players .key.left,
-#menu-players .key.right {
-    width: 60px;
-    margin: 0 1px 1px 0;
-}
+        &.left,
+        &.right {
+            width: 60px;
+            margin: 0 1px 1px 0;
+        }
+    }
 
-#menu-players .superpower .key {
-    width: 40px;
-    margin: 0 1px 1px 0;
+    .superpower .key {
+    }
+
+    .superpower {
+        width: 297px;
+
+        .key {
+            float: left;
+            width: 40px;
+            margin: 0 1px 1px 0;
+        }
+    }
 }
 
 #menu-players-list div {
@@ -242,64 +239,71 @@ p {
     border-bottom: 1px solid #D9D6CC;
 }
 
-#menu-players .superpower {
-    width: 297px;
-}
-
-#menu-players .superpower .key {
-    float: left;
-    margin-right: 1px;
-}
-
-#menu-players .superpowerType {
-    font-size: 18px;
-    width: 216px;
-    height: 40px;
-    float: left;
-    overflow: hidden;
-    position: relative;
-}
-
-#menu-players .superpowerType div {
-    float: left;
-    font-size: 18px;
-}
-
-#menu-players .superpowerType .left {
-    position: absolute;
-    padding: 10px;
-    top: 0;
-    left: 10px;
-
-    .arrow-left {
-        width: 16px;
-        height: 16px;
+#menu-players {
+    .superpowerType {
+        font-size: 18px;
+        width: 216px;
+        height: 40px;
+        float: left;
+        overflow: hidden;
         position: relative;
-        top: 8px;
+
+        div {
+            float: left;
+            font-size: 18px;
+        }
+
+        .left {
+            position: absolute;
+            padding: 10px;
+            top: 0;
+            left: 10px;
+
+            .arrow-left {
+                width: 16px;
+                height: 16px;
+                position: relative;
+                top: 8px;
+            }
+        }
+
+        .right {
+            position: absolute;
+            padding: 10px;
+            top: 0;
+            right: 10px;
+
+            .arrow-right {
+                width: 16px;
+                height: 16px;
+                position: relative;
+                top: 8px;
+            }
+        }
+    }
+
+    .superpowers {
+        width: 100%;
+
+        div {
+            width: 100%;
+            text-align: center;
+        }
     }
 }
 
-#menu-players .superpowerType .right {
-    position: absolute;
-    padding: 10px;
-    top: 0;
-    right: 10px;
+.toggle-sound {
+    float: left;
+    margin-left: 10px;
+    cursor: pointer;
+}
 
-    .arrow-right {
-        width: 16px;
-        height: 16px;
-        position: relative;
-        top: 8px;
+#menu-settings {
+    margin-top: 10px;
+
+    & > div {
+      float: right;
     }
-}
-
-#menu-players .superpowers {
-    width: 100%;
-}
-
-#menu-players .superpowers div {
-    width: 100%;
-    text-align: center;
 }
 
 #lightbox-overlay {
@@ -329,32 +333,32 @@ p {
     text-align: left;
     max-width: 600px;
     margin: auto;
-}
 
-#lightbox-content .button {
-    padding: 15px;
-    display: block;
-    text-align: center;
-}
+    .button {
+      padding: 15px;
+      display: block;
+      text-align: center;
+    }
 
-#lightbox-content .deathmatch h1 {
-    padding: 100px;
-    font-size: 60px;
-    margin: 0;
+    .deathmatch h1 {
+        padding: 100px;
+        font-size: 60px;
+        margin: 0;
+    }
 }
 
 #player-scores {
     margin: 10px 0 30px 0;
-}
 
-#player-scores .title {
-    float: left;
-    width: 180px;
-}
+    .title {
+        float: left;
+        width: 180px;
+    }
 
-#player-scores .points {
-    float: left;
-    font-size: 40px;
+    .points {
+        float: left;
+        font-size: 40px;
+    }
 }
 
 .superpowerCircle {
@@ -367,30 +371,30 @@ p {
     margin-right: 2px;
     float: left;
     border: 2px solid $default-theme-superpower-circle-color;
-}
 
-.superpowerCircle.red {
-    border: 2px solid $default-theme-red;
-}
+    &.red {
+        border: 2px solid $default-theme-red;
+    }
 
-.superpowerCircle.green {
-    border: 2px solid $default-theme-green;
-}
+    &.green {
+        border: 2px solid $default-theme-green;
+    }
 
-.superpowerCircle.blue {
-    border: 2px solid $default-theme-blue;
-}
+    &.blue {
+        border: 2px solid $default-theme-blue;
+    }
 
-.superpowerCircle.orange {
-    border: 2px solid $default-theme-orange;
-}
+    &.orange {
+        border: 2px solid $default-theme-orange;
+    }
 
-.superpowerCircle.purple {
-    border: 2px solid $default-theme-purple;
-}
+    &.purple {
+        border: 2px solid $default-theme-purple;
+    }
 
-.superpowerCircle.pink {
-    border: 2px solid $default-theme-pink;
+    &.pink {
+        border: 2px solid $default-theme-pink;
+    }
 }
 
 #author {
@@ -400,42 +404,44 @@ p {
     font-size: 11px;
     color: #888;
     line-height: 1.4;
+
+    a,
+    a:visited{
+        color: #888;
+        text-decoration: none;
+    }
+
+    a:hover{
+       color: #444;
+       text-decoration: underline;
+    }
 }
 
-#author a,
-#author a:visited{
-    color: #888;
-    text-decoration: none;
-}
+.key {
+    .arrow {
+        width: 0;
+        height: 0;
+        display: block;
+        border-style: solid;
+    }
 
-#author a:hover{
-    color: #444;
-    text-decoration: underline;
-}
+    .arrow-left {
+        margin: 9px 0 0 9px;
+        border-width: 12px 18px 12px 0;
+        border-color: transparent $default-theme-orange transparent transparent;
+    }
 
-.key .arrow {
-    width: 0;
-    height: 0;
-    display: block;
-    border-style: solid;
-}
+    .arrow-right {
+        margin: 9px 0 0 13px;
+        border-width: 12px 0 12px 18px;
+        border-color: transparent transparent transparent $default-theme-orange;
+    }
 
-.key .arrow-left {
-    margin: 9px 0 0 9px;
-    border-width: 12px 18px 12px 0;
-    border-color: transparent $default-theme-orange transparent transparent;
-}
-
-.key .arrow-right {
-    margin: 9px 0 0 13px;
-    border-width: 12px 0 12px 18px;
-    border-color: transparent transparent transparent $default-theme-orange;
-}
-
-.key .arrow-down {
-    margin: 14px 0 0 8px;
-    border-width: 18px 12px 0 12px;
-    border-color: $default-theme-orange transparent transparent transparent;
+    .arrow-down {
+        margin: 14px 0 0 8px;
+        border-width: 18px 12px 0 12px;
+        border-color: $default-theme-orange transparent transparent transparent;
+    }
 }
 
 .inactive .key .arrow-left {
@@ -450,9 +456,13 @@ p {
     border-color: #969696 transparent transparent transparent;
 }
 
-#button-menu {
+#game-settings {
     position: absolute;
     bottom: 70px;
+
+    #button-menu {
+        float: left;
+    }
 }
 
 #dark-knight {
@@ -517,13 +527,6 @@ i.arrow-right {
 i.arrow-left {
     transform: rotate(135deg);
     -webkit-transform: rotate(135deg);
-}
-
-#change-theme {
-    position: fixed;
-    bottom: 40px;
-    right: 40px;
-    cursor: pointer;
 }
 
 body.dark-theme {

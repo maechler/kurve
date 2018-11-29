@@ -3,6 +3,7 @@
     <head>
         <meta charset='utf-8' />
         <meta name='description' content='An open source HTML5 and JavaScript implementation of the game Achtung, die Kurve!' />
+        <meta name='keywords' content='Achtung, Kurve, Zatacka, Curve Fever, Open Source, Browser Game, Online, HTML5, JavaScript' />
         <meta name='author' content='Markus Mächler, https://github.com/maechler' />
 
         <title>Achtung, die Kurve!</title>
@@ -39,12 +40,18 @@
                                     <div class='clear'></div>
 
                                     <div id='menu-players-list'></div>
+                                    <div class='clear'></div>
+                                </div>
+
+                                <div id='menu-settings'>
+                                    <div id='change-theme' class='button' onclick='Kurve.Theming.toggleTheme()'></div>
+                                    <div class='toggle-sound button' onclick='Kurve.Sound.toggleSound()'></div>
+                                    <div class='clear'></div>
                                 </div>
                             </div>
                         </td>
                     </tr>
                 </table>
-                <div id="change-theme" class="button" onclick="Kurve.Theming.toggleTheme()">Lights off</div>
             </div>
             <div id='layer-game' class='layer hidden'>
                 <div id='content-left'>
@@ -55,14 +62,19 @@
                 <div id='content-right' class='light'>
                     <div id='player-scores'></div>
 
-                    <a id='button-menu' href='#' onclick='Kurve.reload(); return false;' title='Go back to the menu' class='button'>menu</a>
+                    <div id='game-settings'>
+                        <a id='button-menu' href='#' onclick='Kurve.reload(); return false;' title='Go back to the menu' class='button'>menu</a>
+                        <div class='toggle-sound button' onclick='Kurve.Sound.toggleSound()'></div>
+                    </div>
 
                     <div id='author'>
                         <a href='https://github.com/maechler/kurve' target='_blank'>GitHub</a>
                         <span>&nbsp;&Iota;&nbsp;</span>
-                        <a href='https://github.com/maechler/kurve/issues' target='_blank'>Report a Bug or Feature Request</a>
+                        <a href='https://github.com/maechler/kurve/issues' target='_blank'>Report a bug or feature request</a>
                         <span>&nbsp;&Iota;&nbsp;</span>
                         <a href='#' onclick='Kurve.Privacypolicy.showPrivacyPolicy();'>Privacy policy</a>
+                        <span>&nbsp;&Iota;&nbsp;</span>
+                        <a href='#' onclick='Kurve.Sound.onCreditsClicked();'>Credits</a>
                         <br>
                         <span>Copyright &copy; 2014 </span>
                         <a href='http://markusmaechler.ch' target='_blank' rel='author'>Markus Mächler</a>
@@ -76,7 +88,7 @@
                 <a href='#' title='Accept privacy policy' onclick='Kurve.Privacypolicy.onPrivacyPolicyAccepted();' class='button'>OK</a>
             </div>
             <div id='privacy-policy' class='hidden'>
-                <h3>Privacy policy</h3>
+                <h2>Privacy policy</h2>
                 <p>Protecting your privacy is very important to us. In this privacy policy we explain what personal information we process.</p>
                 <h3>Information collection and use</h3>
                 <p>When you visit this website data such as your IP address, the address of the last site you visited, the browser and operating system
@@ -116,6 +128,15 @@
                 <h3>Legal basis</h3>
                 <p>The Swiss Federal Act on Data Protection (FADP) forms the basis of this privacy policy.</p>
                 <a href='#' title='Accept privacy policy' class='button'>Close</a>
+            </div>
+            <div id='credits' class='hidden'>
+                <h2>Credits</h2>
+                <h3>Developers</h3>
+                <p>Thanks to <a href='https://github.com/ALRO' target='_blank'>ALRO</a> for improving the build process.</p>
+                <p>Thanks to <a href='https://github.com/darabos' target='_blank'>darabos</a> for adding the hydra and reverse superpowers as well as the new immunity system.</p>
+                <h3>Music &amp; sound effects</h3>
+                <p>Thanks to <a href='https://www.upwork.com/freelancers/~018a088186d455c0a6' target='_blank'>Grant Robertson</a> for creating the music and sound effects.</p>
+                <a href='#' title='Close credits overlay' onclick='Kurve.Sound.onCreditsCloseClicked();' class='button'>Close</a>
             </div>
         </div>
 

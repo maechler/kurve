@@ -27,11 +27,13 @@
 Kurve.Menu = {
     
     boundOnKeyDown: null,
+    audioPlayer: null,
     
     init: function() {
         this.initPlayerMenu();
         this.addWindowListeners();
         this.addMouseListeners();
+        this.initMenuMusic();
     },
         
     initPlayerMenu: function() {
@@ -56,12 +58,18 @@ Kurve.Menu = {
             playerItems[i].addEventListener('click', this.onPlayerItemClicked, false);
         }
     },
+
+    initMenuMusic: function() {
+        this.audioPlayer = Kurve.Sound.getPlayer();
+        this.audioPlayer.play('menu-music', {loop: true, background: true, fadeIn: 2000});
+    },
     
     removeWindowListeners: function() {
         window.removeEventListener('keydown', this.boundOnKeyDown, false);  
     },
 
     onPlayerItemClicked: function(event) {
+        Kurve.Menu.audioPlayer.play('menu-navigate');
         Kurve.Menu.togglePlayerActivation(this.id);
     },
     
@@ -71,10 +79,13 @@ Kurve.Menu = {
         Kurve.players.forEach(function(player) {
             if ( player.isKeyLeft(event.keyCode) ) {
                 Kurve.Menu.activatePlayer(player.getId());
+                Kurve.Menu.audioPlayer.play('menu-navigate');
             } else if ( player.isKeyRight(event.keyCode) ) {
                 Kurve.Menu.deactivatePlayer(player.getId());
+                Kurve.Menu.audioPlayer.play('menu-navigate');
             } else if ( player.isKeySuperpower(event.keyCode) ) {
                 Kurve.Menu.nextSuperpower(player.getId());
+                Kurve.Menu.audioPlayer.play('menu-navigate');
             }
         });
     },
@@ -83,17 +94,20 @@ Kurve.Menu = {
         Kurve.players.forEach(function(player) {
             if ( player.isActive() ) {
                 Kurve.Game.curves.push(
-                    new Kurve.Curve(player, Kurve.Game, Kurve.Field, Kurve.Config.Curve)
+                    new Kurve.Curve(player, Kurve.Game, Kurve.Field, Kurve.Config.Curve, Kurve.Sound.getPlayer())
                 );    
             }
         });
         
         if (Kurve.Game.curves.length <= 1) {
             Kurve.Game.curves = [];
+            Kurve.Menu.audioPlayer.play('menu-error');
+
             return; //not enough players are ready
         }
 
         Kurve.Field.init();
+        Kurve.Menu.audioPlayer.pause('menu-music', {fadeOut: 1000});
         Kurve.Game.startGame();
 
         u.addClass('hidden', 'layer-menu');
@@ -102,11 +116,13 @@ Kurve.Menu = {
 
     onNextSuperPowerClicked: function(event, playerId) {
         event.stopPropagation();
+        Kurve.Menu.audioPlayer.play('menu-navigate');
         Kurve.Menu.nextSuperpower(playerId);
     },
 
     onPreviousSuperPowerClicked: function(event, playerId) {
         event.stopPropagation();
+        Kurve.Menu.audioPlayer.play('menu-navigate');
         Kurve.Menu.previousSuperpower(playerId);
     },
 

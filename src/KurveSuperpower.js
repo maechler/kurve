@@ -24,7 +24,7 @@
 
 'use strict';
 
-Kurve.Superpower = function(hooks, act, helpers, type, init, close) {
+Kurve.Superpower = function(hooks, act, helpers, type, init, close, audioPlayer) {
 
     var count = 1;
     var isActive = false;
@@ -46,6 +46,7 @@ Kurve.Superpower = function(hooks, act, helpers, type, init, close) {
         Kurve.Game.renderPlayerScores();
     };
 
+    this.getAudioPlayer = function() { return audioPlayer; };
     this.getHooks = function() { return hooks; };
     this.getType = function() { return type; };
     this.getCount = function() { return count; };

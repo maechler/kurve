@@ -24,7 +24,7 @@
 
 'use strict';
 
-Kurve.Curve = function(player, game, field, config, superpower) {
+Kurve.Curve = function(player, game, field, config, audioPlayer) {
 
     var immunityFor = 0;  // Collision-immune frames.
     var immunityTo = [];  // Curves we are immune to.
@@ -64,10 +64,10 @@ Kurve.Curve = function(player, game, field, config, superpower) {
     this.setIsInvisible = function(newIsInvisible) { isInvisible = newIsInvisible; };
 
     this.isImmuneTo = function(curve) { return immunityFor > 0 && (immunityTo === 'all' || immunityTo.includes(curve)); };
+    this.getAudioPlayer = function() { return audioPlayer; };
     this.getPlayer = function() { return player; };
     this.getGame = function() { return game; };
     this.getField = function() { return field; };
-    this.getSuperpower = function() { return superpower };
     this.getPositionY = function() { return positionY; };
     this.getPositionX = function() { return positionX; };
     this.getNextPositionY = function() { return nextPositionY; };
@@ -189,6 +189,8 @@ Kurve.Curve.prototype.isWithinSelfCollisionTimeout = function(time) {
 };
 
 Kurve.Curve.prototype.die = function() {
+    this.getPlayer().getSuperpower().getAudioPlayer().pause('all', {reset: true});
+    this.getAudioPlayer().play('curve-crashed');
     this.getGame().notifyDeath(this);
 };
 

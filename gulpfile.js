@@ -9,6 +9,7 @@ var kurveSources = [
     './src/window.js',
     './src/Kurve.js',
     './src/KurveStorage.js',
+    './src/KurveSound.js',
     './src/KurveTheming.js',
     './src/KurveFactory.js',
     './src/KurveConfig.js',
@@ -50,7 +51,11 @@ gulp.task('images', function () {
     return gulp.src('./images/*').pipe(gulp.dest('./dist/images'));
 });
 
-gulp.task('build', ['js', 'sass', 'images']);
+gulp.task('sound', function () {
+    return gulp.src('./sound/**/*').pipe(gulp.dest('./dist/sound'));
+});
+
+gulp.task('build', ['js', 'sass', 'images', 'sound']);
 gulp.task('default', ['build']);
 
 gulp.task('watch', function(){

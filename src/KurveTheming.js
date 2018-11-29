@@ -35,9 +35,9 @@ Kurve.Theming = {
         }
 
         if (this.currentTheme === 'default') {
-            document.getElementById('change-theme').innerText = 'Lights off';
-        } else {
             document.getElementById('change-theme').innerText = 'Lights on';
+        } else {
+            document.getElementById('change-theme').innerText = 'Lights off';
         }
 
         u.addClass(this.currentTheme + '-theme', 'app');
@@ -60,10 +60,10 @@ Kurve.Theming = {
     toggleTheme: function() {
         if (this.currentTheme === 'default') {
             this.changeTheme('dark');
-            document.getElementById('change-theme').innerText = 'Lights on';
+            document.getElementById('change-theme').innerText = 'Lights off';
         } else {
             this.changeTheme('default');
-            document.getElementById('change-theme').innerText = 'Lights off';
+            document.getElementById('change-theme').innerText = 'Lights on';
         }
     },
 };

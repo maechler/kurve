@@ -51,14 +51,23 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
 
     hooks: [Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME],
 
+    audios: [
+        {
+            key: 'superpower-run-faster',
+            source: 'superpower/run-faster.wav'
+        }
+    ],
+
     helpers: {
        executionTime: 0,
        initAct: function() {
+           this.getAudioPlayer().play('superpower-run-faster', {loop: true, reset: true});
            this.decrementCount();
            this.setIsActive(true);
            this.helpers.executionTime = 4 * Kurve.Game.fps;
        },
        closeAct: function() {
+           this.getAudioPlayer().pause('superpower-run-faster', {fadeOut: 500});
            this.setIsActive(false);
        }
     },
@@ -88,10 +97,18 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
 
     hooks: [Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME],
 
+    audios: [
+        {
+            key: 'superpower-run-slower',
+            source: 'superpower/run-slower.wav'
+        }
+    ],
+
     helpers: {
         initialStepLength: null,
         executionTime: 0,
         initAct: function(curve) {
+            this.getAudioPlayer().play('superpower-run-slower', {loop: true, reset: true});
             this.decrementCount();
             this.setIsActive(true);
             this.helpers.executionTime = 6 * Kurve.Game.fps;
@@ -100,6 +117,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
             curve.getOptions().stepLength = this.helpers.initialStepLength / 2;
         },
         closeAct: function(curve) {
+            this.getAudioPlayer().pause('superpower-run-slower', {fadeOut: 500});
             this.setIsActive(false);
             curve.getOptions().stepLength = this.helpers.initialStepLength;
         }
@@ -127,6 +145,13 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
 
     hooks: [Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME],
 
+    audios: [
+        {
+            key: 'superpower-jump',
+            source: 'superpower/jump.wav'
+        }
+    ],
+
     helpers: {
         jumpWidth: 24
     },
@@ -145,6 +170,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
 
             this.decrementCount();
             this.setIsActive(true);
+            this.getAudioPlayer().play('superpower-jump');
         }
 
         if ( !curve.getGame().isKeyDown(curve.getPlayer().getKeySuperpower()) ) {
@@ -165,14 +191,27 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
         Kurve.Superpowerconfig.hooks.IS_COLLIDED
     ],
 
+    audios: [
+        {
+            key: 'superpower-invisible-start',
+            source: 'superpower/invisible-start.wav'
+        },
+        {
+            key: 'superpower-invisible-end',
+            source: 'superpower/invisible-end.wav'
+        }
+    ],
+
     helpers: {
         executionTime: 0,
         initAct: function() {
+            this.getAudioPlayer().play('superpower-invisible-start');
             this.decrementCount();
             this.setIsActive(true);
             this.helpers.executionTime = 4 * Kurve.Game.fps; //4s
         },
         closeAct: function() {
+            this.getAudioPlayer().play('superpower-invisible-end');
             this.setIsActive(false);
         }
     },
@@ -206,6 +245,13 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
         Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME
     ],
 
+    audios: [
+        {
+            key: 'superpower-vertical-bar',
+            source: 'superpower/vertical-bar.wav'
+        }
+    ],
+
     helpers: {
         barWidth: 50
     },
@@ -223,6 +269,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
 
             Kurve.Field.drawLine(leftEndX, leftEndY, rightEndX, rightEndY, curve.getPlayer().getColor(), curve);
 
+            this.getAudioPlayer().play('superpower-vertical-bar');
             this.decrementCount();
             this.setIsActive(true);
         }
@@ -242,6 +289,13 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
 
     hooks: [
         Kurve.Superpowerconfig.hooks.IS_COLLIDED
+    ],
+
+    audios: [
+        {
+            key: 'superpower-cross-walls',
+            source: 'superpower/cross-walls.wav'
+        }
     ],
 
     helpers: {
@@ -315,6 +369,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
 
                 curve.setPosition(movedPosition.getPosX(), movedPosition.getPosY());
                 this.decrementCount();
+                this.getAudioPlayer().play('superpower-cross-walls');
             }
 
             return false;
@@ -336,6 +391,13 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.DARK_KNIGHT] = {
         Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME
     ],
 
+    audios: [
+        {
+            key: 'superpower-dark-knight',
+            source: 'superpower/dark-knight.wav'
+        }
+    ],
+
     helpers: {
         executionTime: 0,
         darkNightDivId: 'dark-knight',
@@ -343,6 +405,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.DARK_KNIGHT] = {
             if ( !u.hasClass('hidden', this.helpers.darkNightDivId) ) return;
 
             u.removeClass('hidden', this.helpers.darkNightDivId);
+            this.getAudioPlayer().play('superpower-dark-knight');
             this.decrementCount();
             this.setIsActive(true);
             this.helpers.executionTime = 3 * Kurve.Game.fps; //3s
@@ -378,6 +441,13 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
         Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME
     ],
 
+    audios: [
+        {
+            key: 'superpower-hydra',
+            source: 'superpower/hydra.wav'
+        }
+    ],
+
     helpers: {
       angle: 0.1 * Math.PI,
       timeOut: 250,
@@ -394,8 +464,9 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
 
         if ( now.getTime() - curve.hydraData.previousExecution.getTime() > this.helpers.timeOut ) {
             curve.hydraData.previousExecution = now;
+            this.getAudioPlayer().play('superpower-hydra');
             this.decrementCount();
-            var copy = new Kurve.Curve(curve.getPlayer(), curve.getGame(), curve.getField(), Kurve.Config.Curve, curve.getSuperpower());
+            var copy = new Kurve.Curve(curve.getPlayer(), curve.getGame(), curve.getField(), Kurve.Config.Curve, this.getAudioPlayer());
             curve.setImmunity([copy], 10);
             copy.setImmunity([curve], 10);
             copy.setPosition(curve.getPositionX(), curve.getPositionY());
@@ -419,6 +490,13 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
 Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.REVERSE] = {
     label: 'reverse',
     hooks: [Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME],
+
+    audios: [
+        {
+            key: 'superpower-reverse',
+            source: 'superpower/reverse.wav'
+        }
+    ],
 
     helpers: {
         otherX: undefined,
@@ -449,6 +527,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.REVERSE] = {
             curve.reverseData.otherAngle = otherAngle;
 
             curve.setImmunity([curve], 10);
+            this.getAudioPlayer().play('superpower-reverse');
             this.decrementCount();
             this.setIsActive(true);
         }
@@ -466,6 +545,13 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.REVERSE] = {
 Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.SQUARE_HEAD] = {
     label: 'square head',
     hooks: [Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME],
+
+    audios: [
+        {
+            key: 'superpower-square-head',
+            source: 'superpower/square-head.wav'
+        }
+    ],
 
     helpers: {
         executionTime: 0,
@@ -510,6 +596,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.SQUARE_HEAD] = {
 
         //to move two times in the same direction, the key must be released in between
         if (keyPressed !== null && this.helpers.previousKeyPressed !== keyPressed) {
+            this.getAudioPlayer().play('superpower-square-head');
             curve.getOptions().dAngle = Math.PI / 2;
         } else {
             curve.getOptions().dAngle = 0;

@@ -31,6 +31,7 @@ var Kurve = {
     
     init: function() {
         this.Theming.init();
+        this.Sound.init();
         this.initPlayers();
         this.Menu.init();
         this.Game.init();

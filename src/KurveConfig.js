@@ -49,12 +49,17 @@ Kurve.Config = {
     },
     
     Game: {
-        startDelay: 2000,
+        startDelay: 3000,
         fps: 60,
     },
 
     Superpower: {
-        maxSuperpowers: 10,
+        maxSuperpowers: 6,
+    },
+
+    Sound: {
+        soundPath: 'dist/sound/',
+        fadeTimeOut: 60
     },
     
     Players: [

@@ -99,4 +99,17 @@ Kurve.Utility.stringToHex = function(string) {
     return parseInt(string.substring(1), 16)
 };
 
+Kurve.Utility.merge = function() {
+    var base = arguments[0];
+
+    for (var i = 1; i < arguments.length; i++) {
+
+        for (var j in arguments[i]) {
+            base[j] = arguments[i][j];
+        }
+    }
+
+    return base;
+};
+
 var u = Kurve.Utility;

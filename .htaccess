@@ -4,3 +4,7 @@
     RewriteCond %{HTTPS} !=on
     RewriteRule (.*) https://achtungkurve.com$1 [R=301,L]
 </IfModule>
+
+<FilesMatch ".(png|ico|wav|mp3)$">
+	Header set Cache-Control "max-age=86400, public"
+</FilesMatch>

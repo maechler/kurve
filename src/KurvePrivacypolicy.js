@@ -42,7 +42,7 @@ Kurve.Privacypolicy = {
 
         setTimeout(function() {
             document.body.addEventListener('click', Kurve.Privacypolicy.onPrivacyPolicyClose, false);
-        },500);
+        }, 500);
     },
 
     onPrivacyPolicyClose: function() {
