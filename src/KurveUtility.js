@@ -42,16 +42,14 @@ Kurve.Utility.addClass = function(className, elementId) {
     var element = document.getElementById(elementId);
     if (element === null) return false;
 
-    element.className += ' ' + className;
+    element.classList.add(className);
 };
     
 Kurve.Utility.removeClass = function(className, elementId) {
     var element = document.getElementById(elementId);
     if (element === null) return false;
 
-    var regExp = new RegExp('(^|\\s)' + className + '($|\\s)', 'g');
-
-    element.className = element.className.replace(regExp, ' ');
+    element.classList.remove(className);
 };
 
 Kurve.Utility.setClassName = function(className, elementId) {
@@ -65,9 +63,7 @@ Kurve.Utility.hasClass = function(className, elementId) {
     var element = document.getElementById(elementId);
     if (element === null) return false;
 
-    var regExp = new RegExp('(^|\\s)' + className + '($|\\s)', 'g');
-
-    return regExp.test(element.className);
+    return element.classList.contains(className);
 };
 
 Kurve.Utility.interpolateTwoPoints = function(fromPointX, fromPointY, toPointX, toPointY) {
