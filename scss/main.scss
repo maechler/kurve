@@ -1,5 +1,6 @@
 @import 'reset';
 @import 'variables';
+@import 'mixins';
 
 body {
     color: #3F3E37;
@@ -167,6 +168,10 @@ p {
 #menu {
     padding: 30px;
     width: 580px;
+
+    &.shake {
+        animation: shake 0.4s ease;
+    }
 }
 
 #menu-intro {

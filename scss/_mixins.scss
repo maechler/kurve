@@ -1,0 +1,33 @@
+@mixin transform($transformation) {
+  -webkit-transform: $transformation;
+  -moz-transform: $transformation;
+  -ms-transform: $transformation;
+  -o-transform: $transformation;
+  transform: $transformation;
+}
+
+@keyframes shake {
+  15% {
+    @include transform(translate3d(12px, 0, 0));
+  }
+
+  30% {
+    @include transform(translate3d(-9px, 0, 0));
+  }
+
+  50% {
+    @include transform(translate3d(7px, 0, 0));
+  }
+
+  70% {
+    @include transform(translate3d(-5px, 0, 0));
+  }
+
+  90% {
+    @include transform(translate3d(3px, 0, 0));
+  }
+
+  100% {
+    @include transform(none);
+  }
+}

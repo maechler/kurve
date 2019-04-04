@@ -74,20 +74,32 @@ Kurve.Menu = {
     },
     
     onKeyDown: function(event) {
-        if (event.keyCode === 32) Kurve.Menu.onSpaceDown();
+        var gameKeyPressed = false;
+
+        if (event.keyCode === 32) {
+            gameKeyPressed = true;
+            Kurve.Menu.onSpaceDown();
+        }
 
         Kurve.players.forEach(function(player) {
             if ( player.isKeyLeft(event.keyCode) ) {
+                gameKeyPressed = true;
                 Kurve.Menu.activatePlayer(player.getId());
                 Kurve.Menu.audioPlayer.play('menu-navigate');
             } else if ( player.isKeyRight(event.keyCode) ) {
+                gameKeyPressed = true;
                 Kurve.Menu.deactivatePlayer(player.getId());
                 Kurve.Menu.audioPlayer.play('menu-navigate');
             } else if ( player.isKeySuperpower(event.keyCode) ) {
+                gameKeyPressed = true;
                 Kurve.Menu.nextSuperpower(player.getId());
                 Kurve.Menu.audioPlayer.play('menu-navigate');
             }
         });
+
+        if (gameKeyPressed) {
+            event.preventDefault(); //prevent page scrolling
+        }
     },
     
     onSpaceDown: function() {
@@ -101,7 +113,13 @@ Kurve.Menu = {
         
         if (Kurve.Game.curves.length <= 1) {
             Kurve.Game.curves = [];
-            Kurve.Menu.audioPlayer.play('menu-error');
+            Kurve.Menu.audioPlayer.play('menu-error', {reset: true});
+
+            u.addClass('shake', 'menu');
+
+            setTimeout(function() {
+                u.removeClass('shake', 'menu');
+            }, 450); //see Sass shake animation in _mixins.scss
 
             return; //not enough players are ready
         }
