@@ -25,7 +25,7 @@
 'use strict';
 
 Kurve.Theming = {
-    currentTheme: 'default',
+    currentTheme: 'dark',
 
     init: function() {
         if (Kurve.Storage.has('kurve.theme')) {
