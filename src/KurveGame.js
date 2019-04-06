@@ -184,9 +184,17 @@ Kurve.Game = {
         this.isRunning = true;
         this.runIntervalId = setInterval(this.run.bind(this), this.intervalTimeOut);
 
-        this.curves.forEach(function(curve) {
-            curve.setImmunity([curve], 5);
-        });
+        if (this.isPaused) {
+            for (var i in this.runningCurves) {
+                for (var j = 0; this.runningCurves[i] && j < this.runningCurves[i].length; ++j) {
+                    this.runningCurves[i][j].setImmunity([this.runningCurves[i][j]], 5);
+                }
+            }
+        } else {
+            this.curves.forEach(function(curve) {
+                curve.setImmunity([curve], 5);
+            });
+        }
     },
     
     stopRun: function() {
