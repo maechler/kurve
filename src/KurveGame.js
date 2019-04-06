@@ -334,17 +334,17 @@ Kurve.Game = {
 
         terminateRound: function() {
             this.pauseAllCurves('all', {reset: true});
-            this.audioPlayer.pause('game-music-stem-1', {volume: 0, fade: this.defaultFadeTime, reset: true});
-            this.audioPlayer.pause('game-music-stem-2', {volume: 0, fade: this.defaultFadeTime, reset: true});
-            this.audioPlayer.pause('game-music-stem-3', {volume: 0, fade: this.defaultFadeTime, reset: true});
-            this.audioPlayer.pause('game-music-stem-4', {volume: 0, fade: this.defaultFadeTime, reset: true});
+            this.audioPlayer.pause('game-music-stem-1', {fade: this.defaultFadeTime, reset: true});
+            this.audioPlayer.pause('game-music-stem-2', {fade: this.defaultFadeTime, reset: true});
+            this.audioPlayer.pause('game-music-stem-3', {fade: this.defaultFadeTime, reset: true});
+            this.audioPlayer.pause('game-music-stem-4', {fade: this.defaultFadeTime, reset: true});
             this.audioPlayer.play('game-end');
         },
 
         pauseIn: function() {
             this.audioPlayer.play('game-pause-in');
             this.setAllCurvesMuted('all', true);
-            this.audioPlayer.setVolume('game-music-stem-1', {volume: 0, fade: this.defaultFadeTime});
+            this.audioPlayer.setVolume('game-music-stem-1', {volume: 0.25, fade: this.defaultFadeTime});
 
             if (this.stemLevel > 1) {
                 this.audioPlayer.setVolume('game-music-stem-2', {volume: 0, fade: this.defaultFadeTime});
