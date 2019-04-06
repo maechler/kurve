@@ -41,6 +41,7 @@ Kurve.Game = {
     isRoundStarted:         false,
     playerScoresElement:    null,
     isGameOver:             false,
+    CURRENT_FRAME_DATE:     null,
     
     init: function() {
         this.fps = Kurve.Config.Game.fps;
@@ -51,6 +52,7 @@ Kurve.Game = {
     },
     
     run: function() {
+        this.CURRENT_FRAME_DATE = new Date();
         requestAnimationFrame(this.drawFrame.bind(this));
     },
     
@@ -178,7 +180,7 @@ Kurve.Game = {
         this.Audio.startNewRound();
     },
     
-    startRun: function() {        
+    startRun: function() {
         this.isRunning = true;
         this.runIntervalId = setInterval(this.run.bind(this), this.intervalTimeOut);
 
@@ -187,7 +189,7 @@ Kurve.Game = {
         });
     },
     
-    stopRun: function() {        
+    stopRun: function() {
         this.isRunning = false;
         clearInterval(this.runIntervalId);
     },

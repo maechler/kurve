@@ -184,8 +184,7 @@ Kurve.Curve.prototype.isCollided = function(positionX, positionY) {
 };
 
 Kurve.Curve.prototype.isWithinSelfCollisionTimeout = function(time) {
-    var now = new Date();
-    return now.getTime() - time.getTime() < this.getOptions().selfCollisionTimeout;
+    return Kurve.Game.CURRENT_FRAME_DATE.getTime() - time.getTime() < this.getOptions().selfCollisionTimeout;
 };
 
 Kurve.Curve.prototype.die = function() {

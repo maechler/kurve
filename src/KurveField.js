@@ -150,7 +150,7 @@ Kurve.Field = {
         this.drawnPixels[pointX0][pointY0] = {
             color: color,
             curve: curve,
-            time: new Date()
+            time: Kurve.Game.CURRENT_FRAME_DATE
         };
 
         if ( Kurve.Config.Debug.fieldDrawnPixels ) {

@@ -460,7 +460,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
     },
 
     act: function(hook, curve) {
-        var now = new Date();
+        var now = Kurve.Game.CURRENT_FRAME_DATE;
 
         if ( now.getTime() - curve.hydraData.previousExecution.getTime() > this.helpers.timeOut ) {
             curve.hydraData.previousExecution = now;
