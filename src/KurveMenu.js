@@ -60,8 +60,8 @@ Kurve.Menu = {
     },
 
     initMenuMusic: function() {
-        this.audioPlayer = Kurve.Sound.getPlayer();
-        this.audioPlayer.play('menu-music', {loop: true, background: true, fadeIn: 2000});
+        this.audioPlayer = Kurve.Sound.getAudioPlayer();
+        this.audioPlayer.play('menu-music', {loop: true, background: true, fade: 2000});
     },
     
     removeWindowListeners: function() {
@@ -106,7 +106,7 @@ Kurve.Menu = {
         Kurve.players.forEach(function(player) {
             if ( player.isActive() ) {
                 Kurve.Game.curves.push(
-                    new Kurve.Curve(player, Kurve.Game, Kurve.Field, Kurve.Config.Curve, Kurve.Sound.getPlayer())
+                    new Kurve.Curve(player, Kurve.Game, Kurve.Field, Kurve.Config.Curve, Kurve.Sound.getAudioPlayer())
                 );    
             }
         });
@@ -125,7 +125,7 @@ Kurve.Menu = {
         }
 
         Kurve.Field.init();
-        Kurve.Menu.audioPlayer.pause('menu-music', {fadeOut: 1000});
+        Kurve.Menu.audioPlayer.pause('menu-music', {fade: 1000});
         Kurve.Game.startGame();
 
         u.addClass('hidden', 'layer-menu');

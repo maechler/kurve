@@ -61,13 +61,13 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
     helpers: {
        executionTime: 0,
        initAct: function() {
-           this.getAudioPlayer().play('superpower-run-faster', {loop: true, reset: true});
+           this.getAudioPlayer().play('superpower-run-faster', {fade: 500, loop: true, reset: true});
            this.decrementCount();
            this.setIsActive(true);
            this.helpers.executionTime = 4 * Kurve.Game.fps;
        },
        closeAct: function() {
-           this.getAudioPlayer().pause('superpower-run-faster', {fadeOut: 500});
+           this.getAudioPlayer().pause('superpower-run-faster', {fade: 500});
            this.setIsActive(false);
        }
     },
@@ -108,7 +108,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
         initialStepLength: null,
         executionTime: 0,
         initAct: function(curve) {
-            this.getAudioPlayer().play('superpower-run-slower', {loop: true, reset: true});
+            this.getAudioPlayer().play('superpower-run-slower', {fade: 500, loop: true, reset: true});
             this.decrementCount();
             this.setIsActive(true);
             this.helpers.executionTime = 6 * Kurve.Game.fps;
@@ -117,7 +117,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
             curve.getOptions().stepLength = this.helpers.initialStepLength / 2;
         },
         closeAct: function(curve) {
-            this.getAudioPlayer().pause('superpower-run-slower', {fadeOut: 500});
+            this.getAudioPlayer().pause('superpower-run-slower', {fade: 500});
             this.setIsActive(false);
             curve.getOptions().stepLength = this.helpers.initialStepLength;
         }
@@ -566,6 +566,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.SQUARE_HEAD] = {
 
             this.setIsActive(true);
             this.decrementCount();
+            this.getAudioPlayer().play('superpower-square-head', {reset: true});
         },
         closeAct: function(curve) {
             curve.getOptions().dAngle = this.helpers.dAngleInitial;
@@ -596,7 +597,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.SQUARE_HEAD] = {
 
         //to move two times in the same direction, the key must be released in between
         if (keyPressed !== null && this.helpers.previousKeyPressed !== keyPressed) {
-            this.getAudioPlayer().play('superpower-square-head');
+            this.getAudioPlayer().play('superpower-square-head', {reset: true});
             curve.getOptions().dAngle = Math.PI / 2;
         } else {
             curve.getOptions().dAngle = 0;

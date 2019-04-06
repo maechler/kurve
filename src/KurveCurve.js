@@ -190,7 +190,7 @@ Kurve.Curve.prototype.isWithinSelfCollisionTimeout = function(time) {
 
 Kurve.Curve.prototype.die = function() {
     this.getPlayer().getSuperpower().getAudioPlayer().pause('all', {reset: true});
-    this.getAudioPlayer().play('curve-crashed');
+    this.getAudioPlayer().play('curve-crashed', {reset: true});
     this.getGame().notifyDeath(this);
 };
 
@@ -216,4 +216,14 @@ Kurve.Curve.prototype.useSuperpower = function(hook) {
 
 Kurve.Curve.prototype.resetHoleCountDown = function() {
     this.getOptions().holeCountDown = this.getOptions().holeInterval + u.round(Math.random() * this.getOptions().holeIntervalRandomness, 0);
+};
+
+Kurve.Curve.prototype.setMuted = function (soundKey, muted) {
+    this.getAudioPlayer().setMuted(soundKey, muted);
+    this.getPlayer().getSuperpower().getAudioPlayer().setMuted(soundKey, muted);
+};
+
+Kurve.Curve.prototype.pause = function (soundKey, options) {
+    this.getAudioPlayer().pause(soundKey, options);
+    this.getPlayer().getSuperpower().getAudioPlayer().pause(soundKey, options);
 };

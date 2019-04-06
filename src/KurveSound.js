@@ -29,54 +29,59 @@ Kurve.Sound = {
     muted: true,
     audios: {
         'menu-music': {
-            source: 'menu-music.wav'
+            source: 'menu-music.mp3'
         },
         'menu-navigate': {
-            source: 'menu-navigate.wav'
+            source: 'menu-navigate.mp3'
         },
         'menu-error': {
-            source: 'menu-error.wav'
+            source: 'menu-error.mp3'
         },
-        'game-music': {
-            source: 'game-music.wav'
+        'game-music-stem-1': {
+            source: 'game-music-stem-1.mp3'
         },
-        'game-music-intensified': {
-            source: 'game-music-intensified.wav'
+        'game-music-stem-2': {
+            source: 'game-music-stem-2.mp3'
+        },
+        'game-music-stem-3': {
+            source: 'game-music-stem-3.mp3'
+        },
+        'game-music-stem-4': {
+            source: 'game-music-stem-4.mp3'
         },
         'game-victory': {
-            source: 'game-victory.wav'
+            source: 'game-victory.mp3'
         },
         'game-end': {
-            source: 'game-end.wav'
+            source: 'game-end.mp3'
         },
         'game-deathmatch': {
-            source: 'game-deathmatch.wav'
-        },
-        'game-deathmatch-music': {
-            source: 'game-deathmatch-music.wav'
+            source: 'game-deathmatch.mp3'
         },
         'game-pause-in': {
-            source: 'game-pause-in.wav'
+            source: 'game-pause-in.mp3'
         },
         'game-pause-out': {
-            source: 'game-pause-out.wav'
+            source: 'game-pause-out.mp3'
         },
         'game-start-in': {
-            source: 'game-start-in.wav'
+            source: 'game-start-in.mp3'
         },
         'game-start-out': {
-            source: 'game-start-out.wav'
+            source: 'game-start-out.mp3'
         },
+//        'game-power-up': {
+//            source: 'game-power-up.mp3'
+//        },
         'curve-crashed': {
-            source: 'curve-crashed.wav'
+            source: 'curve-crashed.mp3'
         }
     },
     audioPlayers: [],
     defaultOptions: {
         loop: false,
         background: false,
-        fadeIn: 0,
-        fadeOut: 0,
+        fade: 0,
         reset: false,
         resetOnEnded: true,
         volume: 1,
@@ -133,7 +138,7 @@ Kurve.Sound = {
         }
     },
 
-    getPlayer: function() {
+    getAudioPlayer: function() {
         var player = new Kurve.AudioPlayer(this.audios);
 
         player.setMuted(this.muted);
@@ -183,20 +188,18 @@ Kurve.AudioPlayer = function(audios) {
 };
 
 Kurve.AudioPlayer.prototype.play = function(soundKey, options) {
+    var audioOptions = u.merge({}, Kurve.Sound.defaultOptions, options);
+
     if ( soundKey === undefined ) return;
     if ( this.audios[soundKey] === undefined ) return;
-    if ( Kurve.Sound.muted && options !== undefined && !options['background'] ) return;
-
-    var audioOptions = u.merge({}, Kurve.Sound.defaultOptions, options);
+    if ( Kurve.Sound.muted && !audioOptions['background'] ) return;
 
     if ( this.activeAudioMap[soundKey] === undefined ) {
         this.activeAudioMap[soundKey] = new Audio(Kurve.Config.Sound.soundPath + this.audios[soundKey].source);
     }
 
     var audio = this.activeAudioMap[soundKey];
-
-    //todo:  test performance
-    //audio.playbackRate = 1.25;
+    var restartBuffer = .25;
 
     audio.loop = audioOptions.loop;
     audio.muted = Kurve.Sound.muted;
@@ -207,13 +210,23 @@ Kurve.AudioPlayer.prototype.play = function(soundKey, options) {
         }
     };
 
+    if (audio.loop) {
+        //See https://stackoverflow.com/questions/7330023/gapless-looping-audio-html5
+        audio.addEventListener('timeupdate', function() {
+            if (this.currentTime > this.duration - restartBuffer) {
+                this.currentTime = 0;
+                this.play()
+            }
+        }, false);
+    }
+
     if (audioOptions.reset && audio.currentTime !== 0) {
         audio.currentTime = 0;
     }
 
-    this.setVolume(soundKey, {fade: audioOptions.fadeIn, volume: audioOptions.volume});
+    this.setVolume(soundKey, {fade: audioOptions.fade, volume: audioOptions.volume});
 
-    audio.play().catch(function() {
+    audio.play().catch(function(e) {
         if ( audioOptions.background ) {
             // User interaction required to start sound because of the browser Autoplay Policy
             Kurve.Sound.registerUserInteractionListener(audio.play.bind(audio));
@@ -239,7 +252,7 @@ Kurve.AudioPlayer.prototype.pause = function(soundKey, options) {
             }
         };
 
-        this.setVolume(soundKey, {fade: audioOptions.fadeOut, volume: 0}, stopAudio);
+        this.setVolume(soundKey, {fade: audioOptions.fade, volume: 0}, stopAudio);
     }
 };
 
@@ -253,7 +266,7 @@ Kurve.AudioPlayer.prototype.setVolume = function(soundKey, options, callback) {
         audio.volume = options.volume;
         if ( typeof callback === 'function' ) callback();
     } else {
-        if ( typeof this.fadeTimeOut !== 'undefined' ) clearTimeout(this.fadeTimeOut);
+        if ( typeof audio.fadeTimeOut !== 'undefined' ) clearTimeout(audio.fadeTimeOut);
 
         var fadeStep = 1 / (options.fade / Kurve.Config.Sound.fadeTimeOut);
         var fadeIn = audio.volume < options.volume;
@@ -262,14 +275,14 @@ Kurve.AudioPlayer.prototype.setVolume = function(soundKey, options, callback) {
 
             if (fadeIn && audio.volume < options.volume || !fadeIn && audio.volume > options.volume) {
                 //still fading
-                this.fadeTimeOut = setTimeout(fadeTimeOutFunction, Kurve.Config.Sound.fadeTimeOut);
+                audio.fadeTimeOut = setTimeout(fadeTimeOutFunction, Kurve.Config.Sound.fadeTimeOut);
             } else {
                 //finished fading
                 if ( typeof callback === 'function' ) callback();
             }
         }.bind(this);
 
-        this.fadeTimeOut = setTimeout(fadeTimeOutFunction, Kurve.Config.Sound.fadeTimeOut);
+        audio.fadeTimeOut = setTimeout(fadeTimeOutFunction, Kurve.Config.Sound.fadeTimeOut);
     }
 };
 

@@ -41,26 +41,13 @@ Kurve.Game = {
     isRoundStarted:         false,
     playerScoresElement:    null,
     isGameOver:             false,
-    isMusicIntense:         false,
     
     init: function() {
         this.fps = Kurve.Config.Game.fps;
         this.intervalTimeOut = Math.round(1000 / this.fps);
         this.playerScoresElement = document.getElementById('player-scores');
-        this.audioPlayer = Kurve.Sound.getPlayer();
 
-        //todo remove
-        window.addEventListener('keydown', function(event) {
-            if ( event.keyCode !== 73 ) return; //i
-
-            if (this.isMusicIntense) {
-                this.audioPlayer.setVolume('game-music-intensified', {volume: 0, fade: 500});
-            } else {
-                this.audioPlayer.setVolume('game-music-intensified', {volume: 1, fade: 500});
-            }
-
-            this.isMusicIntense = !this.isMusicIntense;
-        }.bind(this));
+        this.Audio.init();
     },
     
     run: function() {
@@ -83,8 +70,14 @@ Kurve.Game = {
     },
     
     onKeyDown: function(event) {
-        if ( event.keyCode === 32 ) this.onSpaceDown();
-        
+        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Spacebar', ' '].indexOf(event.key) >= 0) {
+            event.preventDefault(); //prevent page scrolling
+        }
+
+        if ( event.keyCode === 32 ) {
+            this.onSpaceDown();
+        }
+
         this.keysDown[event.keyCode] = true;
     },
     
@@ -105,24 +98,11 @@ Kurve.Game = {
     
     togglePause: function() {
         if ( this.isPaused ) {
-            for (var i in this.runningCurves) {
-                //todo refactor to only set muted once on curve
-                this.runningCurves[i][0].getAudioPlayer().setMuted('all', false);
-                this.runningCurves[i][0].getPlayer().getSuperpower().getAudioPlayer().setMuted('all', false);
-            }
-            this.audioPlayer.setVolume('game-music', {volume: 1, fade: 500});
-            if (this.isMusicIntense) this.audioPlayer.setVolume('game-music-intensified', {volume: 1, fade: 500});
-            this.audioPlayer.play('game-pause-out');
+            this.Audio.pauseOut();
             Kurve.Lightbox.hide();
             this.startRun();
         } else {
-            for (var i in this.runningCurves) {
-                this.runningCurves[i][0].getAudioPlayer().setMuted('all', true);
-                this.runningCurves[i][0].getPlayer().getSuperpower().getAudioPlayer().setMuted('all', true);
-            }
-            this.audioPlayer.setVolume('game-music', {volume: 0.25, fade: 500});
-            if (this.isMusicIntense) this.audioPlayer.setVolume('game-music-intensified', {volume: 0.25, fade: 500});
-            this.audioPlayer.play('game-pause-in');
+            this.Audio.pauseIn();
             this.stopRun();
             Kurve.Lightbox.show('<h2>Game is paused</h2>');
         }
@@ -178,6 +158,10 @@ Kurve.Game = {
             }
         
             this.renderPlayerScores();
+
+            if ( Object.keys(this.runningCurves).length === 2 ) {
+                this.Audio.tension();
+            }
         
             if ( Object.keys(this.runningCurves).length === 1 ) this.terminateRound();
         }
@@ -185,23 +169,13 @@ Kurve.Game = {
     
     startNewRound: function() {
         this.isRoundStarted = true;
-        var startSoundDelay = Kurve.Config.Game.startDelay / 3;
 
         Kurve.Field.clearFieldContent();
         this.initRun();
         this.renderPlayerScores();
-        setTimeout(this.startRun.bind(this), Kurve.Config.Game.startDelay);
-        setTimeout(this.audioPlayer.play.bind(this.audioPlayer, 'game-start-in'), startSoundDelay);
-        setTimeout(this.audioPlayer.play.bind(this.audioPlayer, 'game-start-in'), 2 * startSoundDelay);
-        setTimeout(this.audioPlayer.play.bind(this.audioPlayer, 'game-start-out'), 3 * startSoundDelay);
 
-        if ( this.deathMatch ) {
-            setTimeout(this.audioPlayer.play.bind(this.audioPlayer, 'game-music', {fadeIn: 500, volume: 1, background: true, loop: true}), 3 * startSoundDelay);
-            setTimeout(this.audioPlayer.play.bind(this.audioPlayer, 'game-music-intensified', {volume: 1, background: true, loop: true}), 3 * startSoundDelay);
-        } else {
-            setTimeout(this.audioPlayer.play.bind(this.audioPlayer, 'game-music', {fadeIn: 500, volume: 1, background: true, loop: true}), 3 * startSoundDelay);
-            setTimeout(this.audioPlayer.play.bind(this.audioPlayer, 'game-music-intensified', {volume: 0, background: true, loop: true}), 3 * startSoundDelay);
-        }
+        setTimeout(this.startRun.bind(this), Kurve.Config.Game.startDelay);
+        this.Audio.startNewRound();
     },
     
     startRun: function() {        
@@ -232,7 +206,6 @@ Kurve.Game = {
     terminateRound: function() {
         this.curves.forEach(function(curve) {
             curve.getPlayer().getSuperpower().close(curve);
-            curve.getPlayer().getSuperpower().getAudioPlayer().setMuted('all', true);
         });
 
         if ( this.deathMatch ) {
@@ -244,9 +217,7 @@ Kurve.Game = {
         this.stopRun();
         this.runningCurves  = {};
         this.incrementSuperpowers();
-        this.audioPlayer.setVolume('game-music', {volume: 0.25, fade: 500});
-        if (this.isMusicIntense) this.audioPlayer.setVolume('game-music-intensified', {volume: 0.25, fade: 500});
-        this.audioPlayer.play('game-end');
+        this.Audio.terminateRound();
         this.checkForWinner();
     },
 
@@ -279,7 +250,7 @@ Kurve.Game = {
 
     initDeathMatch: function(winners) {
         this.deathMatch = true;
-        this.audioPlayer.play('game-deathmatch');
+        this.Audio.initDeathMatch();
         Kurve.Lightbox.show('<div class="deathmatch"><h1>DEATHMATCH!</h1></div>');
 
         var winnerCurves = [];
@@ -304,8 +275,7 @@ Kurve.Game = {
     gameOver: function(winner) {
         this.isGameOver = true;
 
-        this.audioPlayer.pause('all');
-        this.audioPlayer.play('game-victory');
+        this.Audio.gameOver();
         Kurve.Piwik.trackPageVariable(4, 'finished_game', 'yes');
         Kurve.Piwik.trackPageView('GameOver');
 
@@ -313,6 +283,115 @@ Kurve.Game = {
             '<h1 class="active ' + winner.getId() + '">' + winner.getId() + ' wins!</h1>' +
             '<a href="#" onclick="Kurve.reload(); return false;" title="Go back to the menu"  class="button">Start new game</a>'
         );
-    }
+    },
 
+    Audio: {
+        stemLevel: 1,
+        audioPlayer: null,
+        defaultFadeTime: 1000,
+
+        init: function() {
+            this.audioPlayer = Kurve.Sound.getAudioPlayer();
+        },
+
+        startNewRound: function() {
+            var startIn1Delay = Kurve.Config.Game.startDelay / 3;
+            var startIn2Delay = 2 * startIn1Delay;
+            var startOutDelay = 3 * startIn1Delay;
+
+            setTimeout(this.audioPlayer.play.bind(this.audioPlayer, 'game-start-in', {reset: true}), startIn1Delay);
+            setTimeout(this.audioPlayer.play.bind(this.audioPlayer, 'game-start-in', {reset: true}), startIn2Delay);
+            setTimeout(function() {
+                this.audioPlayer.play('game-start-out', {reset: true});
+                this.setAllCurvesMuted('all', false);
+
+                if ( Kurve.Game.deathMatch ) {
+                    this.stemLevel = 3;
+                    this.audioPlayer.play('game-music-stem-1', {fade: this.defaultFadeTime, volume: 1, background: true, loop: true, reset: true});
+                    this.audioPlayer.play('game-music-stem-4', {fade: this.defaultFadeTime, volume: 0.5, background: true, loop: true, reset: true});
+                } else {
+                    this.stemLevel = 1;
+                    this.audioPlayer.play('game-music-stem-1', {fade: this.defaultFadeTime, volume: 1, background: true, loop: true, reset: true});
+                    this.audioPlayer.play('game-music-stem-2', {fade: this.defaultFadeTime, volume: 0, background: true, loop: true, reset: true});
+                    this.audioPlayer.play('game-music-stem-3', {fade: this.defaultFadeTime, volume: 0, background: true, loop: true, reset: true});
+                }
+            }.bind(this), startOutDelay);
+        },
+
+        terminateRound: function() {
+            this.pauseAllCurves('all', {reset: true});
+            this.audioPlayer.pause('game-music-stem-1', {volume: 0, fade: this.defaultFadeTime, reset: true});
+            this.audioPlayer.pause('game-music-stem-2', {volume: 0, fade: this.defaultFadeTime, reset: true});
+            this.audioPlayer.pause('game-music-stem-3', {volume: 0, fade: this.defaultFadeTime, reset: true});
+            this.audioPlayer.pause('game-music-stem-4', {volume: 0, fade: this.defaultFadeTime, reset: true});
+            this.audioPlayer.play('game-end');
+        },
+
+        pauseIn: function() {
+            this.audioPlayer.play('game-pause-in');
+            this.setAllCurvesMuted('all', true);
+            this.audioPlayer.setVolume('game-music-stem-1', {volume: 0, fade: this.defaultFadeTime});
+
+            if (this.stemLevel > 1) {
+                this.audioPlayer.setVolume('game-music-stem-2', {volume: 0, fade: this.defaultFadeTime});
+            }
+
+            if (this.stemLevel > 2) {
+                this.audioPlayer.setVolume('game-music-stem-3', {volume: 0, fade: this.defaultFadeTime});
+            }
+
+            if (Kurve.Game.deathMatch) {
+                this.audioPlayer.setVolume('game-music-stem-4', {volume: 0, fade: this.defaultFadeTime});
+            }
+        },
+
+        pauseOut: function() {
+            this.audioPlayer.play('game-pause-out');
+            this.setAllCurvesMuted('all', false);
+            this.audioPlayer.setVolume('game-music-stem-1', {volume: 1, fade: this.defaultFadeTime});
+
+            if (this.stemLevel > 1) {
+                this.audioPlayer.setVolume('game-music-stem-2', {volume: 0.75, fade: this.defaultFadeTime});
+            }
+
+            if (this.stemLevel > 2) {
+                this.audioPlayer.setVolume('game-music-stem-3', {volume: 0.75, fade: this.defaultFadeTime});
+            }
+
+            if (Kurve.Game.deathMatch) {
+                this.audioPlayer.setVolume('game-music-stem-4', {volume: 0.5, fade: this.defaultFadeTime});
+            }
+        },
+
+        tension: function() {
+            if (Kurve.Game.deathMatch) {
+                return;
+            }
+
+            this.stemLevel = 3;
+            this.audioPlayer.setVolume('game-music-stem-2', {volume: 0.75, fade: this.defaultFadeTime});
+            this.audioPlayer.setVolume('game-music-stem-3', {volume: 0.75, fade: this.defaultFadeTime});
+        },
+
+        initDeathMatch: function() {
+            this.audioPlayer.play('game-deathmatch');
+        },
+
+        gameOver: function() {
+            this.audioPlayer.pause('all');
+            this.audioPlayer.play('game-victory');
+        },
+
+        setAllCurvesMuted: function(soundKey, muted) {
+            Kurve.Game.curves.forEach(function(curve) {
+                curve.setMuted(soundKey, muted);
+            });
+        },
+
+        pauseAllCurves: function(soundKey, options) {
+            Kurve.Game.curves.forEach(function(curve) {
+                curve.pause(soundKey, options);
+            });
+        }
+    }
 };

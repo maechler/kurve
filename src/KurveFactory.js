@@ -34,7 +34,7 @@ Kurve.Factory = {
         var init = Kurve.Superpowerconfig[type].init;
         var close = Kurve.Superpowerconfig[type].close;
         var helpers = {};
-        var audioPlayer = Kurve.Sound.getPlayer();
+        var audioPlayer = Kurve.Sound.getAudioPlayer();
 
         for (var attribute in Kurve.Superpowerconfig[type].helpers) {
             if (Kurve.Superpowerconfig[type].helpers.hasOwnProperty(attribute)) {
