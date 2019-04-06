@@ -223,9 +223,13 @@ Kurve.Game = {
 
     incrementSuperpowers: function() {
         var numberOfPlayers = this.players.length;
+        var lastPlayerIndex = numberOfPlayers - 1;
 
-        this.players[numberOfPlayers - 1].getSuperpower().incrementCount();
-        this.players[numberOfPlayers - 1].getSuperpower().incrementCount();
+        this.players[lastPlayerIndex].getSuperpower().incrementCount();
+
+        if (numberOfPlayers > 2) {
+            this.players[lastPlayerIndex].getSuperpower().incrementCount();
+        }
 
         var numberOfOtherPlayersGettingSomething = u.round((numberOfPlayers - 2) / 2, 0);
 
