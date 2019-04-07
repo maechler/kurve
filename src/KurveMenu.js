@@ -61,7 +61,7 @@ Kurve.Menu = {
 
     initMenuMusic: function() {
         this.audioPlayer = Kurve.Sound.getAudioPlayer();
-        this.audioPlayer.play('menu-music', {loop: true, background: true, fade: 2000, volume: .5});
+        this.audioPlayer.play('menu-music', {loop: true, background: true, fade: 2000, volume: 1});
     },
     
     removeWindowListeners: function() {
