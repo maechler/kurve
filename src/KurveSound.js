@@ -70,9 +70,9 @@ Kurve.Sound = {
         'game-start-out': {
             source: 'game-start-out.mp3'
         },
-//        'game-power-up': {
-//            source: 'game-power-up.mp3'
-//        },
+        'game-power-up': {
+            source: 'game-power-up.mp3'
+        },
         'curve-crashed': {
             source: 'curve-crashed.mp3'
         }

@@ -28,6 +28,7 @@ Kurve.Curve = function(player, game, field, config, audioPlayer) {
 
     var immunityFor = 0;  // Collision-immune frames.
     var immunityTo = [];  // Curves we are immune to.
+    var powerUpTimeOutFor = 0;
     var isInvisible = false;
     var positionY = null;
     var positionX = null;
@@ -60,10 +61,13 @@ Kurve.Curve = function(player, game, field, config, audioPlayer) {
     this.setNextPositionX = function(newPosition) { nextPositionX = newPosition; };
     this.setAngle = function(newAngle) { options.angle = newAngle; };
     this.setImmunity = function(curves, duration) { immunityTo = curves; immunityFor = duration; };
+    this.setPowerUpTimeOut = function(timeOut) { powerUpTimeOutFor = timeOut; };
     this.decrementImmunity = function() { if ( immunityFor > 0 ) immunityFor -= 1; };
+    this.decrementPowerUpTimeOut = function() { if ( powerUpTimeOutFor > 0 ) powerUpTimeOutFor -= 1; };
     this.setIsInvisible = function(newIsInvisible) { isInvisible = newIsInvisible; };
 
     this.isImmuneTo = function(curve) { return immunityFor > 0 && (immunityTo === 'all' || immunityTo.includes(curve)); };
+    this.isPowerUpTimeOut = function() { return powerUpTimeOutFor > 0; };
     this.getAudioPlayer = function() { return audioPlayer; };
     this.getPlayer = function() { return player; };
     this.getGame = function() { return game; };
@@ -82,6 +86,7 @@ Kurve.Curve.prototype.drawNextFrame = function() {
     this.moveToNextFrame();
     this.checkForCollision();
     this.drawLine(this.getField());
+    this.decrementPowerUpTimeOut();
     
     if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME) ) {
         this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME, this);
@@ -105,9 +110,13 @@ Kurve.Curve.prototype.drawLine = function(field) {
     }
 
     if ( this.isInvisible() ) {
+        if (this.getOptions().holeCountDown < 0) {
+            field.drawLine('powerUp', this.getPositionX(), this.getPositionY(), this.getNextPositionX(), this.getNextPositionY(), this.getPlayer().getColor(), this);
+        }
+
         if ( this.getOptions().holeCountDown < -6 ) this.resetHoleCountDown();
     } else {
-        field.drawLine(this.getPositionX(), this.getPositionY(), this.getNextPositionX(), this.getNextPositionY(), this.getPlayer().getColor(), this);
+        field.drawLine('curve', this.getPositionX(), this.getPositionY(), this.getNextPositionX(), this.getNextPositionY(), this.getPlayer().getColor(), this);
     }
 
     this.getOptions().holeCountDown--;
@@ -152,6 +161,14 @@ Kurve.Curve.prototype.checkForCollision = function() {
                 for (var pointSurroundingY in pointSurroundings[pointSurroundingX]) {
                     if ( this.isCollided(pointSurroundingX, pointSurroundingY) ) {
                         isCollided = true;
+                    }
+
+                    var powerUpPoint = Kurve.Field.getPowerUpPoint(pointSurroundingX, pointSurroundingY);
+
+                    if ( powerUpPoint !== false && !this.isPowerUpTimeOut() && powerUpPoint.curve !== this && !isCollided ) {
+                        this.setPowerUpTimeOut(5);
+                        this.getAudioPlayer().play('game-power-up');
+                        this.getPlayer().getSuperpower().incrementCount();
                     }
 
                     if (isCollided && !Kurve.Config.Debug.curveTrace) {

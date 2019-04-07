@@ -35,6 +35,7 @@ Kurve.Field = {
     height: null,
     
     drawnPixels: {},
+    drawnPowerUps: {},
     defaultLineWidth: null,
     drawnPixelPrecision: null,
     
@@ -105,14 +106,16 @@ Kurve.Field = {
         this.pixiField.drawRect(0, 0, this.width, this.height);
     },
 
-    drawLine: function(fromPointX, fromPointY, toPointX, toPointY, color, curve) {
+    drawLine: function(type, fromPointX, fromPointY, toPointX, toPointY, color, curve) {
         if ( color === undefined ) color = Kurve.Theming.getThemedValue('field', 'defaultColor');
 
-        this.pixiCurves.lineStyle(this.defaultLineWidth, u.stringToHex(color));
-        this.pixiCurves.moveTo(fromPointX, fromPointY);
-        this.pixiCurves.lineTo(toPointX, toPointY);
+        if (type === 'curve') {
+            this.pixiCurves.lineStyle(this.defaultLineWidth, u.stringToHex(color));
+            this.pixiCurves.moveTo(fromPointX, fromPointY);
+            this.pixiCurves.lineTo(toPointX, toPointY);
+        }
 
-        this.addLineToDrawnPixel(fromPointX, fromPointY, toPointX, toPointY, color, curve);
+        this.addLineToDrawnPixel(type, fromPointX, fromPointY, toPointX, toPointY, color, curve);
     },
 
     drawUntrackedPoint: function(pointX, pointY, color) {
@@ -124,37 +127,43 @@ Kurve.Field = {
         this.pixiCurves.endFill();
     },
 
-    drawPoint: function(pointX, pointY, color, curve) {
+    drawPoint: function(type, pointX, pointY, color, curve) {
         this.drawUntrackedPoint(pointX, pointY, color);
-        this.addPointToDrawnPixel(pointX, pointY, color, curve);
+        this.addPointToDrawnPixel(type, pointX, pointY, color, curve);
     },
 
-    addLineToDrawnPixel: function(fromPointX, fromPointY, toPointX, toPointY, color, curve) {
+    addLineToDrawnPixel: function(type, fromPointX, fromPointY, toPointX, toPointY, color, curve) {
         var interpolatedPoints = u.interpolateTwoPoints(fromPointX, fromPointY, toPointX, toPointY);
 
         for( var pointX in interpolatedPoints ) {
             for( var pointY in interpolatedPoints[pointX]) {
-                this.addPointToDrawnPixel(pointX, pointY, color, curve);
+                this.addPointToDrawnPixel(type, pointX, pointY, color, curve);
             }
         }
     },
     
-    addPointToDrawnPixel: function(pointX, pointY, color, curve) {
+    addPointToDrawnPixel: function(type, pointX, pointY, color, curve) {
         var pointX0 = u.round(pointX, 0);
         var pointY0 = u.round(pointY, 0);
+        var drawnMap = type === 'powerUp' ? this.drawnPowerUps : this.drawnPixels;
 
-        if ( this.drawnPixels[pointX0] === undefined ) {
-            this.drawnPixels[pointX0] = {};
+        if ( drawnMap[pointX0] === undefined ) {
+            drawnMap[pointX0] = {};
         }
 
-        this.drawnPixels[pointX0][pointY0] = {
+        drawnMap[pointX0][pointY0] = {
             color: color,
             curve: curve,
             time: Kurve.Game.CURRENT_FRAME_DATE
         };
 
         if ( Kurve.Config.Debug.fieldDrawnPixels ) {
-            this.pixiDebug.lineStyle(1, 0x37FDFC);
+            if (type === 'curve') {
+                this.pixiDebug.lineStyle(1, 0x37FDFC);
+            } else {
+                this.pixiDebug.lineStyle(1, 0xFDFC37);
+            }
+
             this.pixiDebug.drawRect(pointX0, pointY0, 1, 1);
         }
     },
@@ -166,6 +175,17 @@ Kurve.Field = {
     isPointDrawn: function(pointX, pointY) {
         return this.drawnPixels[u.round(pointX, 0)] !== undefined &&
                this.drawnPixels[u.round(pointX, 0)][u.round(pointY, 0)] !== undefined;
+    },
+
+    getPowerUpPoint: function(pointX, pointY) {
+        var pointX0 = u.round(pointX, 0);
+        var pointY0 = u.round(pointY, 0);
+
+        if ( this.drawnPowerUps[pointX0] !== undefined && this.drawnPowerUps[pointX0][pointY0] !== undefined ) {
+            return this.drawnPowerUps[pointX0][pointY0];
+        } else {
+            return false;
+        }
     },
 
     getDrawnPoint: function(pointX, pointY) {

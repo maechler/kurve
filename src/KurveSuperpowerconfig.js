@@ -90,7 +90,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
     close: function(curve) {
         this.setIsActive(false);
     }
- };
+};
 
 Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
     label: 'run slower',
@@ -267,7 +267,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
             var rightEndX = Math.cos(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPositionX();
             var rightEndY = Math.sin(curve.getOptions().angle + Math.PI / 2) * this.helpers.barWidth + curve.getPositionY();
 
-            Kurve.Field.drawLine(leftEndX, leftEndY, rightEndX, rightEndY, curve.getPlayer().getColor(), curve);
+            Kurve.Field.drawLine('curve', leftEndX, leftEndY, rightEndX, rightEndY, curve.getPlayer().getColor(), curve);
 
             this.getAudioPlayer().play('superpower-vertical-bar');
             this.decrementCount();
