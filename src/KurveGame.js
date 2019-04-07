@@ -141,6 +141,7 @@ Kurve.Game = {
     
     addPlayers: function() {
         Kurve.Game.curves.forEach(function(curve) {
+            curve.getPlayer().getSuperpower().incrementCount();
             Kurve.Game.players.push( curve.getPlayer() );
         });
     },

@@ -27,7 +27,7 @@
 Kurve.Player = function(id, keyLeft, keyRight, keySuperpower) {
 
     var points = 0;
-    var superpower = Kurve.Factory.getSuperpower(Kurve.Superpowerconfig.types.RUN_FASTER);
+    var superpower = Kurve.Factory.getSuperpower(Kurve.Superpowerconfig.types.NO_SUPERPOWER);
     var superPowerElement = null;
     var isActive = false;
     var color = null;

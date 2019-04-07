@@ -26,7 +26,7 @@
 
 Kurve.Superpower = function(hooks, act, helpers, type, init, close, audioPlayer) {
 
-    var count = 1;
+    var count = 0;
     var isActive = false;
 
     this.act = act;
@@ -34,7 +34,11 @@ Kurve.Superpower = function(hooks, act, helpers, type, init, close, audioPlayer)
     this.init = init;
     this.close = close;
     
-    this.incrementCount = function() { 
+    this.incrementCount = function() {
+        if (type === Kurve.Superpowerconfig.types.CHUCK_NORRIS || type === Kurve.Superpowerconfig.types.NO_SUPERPOWER) {
+            return;
+        }
+
         count = Math.min(count + 1, Kurve.Config.Superpower.maxSuperpowers);
 
         Kurve.Game.renderPlayerScores();

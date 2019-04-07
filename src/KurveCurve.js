@@ -166,9 +166,17 @@ Kurve.Curve.prototype.checkForCollision = function() {
                     var powerUpPoint = Kurve.Field.getPowerUpPoint(pointSurroundingX, pointSurroundingY);
 
                     if ( powerUpPoint !== false && !this.isPowerUpTimeOut() && powerUpPoint.curve !== this && !isCollided ) {
-                        this.setPowerUpTimeOut(5);
-                        this.getAudioPlayer().play('game-power-up');
-                        this.getPlayer().getSuperpower().incrementCount();
+                        var usePowerUp = true;
+
+                        if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.POWER_UP) ) {
+                            usePowerUp = this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.POWER_UP, this);
+                        }
+
+                        if (usePowerUp) {
+                            this.setPowerUpTimeOut(5);
+                            this.getAudioPlayer().play('game-power-up');
+                            this.getPlayer().getSuperpower().incrementCount();
+                        }
                     }
 
                     if (isCollided && !Kurve.Config.Debug.curveTrace) {
