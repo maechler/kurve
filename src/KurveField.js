@@ -132,6 +132,40 @@ Kurve.Field = {
         this.addPointToDrawnPixel(type, pointX, pointY, color, curve);
     },
 
+    clearLine: function(fromPointX, fromPointY, toPointX, toPointY) {
+        var interpolatedPoints = u.interpolateTwoPoints(fromPointX, fromPointY, toPointX, toPointY);
+        var color = Kurve.Theming.getThemedValue('field', 'backgroundColor');
+
+        for( var pointX in interpolatedPoints ) {
+            for( var pointY in interpolatedPoints[pointX]) {
+                var pointSurroundings = Kurve.Field.getPointSurroundings(pointX, pointY);
+
+                for (var pointSurroundingX in pointSurroundings) {
+                    for (var pointSurroundingY in pointSurroundings[pointSurroundingX]) {
+                        var pointSurroundings2 = Kurve.Field.getPointSurroundings(pointSurroundingX, pointSurroundingY);
+
+                        for (var pointSurrounding2X in pointSurroundings2) {
+                            for (var pointSurrounding2Y in pointSurroundings2[pointSurrounding2X]) {
+                                if ( this.drawnPixels[pointSurrounding2X] !== undefined && this.drawnPixels[pointSurrounding2X][pointSurrounding2Y] !== undefined ) {
+                                    this.drawnPixels[pointSurrounding2X][pointSurrounding2Y] = undefined;
+
+                                    if ( Kurve.Config.Debug.fieldDrawnPixels ) {
+                                        this.pixiDebug.lineStyle(1, 0xFD379B);
+                                        this.pixiDebug.drawRect(pointSurrounding2X, pointSurrounding2Y, 1, 1);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        this.pixiCurves.lineStyle(this.defaultLineWidth * 2, u.stringToHex(color));
+        this.pixiCurves.moveTo(fromPointX, fromPointY);
+        this.pixiCurves.lineTo(toPointX, toPointY);
+    },
+
     addLineToDrawnPixel: function(type, fromPointX, fromPointY, toPointX, toPointY, color, curve) {
         var interpolatedPoints = u.interpolateTwoPoints(fromPointX, fromPointY, toPointX, toPointY);
 

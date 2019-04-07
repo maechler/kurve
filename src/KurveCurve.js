@@ -156,27 +156,26 @@ Kurve.Curve.prototype.checkForCollision = function() {
     for (var pointX in trace) {
         for (var pointY in trace[pointX]) {
             var pointSurroundings = Kurve.Field.getPointSurroundings(pointX, pointY);
+            var powerUpPoint = Kurve.Field.getPowerUpPoint(pointX, pointY);
+
+            if ( powerUpPoint !== false && !this.isPowerUpTimeOut() && powerUpPoint.curve !== this && !isCollided ) {
+                var usePowerUp = true;
+
+                if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.POWER_UP) ) {
+                    usePowerUp = this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.POWER_UP, this);
+                }
+
+                if (usePowerUp) {
+                    this.setPowerUpTimeOut(5);
+                    this.getAudioPlayer().play('game-power-up');
+                    this.getPlayer().getSuperpower().incrementCount();
+                }
+            }
 
             for (var pointSurroundingX in pointSurroundings) {
                 for (var pointSurroundingY in pointSurroundings[pointSurroundingX]) {
                     if ( this.isCollided(pointSurroundingX, pointSurroundingY) ) {
                         isCollided = true;
-                    }
-
-                    var powerUpPoint = Kurve.Field.getPowerUpPoint(pointSurroundingX, pointSurroundingY);
-
-                    if ( powerUpPoint !== false && !this.isPowerUpTimeOut() && powerUpPoint.curve !== this && !isCollided ) {
-                        var usePowerUp = true;
-
-                        if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.POWER_UP) ) {
-                            usePowerUp = this.getPlayer().getSuperpower().act(Kurve.Superpowerconfig.hooks.POWER_UP, this);
-                        }
-
-                        if (usePowerUp) {
-                            this.setPowerUpTimeOut(5);
-                            this.getAudioPlayer().play('game-power-up');
-                            this.getPlayer().getSuperpower().incrementCount();
-                        }
                     }
 
                     if (isCollided && !Kurve.Config.Debug.curveTrace) {

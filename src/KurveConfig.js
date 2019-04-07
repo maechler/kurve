@@ -82,6 +82,7 @@ Kurve.Config = {
                 pink: '#DC72FF'
             },
             field: {
+                backgroundColor: '#EBE7DC',
                 defaultColor: '#333333',
                 borderColor: '#ACAC9D',
                 deathMatchColor: '#333333',
@@ -100,6 +101,7 @@ Kurve.Config = {
                 pink: '#FF1493'
             },
             field: {
+                backgroundColor: '#222222',
                 defaultColor: '#DDDDDD',
                 borderColor: '#999999',
                 deathMatchColor: '#DDDDDD',

@@ -38,7 +38,8 @@ Kurve.Superpowerconfig.types = {
     REVERSE: 'REVERSE',
     SQUARE_HEAD: 'SQUARE_HEAD',
     CHUCK_NORRIS: 'CHUCK_NORRIS',
-    NO_SUPERPOWER: 'NO_SUPERPOWER'
+    NO_SUPERPOWER: 'NO_SUPERPOWER',
+    SHOOT_HOLES: 'SHOOT_HOLES'
 };
 
 Kurve.Superpowerconfig.hooks = {
@@ -56,7 +57,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
     audios: [
         {
             key: 'superpower-run-faster',
-            source: 'superpower/run-faster.wav'
+            source: 'superpower/run-faster.mp3'
         }
     ],
 
@@ -102,7 +103,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
     audios: [
         {
             key: 'superpower-run-slower',
-            source: 'superpower/run-slower.wav'
+            source: 'superpower/run-slower.mp3'
         }
     ],
 
@@ -150,7 +151,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
     audios: [
         {
             key: 'superpower-jump',
-            source: 'superpower/jump.wav'
+            source: 'superpower/jump.mp3'
         }
     ],
 
@@ -172,7 +173,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.JUMP] = {
 
             this.decrementCount();
             this.setIsActive(true);
-            this.getAudioPlayer().play('superpower-jump');
+            this.getAudioPlayer().play('superpower-jump', {reset: true});
         }
 
         if ( !curve.getGame().isKeyDown(curve.getPlayer().getKeySuperpower()) ) {
@@ -196,11 +197,11 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.INVISIBLE] = {
     audios: [
         {
             key: 'superpower-invisible-start',
-            source: 'superpower/invisible-start.wav'
+            source: 'superpower/invisible-start.mp3'
         },
         {
             key: 'superpower-invisible-end',
-            source: 'superpower/invisible-end.wav'
+            source: 'superpower/invisible-end.mp3'
         }
     ],
 
@@ -250,7 +251,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
     audios: [
         {
             key: 'superpower-vertical-bar',
-            source: 'superpower/vertical-bar.wav'
+            source: 'superpower/vertical-bar.mp3'
         }
     ],
 
@@ -271,7 +272,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.VERTICAL_BAR] = {
 
             Kurve.Field.drawLine('curve', leftEndX, leftEndY, rightEndX, rightEndY, curve.getPlayer().getColor(), curve);
 
-            this.getAudioPlayer().play('superpower-vertical-bar');
+            this.getAudioPlayer().play('superpower-vertical-bar', {reset: true});
             this.decrementCount();
             this.setIsActive(true);
         }
@@ -296,7 +297,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
     audios: [
         {
             key: 'superpower-cross-walls',
-            source: 'superpower/cross-walls.wav'
+            source: 'superpower/cross-walls.mp3'
         }
     ],
 
@@ -396,7 +397,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.DARK_KNIGHT] = {
     audios: [
         {
             key: 'superpower-dark-knight',
-            source: 'superpower/dark-knight.wav'
+            source: 'superpower/dark-knight.mp3'
         }
     ],
 
@@ -446,7 +447,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
     audios: [
         {
             key: 'superpower-hydra',
-            source: 'superpower/hydra.wav'
+            source: 'superpower/hydra.mp3'
         }
     ],
 
@@ -466,7 +467,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
 
         if ( now.getTime() - curve.hydraData.previousExecution.getTime() > this.helpers.timeOut ) {
             curve.hydraData.previousExecution = now;
-            this.getAudioPlayer().play('superpower-hydra');
+            this.getAudioPlayer().play('superpower-hydra', {reset: true});
             this.decrementCount();
             var copy = new Kurve.Curve(curve.getPlayer(), curve.getGame(), curve.getField(), Kurve.Config.Curve, this.getAudioPlayer());
             curve.setImmunity([copy], 10);
@@ -496,7 +497,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.REVERSE] = {
     audios: [
         {
             key: 'superpower-reverse',
-            source: 'superpower/reverse.wav'
+            source: 'superpower/reverse.mp3'
         }
     ],
 
@@ -529,7 +530,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.REVERSE] = {
             curve.reverseData.otherAngle = otherAngle;
 
             curve.setImmunity([curve], 10);
-            this.getAudioPlayer().play('superpower-reverse');
+            this.getAudioPlayer().play('superpower-reverse', {reset: true});
             this.decrementCount();
             this.setIsActive(true);
         }
@@ -551,7 +552,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.SQUARE_HEAD] = {
     audios: [
         {
             key: 'superpower-square-head',
-            source: 'superpower/square-head.wav'
+            source: 'superpower/square-head.mp3'
         }
     ],
 
@@ -656,6 +657,37 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.NO_SUPERPOWER] = {
     },
     act: function(hook, curve) {
         return false;
+    },
+    close: function(curve) {}
+};
+
+Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.SHOOT_HOLES] = {
+    label: 'shoot holes',
+    hooks: [Kurve.Superpowerconfig.hooks.DRAW_NEXT_FRAME],
+    audios: [
+        {
+            key: 'superpower-shoot-holes',
+            source: 'superpower/shoot-holes.mp3'
+        }
+    ],
+    helpers: {
+        shotLength: 60
+    },
+    init: function(curve) {},
+    act: function(hook, curve) {
+        if ( !this.isActive() ) {
+            var shotPositionX = curve.getMovedPositionX(this.helpers.shotLength);
+            var shotPositionY = curve.getMovedPositionY(this.helpers.shotLength);
+
+            Kurve.Field.clearLine(curve.getNextPositionX(), curve.getNextPositionY(), shotPositionX, shotPositionY);
+            this.decrementCount();
+            this.setIsActive(true);
+            this.getAudioPlayer().play('superpower-shoot-holes', {reset: true});
+        }
+
+        if ( !curve.getGame().isKeyDown(curve.getPlayer().getKeySuperpower()) ) {
+            this.setIsActive(false); //super power key has been released, can be used again
+        }
     },
     close: function(curve) {}
 };
