@@ -17,6 +17,6 @@
     "gulp-watch": "~4.3.5"
   },
   "dependencies": {
-    "pixi.js": "^4.8.2"
+    "pixi.js": "^4.8.7"
   }
 }
