@@ -323,7 +323,7 @@ Kurve.Game = {
                 if ( Kurve.Game.deathMatch ) {
                     this.stemLevel = 3;
                     this.audioPlayer.play('game-music-stem-1', {fade: this.defaultFadeTime, volume: 1, background: true, loop: true, reset: true});
-                    this.audioPlayer.play('game-music-stem-4', {fade: this.defaultFadeTime, volume: 0.5, background: true, loop: true, reset: true});
+                    this.audioPlayer.play('game-music-stem-4', {fade: this.defaultFadeTime, volume: 1, background: true, loop: true, reset: true});
                 } else {
                     this.stemLevel = 1;
                     this.audioPlayer.play('game-music-stem-1', {fade: this.defaultFadeTime, volume: 1, background: true, loop: true, reset: true});
@@ -374,7 +374,7 @@ Kurve.Game = {
             }
 
             if (Kurve.Game.deathMatch) {
-                this.audioPlayer.setVolume('game-music-stem-4', {volume: 0.5, fade: this.defaultFadeTime});
+                this.audioPlayer.setVolume('game-music-stem-4', {volume: 1, fade: this.defaultFadeTime});
             }
         },
 
