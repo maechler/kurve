@@ -91,10 +91,10 @@ Kurve.Sound = {
         this.initSuperpowerSounds();
         this.preloadAudio();
 
-        if (Kurve.Storage.has('kurve.sound.muted')) {
-            this.muted = Kurve.Storage.get('kurve.sound.muted');
+        if (Kurve.Storage.has('kurve.sound.muted', 'sessionStorage')) {
+            this.muted = Kurve.Storage.get('kurve.sound.muted', 'sessionStorage');
         } else {
-            Kurve.Storage.set('kurve.sound.muted', this.muted);
+            Kurve.Storage.set('kurve.sound.muted', this.muted, 'sessionStorage');
         }
 
         if (this.muted) {
@@ -162,7 +162,7 @@ Kurve.Sound = {
             this.setButtonText('Sound on');
         }
 
-        Kurve.Storage.set('kurve.sound.muted', this.muted);
+        Kurve.Storage.set('kurve.sound.muted', this.muted, 'sessionStorage');
     },
     
     setButtonText: function (text) {
@@ -215,6 +215,7 @@ Kurve.AudioPlayer.prototype.play = function(soundKey, options) {
         audio.addEventListener('timeupdate', function() {
             if (this.currentTime > this.duration - restartBuffer) {
                 this.currentTime = 0;
+                if (u.isSafari()) this.load(); //See https://stackoverflow.com/questions/9335577/html5-audio-sound-only-plays-once
                 this.play()
             }
         }, false);
@@ -226,6 +227,7 @@ Kurve.AudioPlayer.prototype.play = function(soundKey, options) {
 
     this.setVolume(soundKey, {fade: audioOptions.fade, volume: audioOptions.volume});
 
+    if (u.isSafari()) audio.load(); //See https://stackoverflow.com/questions/9335577/html5-audio-sound-only-plays-once
     audio.play().catch(function(e) {
         if ( audioOptions.background ) {
             // User interaction required to start sound because of the browser Autoplay Policy

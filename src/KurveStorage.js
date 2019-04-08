@@ -25,23 +25,45 @@
 'use strict';
 
 Kurve.Storage = {
-    get: function(itemId) {
-        return JSON.parse(localStorage.getItem(itemId));
+    defaultStorage: 'localStorage',
+    
+    get: function(itemId, storage) {
+        if (storage === undefined) {
+            storage = this.defaultStorage;
+        }
+
+        return JSON.parse(window[storage].getItem(itemId));
     },
 
-    set: function(itemId, item) {
-        localStorage.setItem(itemId, JSON.stringify(item));
+    set: function(itemId, item, storage) {
+        if (storage === undefined) {
+            storage = this.defaultStorage;
+        }
+
+        window[storage].setItem(itemId, JSON.stringify(item));
     },
 
-    remove: function(itemId) {
-        localStorage.removeItem(itemId);
+    remove: function(itemId, storage) {
+        if (storage === undefined) {
+            storage = this.defaultStorage;
+        }
+
+        window[storage].removeItem(itemId);
     },
 
-    has: function(itemId) {
-        return localStorage.getItem(itemId) !== null;
+    has: function(itemId, storage) {
+        if (storage === undefined) {
+            storage = this.defaultStorage;
+        }
+
+        return window[storage].getItem(itemId) !== null;
     },
 
-    clear: function() {
-        localStorage.clear();
+    clear: function(storage) {
+        if (storage === undefined) {
+            storage = this.defaultStorage;
+        }
+
+        window[storage].clear();
     }
 };

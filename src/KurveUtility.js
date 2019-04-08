@@ -108,4 +108,8 @@ Kurve.Utility.merge = function() {
     return base;
 };
 
+Kurve.Utility.isSafari = function () {
+    return !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+};
+
 var u = Kurve.Utility;
