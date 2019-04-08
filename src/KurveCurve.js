@@ -111,7 +111,7 @@ Kurve.Curve.prototype.drawLine = function(field) {
 
     if ( this.isInvisible() ) {
         if (this.getOptions().holeCountDown < 0) {
-            field.drawLine('powerUp', this.getPositionX(), this.getPositionY(), this.getNextPositionX(), this.getNextPositionY(), this.getPlayer().getColor(), this);
+            field.drawLine('powerUp', this.getPositionX(), this.getPositionY(), this.getNextPositionX(), this.getNextPositionY(), '', this);
         }
 
         if ( this.getOptions().holeCountDown < -6 ) this.resetHoleCountDown();
@@ -158,7 +158,7 @@ Kurve.Curve.prototype.checkForCollision = function() {
             var pointSurroundings = Kurve.Field.getPointSurroundings(pointX, pointY);
             var powerUpPoint = Kurve.Field.getPowerUpPoint(pointX, pointY);
 
-            if ( powerUpPoint !== false && !this.isPowerUpTimeOut() && powerUpPoint.curve !== this && !isCollided ) {
+            if ( powerUpPoint !== false && !this.isPowerUpTimeOut() && powerUpPoint.curve !== this ) {
                 var usePowerUp = true;
 
                 if ( this.useSuperpower(Kurve.Superpowerconfig.hooks.POWER_UP) ) {

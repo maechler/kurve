@@ -93,6 +93,7 @@ Kurve.Field = {
 
     clearFieldContent: function() {
         this.drawnPixels = {};
+        this.drawnPowerUps = {};
 
         this.pixiCurves.clear();
         this.pixiDebug.clear();
