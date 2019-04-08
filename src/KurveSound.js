@@ -88,6 +88,10 @@ Kurve.Sound = {
     },
 
     init: function() {
+        if (u.isSafari() || u.isIE()) {
+            return; //Sound not supported
+        }
+
         this.initSuperpowerSounds();
         this.preloadAudio();
 
@@ -139,6 +143,16 @@ Kurve.Sound = {
     },
 
     getAudioPlayer: function() {
+        if (u.isSafari() || u.isIE()) {
+            // Sound not supported, return stub player
+            return {
+                play: function(soundKey, options) { },
+                pause: function(soundKey, options) { },
+                setVolume: function(soundKey, options, callback) { },
+                setMuted: function(soundKey, muted) { }
+            };
+        }
+
         var player = new Kurve.AudioPlayer(this.audios);
 
         player.setMuted(this.muted);
@@ -215,7 +229,6 @@ Kurve.AudioPlayer.prototype.play = function(soundKey, options) {
         audio.addEventListener('timeupdate', function() {
             if (this.currentTime > this.duration - restartBuffer) {
                 this.currentTime = 0;
-                if (u.isSafari()) this.load(); //See https://stackoverflow.com/questions/9335577/html5-audio-sound-only-plays-once
                 this.play()
             }
         }, false);
@@ -227,7 +240,6 @@ Kurve.AudioPlayer.prototype.play = function(soundKey, options) {
 
     this.setVolume(soundKey, {fade: audioOptions.fade, volume: audioOptions.volume});
 
-    if (u.isSafari()) audio.load(); //See https://stackoverflow.com/questions/9335577/html5-audio-sound-only-plays-once
     audio.play().catch(function(e) {
         if ( audioOptions.background ) {
             // User interaction required to start sound because of the browser Autoplay Policy

@@ -693,3 +693,10 @@ body.dark-theme {
         100% { color: #DDD; background: #222; }
     }
 }
+
+.is-safari,
+.is-ie {
+    .toggle-sound {
+        display: none;
+    }
+}

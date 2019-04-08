@@ -30,6 +30,9 @@ var Kurve = {
     playersById: {},
     
     init: function() {
+        if (u.isSafari()) u.addClass('is-safari', 'app');
+        if (u.isIE())  u.addClass('is-ie', 'app');
+
         this.Theming.init();
         this.Sound.init();
         this.initPlayers();

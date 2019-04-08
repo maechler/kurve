@@ -112,4 +112,10 @@ Kurve.Utility.isSafari = function () {
     return !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
 };
 
+Kurve.Utility.isIE = function() {
+    var userAgent = window.navigator.userAgent;
+
+    return userAgent.indexOf('MSIE ') > 0 || userAgent.indexOf('Trident/') > 0;
+};
+
 var u = Kurve.Utility;
