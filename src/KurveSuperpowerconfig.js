@@ -372,7 +372,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CROSS_WALLS] = {
 
                 curve.setPosition(movedPosition.getPosX(), movedPosition.getPosY());
                 this.decrementCount();
-                this.getAudioPlayer().play('superpower-cross-walls');
+                this.getAudioPlayer().play('superpower-cross-walls', {reset: true});
             }
 
             return false;
@@ -452,24 +452,10 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
     ],
 
     helpers: {
-      angle: 0.1 * Math.PI,
-      timeOut: 250,
-    },
+        angle: 0.1 * Math.PI,
+        createCopy: function(curve) {
+            var copy = new Kurve.Curve(curve.getPlayer(), curve.getGame(), curve.getField(), Kurve.Config.Curve, Kurve.Sound.getAudioPlayer());
 
-    init: function(curve) {
-        curve.hydraData = {
-            previousExecution: new Date(),
-        };
-    },
-
-    act: function(hook, curve) {
-        var now = Kurve.Game.CURRENT_FRAME_DATE;
-
-        if ( now.getTime() - curve.hydraData.previousExecution.getTime() > this.helpers.timeOut ) {
-            curve.hydraData.previousExecution = now;
-            this.getAudioPlayer().play('superpower-hydra', {reset: true});
-            this.decrementCount();
-            var copy = new Kurve.Curve(curve.getPlayer(), curve.getGame(), curve.getField(), Kurve.Config.Curve, this.getAudioPlayer());
             curve.setImmunity([copy], 10);
             copy.setImmunity([curve], 10);
             copy.setPosition(curve.getPositionX(), curve.getPositionY());
@@ -478,10 +464,33 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.HYDRA] = {
                 copy.getOptions()[k] = curve.getOptions()[k];
             }
 
-            copy.hydraData = { previousExecution: curve.hydraData.previousExecution };
             curve.getOptions().angle += this.helpers.angle / 2;
             copy.getOptions().angle -= this.helpers.angle / 2;
-            curve.getGame().runningCurves[curve.getPlayer().getId()].push(copy);
+
+            return copy;
+        }
+    },
+
+    init: function(curve) {
+
+    },
+
+    act: function(hook, curve) {
+        if ( !this.isActive() ) {
+            this.getAudioPlayer().play('superpower-hydra', {reset: true});
+            this.decrementCount();
+
+            for (var copyIndex in curve.getGame().runningCurves[curve.getPlayer().getId()]) {
+                var copy = this.helpers.createCopy.call(this, curve.getGame().runningCurves[curve.getPlayer().getId()][copyIndex]);
+
+                curve.getGame().runningCurves[curve.getPlayer().getId()].push(copy);
+            }
+
+            this.setIsActive(true);
+        }
+
+        if ( !curve.getGame().isKeyDown(curve.getPlayer().getKeySuperpower()) ) {
+            this.setIsActive(false); //super power key has been released, can be used again
         }
     },
 

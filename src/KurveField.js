@@ -189,7 +189,7 @@ Kurve.Field = {
         drawnMap[pointX0][pointY0] = {
             color: color,
             curve: curve,
-            time: Kurve.Game.CURRENT_FRAME_DATE
+            frameId: Kurve.Game.CURRENT_FRAME_ID
         };
 
         if ( Kurve.Config.Debug.fieldDrawnPixels ) {

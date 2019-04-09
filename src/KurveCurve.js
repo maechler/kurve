@@ -43,7 +43,7 @@ Kurve.Curve = function(player, game, field, config, audioPlayer) {
         holeInterval: config.holeInterval,
         holeIntervalRandomness: config.holeIntervalRandomness,
         holeCountDown: config.holeInterval,
-        selfCollisionTimeout: config.selfCollisionTimeout
+        selfCollisionTimeoutInFrames: config.selfCollisionTimeoutInFrames
     };
 
 
@@ -202,13 +202,13 @@ Kurve.Curve.prototype.isCollided = function(positionX, positionY) {
 
     if ( !drawnPoint ) return false;  // No collision.
     if ( drawnPoint.curve && this.isImmuneTo(drawnPoint.curve) ) return false;
-    if ( drawnPoint.curve === this && this.isWithinSelfCollisionTimeout(drawnPoint.time) ) return false;
+    if ( drawnPoint.curve === this && this.isWithinSelfCollisionTimeout(drawnPoint.frameId) ) return false;
 
     return true;
 };
 
-Kurve.Curve.prototype.isWithinSelfCollisionTimeout = function(time) {
-    return Kurve.Game.CURRENT_FRAME_DATE.getTime() - time.getTime() < this.getOptions().selfCollisionTimeout;
+Kurve.Curve.prototype.isWithinSelfCollisionTimeout = function(frameId) {
+    return Kurve.Game.CURRENT_FRAME_ID - frameId < this.getOptions().selfCollisionTimeoutInFrames;
 };
 
 Kurve.Curve.prototype.die = function() {

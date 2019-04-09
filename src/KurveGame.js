@@ -41,7 +41,7 @@ Kurve.Game = {
     isRoundStarted:         false,
     playerScoresElement:    null,
     isGameOver:             false,
-    CURRENT_FRAME_DATE:     null,
+    CURRENT_FRAME_ID:       0,
     
     init: function() {
         this.fps = Kurve.Config.Game.fps;
@@ -52,7 +52,7 @@ Kurve.Game = {
     },
     
     run: function() {
-        this.CURRENT_FRAME_DATE = new Date();
+        this.CURRENT_FRAME_ID++;
         requestAnimationFrame(this.drawFrame.bind(this));
     },
     
@@ -172,6 +172,7 @@ Kurve.Game = {
     
     startNewRound: function() {
         this.isRoundStarted = true;
+        this.CURRENT_FRAME_ID = 0;
 
         Kurve.Field.clearFieldContent();
         this.initRun();
@@ -184,18 +185,6 @@ Kurve.Game = {
     startRun: function() {
         this.isRunning = true;
         this.runIntervalId = setInterval(this.run.bind(this), this.intervalTimeOut);
-
-        if (this.isPaused) {
-            for (var i in this.runningCurves) {
-                for (var j = 0; this.runningCurves[i] && j < this.runningCurves[i].length; ++j) {
-                    this.runningCurves[i][j].setImmunity([this.runningCurves[i][j]], 5);
-                }
-            }
-        } else {
-            this.curves.forEach(function(curve) {
-                curve.setImmunity([curve], 5);
-            });
-        }
     },
     
     stopRun: function() {

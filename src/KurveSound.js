@@ -145,12 +145,7 @@ Kurve.Sound = {
     getAudioPlayer: function() {
         if (u.isSafari() || u.isIE()) {
             // Sound not supported, return stub player
-            return {
-                play: function(soundKey, options) { },
-                pause: function(soundKey, options) { },
-                setVolume: function(soundKey, options, callback) { },
-                setMuted: function(soundKey, muted) { }
-            };
+            return this.getStubAudioPlayer();
         }
 
         var player = new Kurve.AudioPlayer(this.audios);
@@ -193,6 +188,15 @@ Kurve.Sound = {
 
     onCreditsClicked: function () {
         Kurve.Lightbox.show(document.getElementById('credits').innerHTML);
+    },
+
+    getStubAudioPlayer: function () {
+        return {
+            play: function(soundKey, options) { },
+            pause: function(soundKey, options) { },
+            setVolume: function(soundKey, options, callback) { },
+            setMuted: function(soundKey, muted) { }
+        };
     }
 };
 

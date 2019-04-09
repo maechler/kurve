@@ -45,7 +45,7 @@ Kurve.Config = {
         dAngle: 0.035,
         holeInterval: 150,
         holeIntervalRandomness: 300,
-        selfCollisionTimeout: 150,
+        selfCollisionTimeoutInFrames: 5,
     },
     
     Game: {
