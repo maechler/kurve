@@ -28,6 +28,7 @@ Kurve.Menu = {
     
     boundOnKeyDown: null,
     audioPlayer: null,
+    scrollKeys: ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Spacebar', ' '],
     
     init: function() {
         this.initPlayerMenu();
@@ -74,32 +75,30 @@ Kurve.Menu = {
     },
     
     onKeyDown: function(event) {
-        var gameKeyPressed = false;
+        if (event.metaKey) {
+            return; //Command or Ctrl pressed
+        }
+
+        if (Kurve.Menu.scrollKeys.indexOf(event.key) >= 0) {
+            event.preventDefault(); //prevent page scrolling
+        }
 
         if (event.keyCode === 32) {
-            gameKeyPressed = true;
             Kurve.Menu.onSpaceDown();
         }
 
         Kurve.players.forEach(function(player) {
             if ( player.isKeyLeft(event.keyCode) ) {
-                gameKeyPressed = true;
                 Kurve.Menu.activatePlayer(player.getId());
                 Kurve.Menu.audioPlayer.play('menu-navigate');
             } else if ( player.isKeyRight(event.keyCode) ) {
-                gameKeyPressed = true;
                 Kurve.Menu.deactivatePlayer(player.getId());
                 Kurve.Menu.audioPlayer.play('menu-navigate');
             } else if ( player.isKeySuperpower(event.keyCode) ) {
-                gameKeyPressed = true;
                 Kurve.Menu.nextSuperpower(player.getId());
                 Kurve.Menu.audioPlayer.play('menu-navigate');
             }
         });
-
-        if (gameKeyPressed) {
-            event.preventDefault(); //prevent page scrolling
-        }
     },
     
     onSpaceDown: function() {

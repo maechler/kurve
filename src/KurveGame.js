@@ -72,7 +72,7 @@ Kurve.Game = {
     },
     
     onKeyDown: function(event) {
-        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Spacebar', ' '].indexOf(event.key) >= 0) {
+        if (Kurve.Menu.scrollKeys.indexOf(event.key) >= 0) {
             event.preventDefault(); //prevent page scrolling
         }
 
