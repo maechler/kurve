@@ -53,7 +53,8 @@ Kurve.Game = {
     
     run: function() {
         this.CURRENT_FRAME_ID++;
-        requestAnimationFrame(this.drawFrame.bind(this));
+        this.drawFrame();
+        this.keysDown = {};
     },
     
     drawFrame: function() {
@@ -72,6 +73,10 @@ Kurve.Game = {
     },
     
     onKeyDown: function(event) {
+        if (event.key === 'Enter') {
+            this.run()
+        }
+
         if (Kurve.Menu.scrollKeys.indexOf(event.key) >= 0) {
             event.preventDefault(); //prevent page scrolling
         }
@@ -84,9 +89,9 @@ Kurve.Game = {
     },
     
     onKeyUp: function(event) {
-        delete this.keysDown[event.keyCode];
+        // do nothing
     },
-    
+
     isKeyDown: function(keyCode) {
         return this.keysDown[keyCode] === true;
     },
@@ -177,19 +182,16 @@ Kurve.Game = {
         Kurve.Field.clearFieldContent();
         this.initRun();
         this.renderPlayerScores();
-
-        setTimeout(this.startRun.bind(this), Kurve.Config.Game.startDelay);
+        this.startRun();
         this.Audio.startNewRound();
     },
     
     startRun: function() {
         this.isRunning = true;
-        this.runIntervalId = setInterval(this.run.bind(this), this.intervalTimeOut);
     },
     
     stopRun: function() {
         this.isRunning = false;
-        clearInterval(this.runIntervalId);
     },
     
     initRun: function() {
