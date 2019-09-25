@@ -25,15 +25,15 @@
 'use strict';
 
 Kurve.Player = function(id, keyLeft, keyRight, keySuperpower) {
-
-    var points = 0;
+    this.points = 0;
     var superpower = Kurve.Factory.getSuperpower(Kurve.Superpowerconfig.types.NO_SUPERPOWER);
     var superPowerElement = null;
     var isActive = false;
     var color = null;
-    
+
+    this.id = id;
     this.incrementPoints = function() {
-        points++;
+        this.points++;
     };
 
     this.setSuperpower = function(newSuperpower) {
@@ -49,7 +49,7 @@ Kurve.Player = function(id, keyLeft, keyRight, keySuperpower) {
     this.setColor = function(newColor) { color = newColor; };
     this.setIsActive = function(newIsActive) { isActive = newIsActive; };
     
-    this.getPoints = function() { return points; };
+    this.getPoints = function() { return this.points; };
     this.getId = function() { return id; };
     this.getColor = function() { return color === null ? Kurve.Theming.getThemedValue('players', id) : color };
     this.getSuperpower = function() { return superpower; };

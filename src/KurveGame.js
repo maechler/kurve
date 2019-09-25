@@ -35,6 +35,8 @@ Kurve.Game = {
     isRunning:              false,
     curves:                 [],
     runningCurves:          {},
+    deadCurves:             [],
+    winner:                 null,
     players:                [],
     deathMatch:             false,
     isPaused:               false,
@@ -157,6 +159,7 @@ Kurve.Game = {
         if ( this.runningCurves[playerId] === undefined ) return;
 
         this.runningCurves[playerId].splice(this.runningCurves[playerId].indexOf(curve), 1);
+        this.deadCurves.push(playerId);
 
         if ( this.runningCurves[playerId].length === 0 ) {
             // Drop this player.
@@ -177,6 +180,8 @@ Kurve.Game = {
     
     startNewRound: function() {
         this.isRoundStarted = true;
+        this.deadCurves = [];
+        this.winner = null;
         this.CURRENT_FRAME_ID = 0;
 
         Kurve.Field.clearFieldContent();
@@ -280,6 +285,7 @@ Kurve.Game = {
     
     gameOver: function(winner) {
         this.isGameOver = true;
+        this.winner = winner;
 
         this.Audio.gameOver();
         Kurve.Piwik.trackPageVariable(4, 'finished_game', 'yes');

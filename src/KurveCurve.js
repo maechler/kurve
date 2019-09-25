@@ -35,6 +35,12 @@ Kurve.Curve = function(player, game, field, config, audioPlayer) {
     var nextPositionY = null;
     var nextPositionX = null;
 
+    this.playerId = player.getId();
+    this.player = player;
+    this.positionX = 0;
+    this.positionY = 0;
+    this.angle = 0;
+
     var options = {
         stepLength: config.stepLength,
         lineWidth: config.lineWidth,
@@ -48,18 +54,18 @@ Kurve.Curve = function(player, game, field, config, audioPlayer) {
 
 
     this.setPosition = function(newPositionX, newPositionY) {
-        positionX = nextPositionX = newPositionX;
-        positionY = nextPositionY = newPositionY;
+        this.positionX = positionX = nextPositionX = newPositionX;
+        this.positionY = positionY = nextPositionY = newPositionY;
     };
     
-    this.incrementAngle = function() { options.angle += options.dAngle };
-    this.decrementAngle = function() { options.angle -= options.dAngle };
+    this.incrementAngle = function() { this.angle = options.angle += options.dAngle };
+    this.decrementAngle = function() { this.angle = options.angle -= options.dAngle };
     
     this.setPositionY = function(newPosition) { positionY = newPosition; };
     this.setPositionX = function(newPosition) { positionX = newPosition; };
     this.setNextPositionY = function(newPosition) { nextPositionY = newPosition; };
     this.setNextPositionX = function(newPosition) { nextPositionX = newPosition; };
-    this.setAngle = function(newAngle) { options.angle = newAngle; };
+    this.setAngle = function(newAngle) { this.angle = options.angle = newAngle; };
     this.setImmunity = function(curves, duration) { immunityTo = curves; immunityFor = duration; };
     this.setPowerUpTimeOut = function(timeOut) { powerUpTimeOutFor = timeOut; };
     this.decrementImmunity = function() { if ( immunityFor > 0 ) immunityFor -= 1; };
