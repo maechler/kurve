@@ -141,7 +141,10 @@ Kurve.Game = {
     
     addPlayers: function() {
         Kurve.Game.curves.forEach(function(curve) {
-            curve.getPlayer().getSuperpower().incrementCount();
+            for (var i=0; i<Kurve.Config.Game.initialSuperpowerCount; i++) {
+                curve.getPlayer().getSuperpower().incrementCount();
+            }
+
             Kurve.Game.players.push( curve.getPlayer() );
         });
     },
@@ -223,18 +226,19 @@ Kurve.Game = {
 
     incrementSuperpowers: function() {
         var numberOfPlayers = this.players.length;
-        var lastPlayerIndex = numberOfPlayers - 1;
 
-        this.players[lastPlayerIndex].getSuperpower().incrementCount();
+        if (numberOfPlayers === 2) {
+            this.players[0].getSuperpower().incrementCount();
+            this.players[1].getSuperpower().incrementCount();
+        } else {
+            for (var i in this.players) {
+                if (parseInt(i) === 0) continue; // skip the leader
 
-        if (numberOfPlayers > 2) {
-            this.players[lastPlayerIndex].getSuperpower().incrementCount();
-        }
+                this.players[i].getSuperpower().incrementCount();
+            }
 
-        var numberOfOtherPlayersGettingSomething = u.round((numberOfPlayers - 2) / 2, 0);
-
-        for (var i = numberOfOtherPlayersGettingSomething; i > 0; i--) {
-            this.players[numberOfPlayers - 1 - i].getSuperpower().incrementCount();
+            // extra superpower for the loser
+            this.players[numberOfPlayers - 1].getSuperpower().incrementCount();
         }
     },
     
