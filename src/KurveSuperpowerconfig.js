@@ -39,7 +39,8 @@ Kurve.Superpowerconfig.types = {
     SQUARE_HEAD: 'SQUARE_HEAD',
     CHUCK_NORRIS: 'CHUCK_NORRIS',
     NO_SUPERPOWER: 'NO_SUPERPOWER',
-    SHOOT_HOLES: 'SHOOT_HOLES'
+    SHOOT_HOLES: 'SHOOT_HOLES',
+    RANDOM: 'RANDOM',
 };
 
 Kurve.Superpowerconfig.hooks = {
@@ -698,5 +699,15 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.SHOOT_HOLES] = {
             this.setIsActive(false); //super power key has been released, can be used again
         }
     },
+    close: function(curve) {}
+};
+
+Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RANDOM] = {
+    label: 'random',
+    hooks: [],
+    audios: [],
+    helpers: {},
+    init: function(curve) {},
+    act: function(hook, curve) {},
     close: function(curve) {}
 };
