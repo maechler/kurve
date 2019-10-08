@@ -359,11 +359,11 @@ Kurve.Game = {
             this.audioPlayer.setVolume('game-music-stem-1', {volume: 1, fade: this.defaultFadeTime});
 
             if (this.stemLevel > 1) {
-                this.audioPlayer.setVolume('game-music-stem-2', {volume: 0.75, fade: this.defaultFadeTime});
+                this.audioPlayer.setVolume('game-music-stem-2', {volume: 0.5, fade: this.defaultFadeTime});
             }
 
             if (this.stemLevel > 2) {
-                this.audioPlayer.setVolume('game-music-stem-3', {volume: 0.75, fade: this.defaultFadeTime});
+                this.audioPlayer.setVolume('game-music-stem-3', {volume: 0.3, fade: this.defaultFadeTime});
             }
 
             if (Kurve.Game.deathMatch) {
@@ -377,8 +377,8 @@ Kurve.Game = {
             }
 
             this.stemLevel = 3;
-            this.audioPlayer.setVolume('game-music-stem-2', {volume: 0.75, fade: this.defaultFadeTime});
-            this.audioPlayer.setVolume('game-music-stem-3', {volume: 0.75, fade: this.defaultFadeTime});
+            this.audioPlayer.setVolume('game-music-stem-2', {volume: 0.5, fade: this.defaultFadeTime});
+            this.audioPlayer.setVolume('game-music-stem-3', {volume: 0.3, fade: this.defaultFadeTime});
         },
 
         initDeathMatch: function() {
