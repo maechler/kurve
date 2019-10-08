@@ -114,7 +114,7 @@ Kurve.Curve.prototype.drawLine = function(field) {
             field.drawLine('powerUp', this.getPositionX(), this.getPositionY(), this.getNextPositionX(), this.getNextPositionY(), '', this);
         }
 
-        if ( this.getOptions().holeCountDown < -6 ) this.resetHoleCountDown();
+        if ( this.getOptions().holeCountDown < -7 ) this.resetHoleCountDown();
     } else {
         field.drawLine('curve', this.getPositionX(), this.getPositionY(), this.getNextPositionX(), this.getNextPositionY(), this.getPlayer().getColor(), this);
     }
