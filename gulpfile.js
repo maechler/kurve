@@ -1,8 +1,7 @@
 var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat-util'),
-    watch = require('gulp-watch'),
-    sass = require('gulp-sass'),
+    sass = require('gulp-sass')(require('sass')),
     sourcemaps = require('gulp-sourcemaps');
 
 var kurveSources = [
@@ -28,16 +27,17 @@ var kurveSources = [
 ];
 
 var kurveLibs = [
-    './node_modules/pixi.js/dist/pixi.js',
+    './node_modules/pixi.js/dist/browser/pixi.js',
 ];
 
-gulp.task('js', function() {
+gulp.task('js', function(done) {
     gulp.src(kurveLibs.concat(kurveSources))
         .pipe(sourcemaps.init())
-        .pipe(uglify({preserveComments: 'some'}))
+        .pipe(uglify({output: { comments: 'some'}}))
         .pipe(concat('kurve.min.js', {sep: ''}))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./dist/js/'));
+        .pipe(gulp.dest('./dist/js/'))
+        .on('end', done);
 });
 
 gulp.task('sass', function(done) {
@@ -55,12 +55,12 @@ gulp.task('sound', function () {
     return gulp.src('./sound/**/*').pipe(gulp.dest('./dist/sound'));
 });
 
-gulp.task('build', ['js', 'sass', 'images', 'sound']);
-gulp.task('default', ['build']);
+gulp.task('build', gulp.series('js', 'sass', 'images', 'sound'));
+gulp.task('default', gulp.series('build'));
 
-gulp.task('watch', function(){
+gulp.task('watch', function() {
     gulp.watch([
         'src/*',
         'scss/*'
-    ], ['build'])
+    ], gulp.series('build'))
 });
