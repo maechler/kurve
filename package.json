@@ -9,14 +9,15 @@
   "author": "Markus Mächler",
   "license": "GPL3",
   "devDependencies": {
-    "gulp": "~3.9.0",
-    "gulp-concat-util": "~0.5.1",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-uglify": "~1.5.1",
-    "gulp-watch": "~4.3.5"
+    "gulp": "^4.0.2",
+    "gulp-concat-util": "^0.5.5",
+    "gulp-sass": "^5.1.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
+    "gulp-watch": "^5.0.1",
+    "sass": "^1.54.5"
   },
   "dependencies": {
-    "pixi.js": "^4.8.7"
+    "pixi.js": "^6.5.1"
   }
 }
