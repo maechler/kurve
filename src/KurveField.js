@@ -63,16 +63,13 @@ Kurve.Field = {
     
     initPixi: function() {
         PIXI.utils.skipHello();
-        this.pixiApp = new PIXI.Application({width: this.canvas.width, height: this.canvas.height});
-        this.pixiApp.renderer = new PIXI.autoDetectRenderer(
-            this.canvas.width,
-            this.canvas.height,
-            {
-                view: this.canvas,
-                transparent: true,
-                antialias: true
-            }
-        );
+        this.pixiApp = new PIXI.Application({
+            view: this.canvas,
+            width: this.canvas.width,
+            height: this.canvas.height,
+            antialias: true,
+            backgroundAlpha: 0,
+        });
         this.pixiCurves = new PIXI.Graphics();
         this.pixiField = new PIXI.Graphics();
         this.pixiDebug = new PIXI.Graphics();
