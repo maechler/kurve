@@ -115,11 +115,14 @@
                     We use cookies to analyse general visitor behaviour such as what sites are visited and for how long.
                     Browsers can be configured to show a warning every time a cookie is saved to your computer.
                 </p>
-                <h3>Piwik</h3>
-                <p>This website uses Piwik (that is now called Matomo), an open source web analysis tool. Piwik also uses cookies.
-                    You can prevent the generated data from being transmitted (this includes information such as the number of players or selected theme) by the following Piwik preferences:
+                <h3>Matomo</h3>
+                <p>This website uses Matomo (formerly called Piwik), an open source web analysis tool. Matomo also uses cookies.
+                    You can prevent the generated data from being transmitted (this includes information such as the number of players or selected theme) by the following Matomo preferences:
                 </p>
-                <iframe src="https://piwik.markusmaechler.ch/index.php?module=CoreAdminHome&action=optOut&language=en" width="100%" height="150px"></iframe>
+                <iframe id='privacy-policy-matomo-opt-out'
+                        style="border: 0; height: 160px; width: 100%;"
+                        data-src="https://matomo.achtungkurve.com/index.php?module=CoreAdminHome&action=optOut&language=en&backgroundColor=eeeeee&fontColor=222222&fontSize=18px&fontFamily=%22Trebuchet%20MS%22,%20Helvetica,%20sans-serif"
+                ></iframe>
                 <br><br>
                 <h3>Security</h3>
                 <p>We treat all collected data as confidential. We employ appropriate technical precautionary measures to protect your
@@ -166,21 +169,5 @@
         </div>
 
         <script type='text/javascript' src='dist/js/kurve.min.js'></script>
-
-        <script type='text/javascript'>
-            var _paq = _paq || [];
-            _paq.push(['setDocumentTitle', 'Home']);
-            _paq.push(['trackPageView']);
-            _paq.push(['enableLinkTracking']);
-            //_paq.push(['enableHeartBeatTimer']); //TODO update piwik and enable heartbeattimer
-            (function() {
-                var u='https://piwik.markusmaechler.ch/';
-                _paq.push(['setTrackerUrl', u+'piwik.php']);
-                _paq.push(['setSiteId', 1]);
-                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
-                g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-            })();
-        </script>
-        <noscript><p><img src='https://piwik.markusmaechler.ch/piwik.php?idsite=1' style='border:0;' alt='' /></p></noscript>
     </body>
 </html>

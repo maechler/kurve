@@ -26,7 +26,8 @@
 
 Kurve.Privacypolicy = {
     init: function() {
-        if (Kurve.Storage.has('kurve.privacy-policy-accepted')) {
+        if (Kurve.Storage.get('kurve.privacy-policy-accepted') === 'yes') {
+            this.enableTracking();
             return;
         }
 
@@ -43,6 +44,12 @@ Kurve.Privacypolicy = {
         setTimeout(function() {
             document.body.addEventListener('click', Kurve.Privacypolicy.onPrivacyPolicyClose, false);
         }, 500);
+
+        var matomoOptOutIframe = document.getElementById('lightbox-content').querySelector('#privacy-policy-matomo-opt-out');
+
+        if (matomoOptOutIframe.dataset.src) {
+            matomoOptOutIframe.src = matomoOptOutIframe.dataset.src;
+        }
     },
 
     onPrivacyPolicyClose: function() {
@@ -58,5 +65,21 @@ Kurve.Privacypolicy = {
     onPrivacyPolicyAccepted: function() {
         Kurve.Storage.set('kurve.privacy-policy-accepted', 'yes');
         Kurve.Lightbox.hide();
+
+        this.enableTracking();
+    },
+
+    enableTracking: function() {
+        window._paq = window._paq || [];
+        _paq.push(['setDocumentTitle', 'Home']);
+        _paq.push(['trackPageView']);
+
+        (function() {
+            var u='https://matomo.achtungkurve.com/';
+            _paq.push(['setTrackerUrl', u+'piwik.php']);
+            _paq.push(['setSiteId', 1]);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+            g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+        })();
     }
 };
