@@ -52,11 +52,12 @@ Kurve.Game = {
     },
     
     run: function() {
-        this.CURRENT_FRAME_ID++;
         requestAnimationFrame(this.drawFrame.bind(this));
     },
     
     drawFrame: function() {
+        this.CURRENT_FRAME_ID++;
+
         for (var i in this.runningCurves) {
             for (var j = 0; this.runningCurves[i] && j < this.runningCurves[i].length; ++j) {
                 this.runningCurves[i][j].drawNextFrame();
@@ -93,23 +94,35 @@ Kurve.Game = {
     
     onSpaceDown: function() {
         if ( this.isGameOver ) return location.reload();
-        if ( this.isRunning || this.isPaused ) return this.togglePause();
+        if ( this.isRunning || this.isPaused ) return this.togglePause();
         if ( !this.isRoundStarted && !this.deathMatch) return this.startNewRound();
         if ( !this.isRoundStarted && this.deathMatch) return this.startDeathMatch();
     },
     
     togglePause: function() {
         if ( this.isPaused ) {
-            this.Audio.pauseOut();
-            Kurve.Lightbox.hide();
-            this.startRun();
+            this.endPause();
         } else {
-            this.Audio.pauseIn();
-            this.stopRun();
-            Kurve.Lightbox.show('<h2>Game is paused</h2>');
+            this.doPause();
         }
-        
-        this.isPaused = !this.isPaused;
+    },
+
+    doPause: function() {
+        if ( this.isPaused ) return;
+
+        this.isPaused = true;
+        this.Audio.pauseIn();
+        this.stopRun();
+        Kurve.Lightbox.show('<h2>Game is paused</h2>');
+    },
+
+    endPause: function() {
+        if ( !this.isPaused ) return;
+
+        this.isPaused = false;
+        this.Audio.pauseOut();
+        Kurve.Lightbox.hide();
+        this.startRun();
     },
     
     startGame: function() {
