@@ -112,6 +112,10 @@ p {
         float: left;
         width: 240px;
     }
+    .bot {
+        float: left;
+        width: 50px;
+    }
     .keys {
         float: left;
         font-size: 28px;
@@ -167,7 +171,7 @@ p {
 
 #menu {
     padding: 30px;
-    width: 580px;
+    width: 632px;
 
     &.shake {
         animation: shake 0.4s ease;
@@ -208,6 +212,11 @@ p {
         margin: 0 1px 1px 0;
     }
 
+    .bot {
+        width: 50px;
+        margin: 0 1px 1px 0;
+    }
+
     .key {
         text-align: center;
 
@@ -239,6 +248,7 @@ p {
 #menu-players-list .title,
 #menu-players-list .key.left,
 #menu-players-list .key.right,
+#menu-players-list .bot,
 #menu-players-list .superpower .key,
 #menu-players-list .superpower .superpowerType {
     border-bottom: 1px solid #D9D6CC;
@@ -631,6 +641,7 @@ body.dark-theme {
     #menu-players-list .title,
     #menu-players-list .key.left,
     #menu-players-list .key.right,
+    #menu-players-list .bot,
     #menu-players-list .superpower .key,
     #menu-players-list .superpower .superpowerType {
         border-bottom: 1px solid #444;

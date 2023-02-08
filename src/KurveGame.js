@@ -36,6 +36,7 @@ Kurve.Game = {
     curves:                 [],
     runningCurves:          {},
     players:                [],
+    bots:                   [],
     deathMatch:             false,
     isPaused:               false,
     isRoundStarted:         false,
@@ -57,6 +58,11 @@ Kurve.Game = {
     
     drawFrame: function() {
         this.CURRENT_FRAME_ID++;
+
+        for (var b in this.bots) {
+            this.bots[b].resetKeysDown();
+            this.bots[b].act();
+        }
 
         for (var i in this.runningCurves) {
             for (var j = 0; this.runningCurves[i] && j < this.runningCurves[i].length; ++j) {

@@ -104,9 +104,13 @@ Kurve.Menu = {
     onSpaceDown: function() {
         Kurve.players.forEach(function(player) {
             if ( player.isActive() ) {
-                Kurve.Game.curves.push(
-                    new Kurve.Curve(player, Kurve.Game, Kurve.Field, Kurve.Config.Curve, Kurve.Sound.getAudioPlayer())
-                );    
+                var curve = new Kurve.Curve(player, Kurve.Game, Kurve.Field, Kurve.Config.Curve, Kurve.Sound.getAudioPlayer());
+
+                Kurve.Game.curves.push(curve);
+
+                // TODO Only add bot if player is selected as bot
+                var bot = new Kurve.Bot(curve);
+                Kurve.Game.bots.push(bot);
             }
         });
         

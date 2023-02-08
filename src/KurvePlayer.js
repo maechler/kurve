@@ -63,6 +63,7 @@ Kurve.Player = function(id, keyLeft, keyRight, keySuperpower) {
 Kurve.Player.prototype.renderMenuItem = function() {
     return  '<div id="' + this.getId() + '" class="player inactive ' + this.getId() +'">' +
                 '<div class="title light"><h2>' + this.getId() + '</h2></div>' +
+                '<div class="bot light"><div>&#129302;</div></div>' +
                 '<div class="key left light"><div>' + this.getKeyLeftChar() + '</div></div>' +
                 '<div class="key right light"><div>' + this.getKeyRightChar() + '</div></div>' +
                 '<div class="superpower">' +

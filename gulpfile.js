@@ -21,6 +21,7 @@ var kurveSources = [
     './src/KurveCurve.js',
     './src/KurvePoint.js',
     './src/KurvePlayer.js',
+    './src/KurveBot.js',
     './src/KurveLightbox.js',
     './src/KurvePiwik.js',
     './src/KurvePrivacypolicy.js',
