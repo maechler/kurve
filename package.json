@@ -8,6 +8,10 @@
   },
   "author": "Markus Mächler",
   "license": "GPL3",
+  "scripts": {
+    "build": "gulp build",
+    "watch": "gulp watch"
+  },
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-concat-util": "^0.5.5",

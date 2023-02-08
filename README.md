@@ -21,10 +21,10 @@ npm install
 
 ### Building sources during development
 ```sh
-gulp watch
+npm run watch
 ```
 
 ### Building sources for production
 ```sh
-gulp build
+npm run build
 ```
