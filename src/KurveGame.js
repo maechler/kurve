@@ -234,6 +234,7 @@ Kurve.Game = {
         this.runningCurves  = {};
         this.incrementSuperpowers();
         this.Audio.terminateRound();
+        Kurve.Field.resize();
         this.checkForWinner();
     },
 

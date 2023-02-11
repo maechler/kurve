@@ -45,26 +45,32 @@ Kurve.Field = {
         this.initPixi();
         this.initDrawing();
         this.initField();
+
+        // Use setTimeout here because the canvas is only about to be displayed and still has width=0 at this point in time
+        setTimeout(function() {
+            this.resize();
+        }.bind(this), 0);
     },
 
     initWindow: function() {
-        //Fix window width in order to prevent window resize to change field size
-        document.body.style.height = window.innerHeight + 'px';
-        document.body.style.width = window.innerWidth + 'px';
+        window.addEventListener('resize', function() {
+            if (Kurve.Game.isRoundStarted) {
+                return; // Do not allow resize during a round
+            }
+
+            this.resize();
+        }.bind(this));
     },
-        
+
     initCanvas: function() {
-        this.width = window.innerWidth * Kurve.Config.Field.width;
-        this.height = window.innerHeight;
         this.canvas = document.getElementById('field');
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
     },
-    
+
     initPixi: function() {
         PIXI.utils.skipHello();
         this.pixiApp = new PIXI.Application({
             view: this.canvas,
+            resizeTo: this.canvas.parentElement,
             width: this.canvas.width,
             height: this.canvas.height,
             antialias: true,
@@ -80,12 +86,28 @@ Kurve.Field = {
     },
     
     initField: function() {
-        this.drawField();
+        this.canvas = document.getElementById('field');
+
+        this.resize();
     },
 
     initDrawing: function() {
         this.defaultLineWidth = Kurve.Config.Field.defaultLineWidth;
         this.drawnPixelPrecision = Kurve.Config.Field.drawnPixelPrecision;
+    },
+
+    resize: function() {
+        // Fix window width in order to prevent window resize to change field size
+        document.body.style.height = window.innerHeight + 'px';
+        document.body.style.width = window.innerWidth + 'px';
+
+        this.width = window.innerWidth * Kurve.Config.Field.width;
+        this.height = window.innerHeight;
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+
+        this.pixiApp.resize();
+        this.drawField();
     },
 
     clearFieldContent: function() {
