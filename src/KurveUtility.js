@@ -118,4 +118,16 @@ Kurve.Utility.isIE = function() {
     return userAgent.indexOf('MSIE ') > 0 || userAgent.indexOf('Trident/') > 0;
 };
 
+Kurve.Utility.debounce = function(debouncedFunction, timeout) {
+    var timeoutId;
+
+    return function(...args) {
+        clearTimeout(timeoutId);
+
+        timeoutId = setTimeout(function () {
+            debouncedFunction.apply(this, args);
+        }, timeout);
+    };
+};
+
 var u = Kurve.Utility;
