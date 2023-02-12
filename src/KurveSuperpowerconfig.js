@@ -47,7 +47,7 @@ Kurve.Superpowerconfig.hooks = {
     DRAW_NEXT_FRAME: 'DRAW_NEXT_FRAME',
     DRAW_LINE: 'DRAW_LINE',
     IS_COLLIDED: 'IS_COLLIDED',
-    POWER_UP: 'POWER_UP'
+    POWER_UP: 'POWER_UP',
 };
 
 Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_FASTER] = {
@@ -629,7 +629,8 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CHUCK_NORRIS] = {
     label: 'chuck norris',
     hooks: [Kurve.Superpowerconfig.hooks.POWER_UP],
     helpers: {
-        initCalled: false
+        initCalled: false,
+        styleNode: null,
     },
 
     init: function(curve) {
@@ -644,6 +645,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CHUCK_NORRIS] = {
             document.body.appendChild(styleNode);
             curve.getPlayer().setColor(chuckNorrisColor);
 
+            this.helpers.styleNode = styleNode;
             this.helpers.initCalled = true;
         }
     },
@@ -653,7 +655,10 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.CHUCK_NORRIS] = {
     },
 
     close: function(curve) {
-
+        if (this.helpers.isRandomSuperpower && this.helpers.styleNode) {
+            curve.getPlayer().setColor(null);
+            this.helpers.styleNode.parentElement.removeChild(this.helpers.styleNode);
+        }
     },
 };
 
@@ -707,7 +712,27 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RANDOM] = {
     hooks: [],
     audios: [],
     helpers: {},
-    init: function(curve) {},
-    act: function(hook, curve) {},
-    close: function(curve) {}
+    init: function(curve) {
+        var superpowerTypes = Object.values(Kurve.Superpowerconfig.types).filter(type => type !== Kurve.Superpowerconfig.types.RANDOM);
+        var randomSuperpowerType = superpowerTypes[Math.floor(Math.random() * superpowerTypes.length)];
+        var randomSuperpower = Kurve.Factory.getSuperpower(randomSuperpowerType);
+
+        this.label = randomSuperpower.label;
+        this.hooks = randomSuperpower.hooks;
+        this.helpers = randomSuperpower.helpers;
+        this.getType = randomSuperpower.getType;
+        this.getHooks = randomSuperpower.getHooks.bind(this);
+        this.act = randomSuperpower.act.bind(this);
+        this.close = randomSuperpower.close.bind(this);
+
+        this.helpers.isRandomSuperpower = true;
+
+        randomSuperpower.init.call(this, curve);
+    },
+    act: function(hook, curve) {
+
+    },
+    close: function(curve) {
+
+    }
 };
