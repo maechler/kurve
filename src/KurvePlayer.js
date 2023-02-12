@@ -84,8 +84,10 @@ Kurve.Player.prototype.renderScoreItem = function() {
                 '<div class="title"><h2>' + this.getId() + '</h2></div>' +
                 '<div class="points">' + this.getPoints() + '</div>' +
                 '<div class="clear"></div>' +
-                '<div class="superpowers">' + this.renderNumberOfSuperPowers() + '</div>' +
-                '<div class="clear"></div>' +
+                '<div class="superpowers">' +
+                    this.renderNumberOfSuperPowers() +
+                    '<span class="superpower-label">' + this.getSuperpower().getLabel() + '</span>' +
+                '</div>' +
             '</div>';
 };
 

@@ -123,14 +123,6 @@ Kurve.Menu = {
             return; //not enough players are ready
         }
 
-        Kurve.Game.curves.forEach(function(curve) {
-            if (curve.getPlayer().getSuperpower().getType() === Kurve.Superpowerconfig.types.RANDOM) {
-                var randomSuperpower = Kurve.Menu.getRandomSuperpower();
-
-                curve.getPlayer().setSuperpower(Kurve.Factory.getSuperpower(randomSuperpower))
-            }
-        });
-
         Kurve.Field.init();
         Kurve.Menu.audioPlayer.pause('menu-music', {fade: 1000});
         Kurve.Game.startGame();
@@ -222,17 +214,4 @@ Kurve.Menu = {
     requestFullScreen: function() {
         document.body.webkitRequestFullScreen();
     },
-
-    getRandomSuperpower: function() {
-        var availableTypes = [];
-
-        for (var superpowerType in Kurve.Superpowerconfig.types) {
-            if (superpowerType !== Kurve.Superpowerconfig.types.RANDOM) {
-                availableTypes.push(superpowerType);
-            }
-        }
-
-        return availableTypes[Math.floor(Math.random() * availableTypes.length)];
-    }
-    
 };
