@@ -109,7 +109,7 @@ Kurve.Superpowerconfig[Kurve.Superpowerconfig.types.RUN_SLOWER] = {
     ],
 
     helpers: {
-        initialStepLength: null,
+        initialStepLength: Kurve.Config.Curve.stepLength,
         executionTime: 0,
         initAct: function(curve) {
             this.getAudioPlayer().play('superpower-run-slower', {fade: 500, loop: true, reset: true});
