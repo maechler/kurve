@@ -30,6 +30,8 @@ Kurve.Config = {
         curvePosition: false,
         curveTrace: false,
         fieldDrawnPixels: false,
+        gymVisualisationRoundCountModulo: 10,
+        gymOverwriteMaxPoints: 100,
     },
     
     Field: {

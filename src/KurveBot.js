@@ -122,7 +122,7 @@ class Level {
 }
 
 Kurve.Bot = function(curve, id) {
-    console.log("bot id: " + id);
+    console.log('Kurve.Bot.id', id);
     this.getCurve = function() { return curve; };
     this.getPlayer = function() { return curve.getPlayer(); };
     this.getGame = function() { return curve.getGame(); };
@@ -135,16 +135,16 @@ Kurve.Bot = function(curve, id) {
 
         if (id != 'red') {
             NeuralNetwork.mutate(this.brain, 0.02)
-            console.log("mutate brain");
+            console.log('Kurve.Bot:mutateBrain');
         }
         if (id == 'green') {
-            this.brain = new NeuralNetwork([5, 6, 3]);
-            console.log("create brain of playerid 1")
+            this.brain = new NeuralNetwork([10, 30, 3]);
+            console.log('Kurve.Bot:createBrainOfPlayerGreen');
         }
 
     } else {
-        this.brain = new NeuralNetwork([5, 6, 3]); // [input, hidden layer, outputs(left, right)]
-        console.log("create new brain");
+        this.brain = new NeuralNetwork([10, 30, 3]); // [input, hidden layer, outputs(left, right)]
+        console.log('Kurve.Bot:createNewBrain');
     }
 };
 
@@ -161,30 +161,48 @@ Kurve.Bot.prototype.act = function() {
         //console.log(this.getField().drawnPixels);
     }
 
-    offsets = [];
-    sensorSpread = Math.PI / 2;
-    sensorCount = 5;
-    sensorLength = 50;
+    let offsets = [];
+    let sensorSpread = Math.PI / 2;
+    let sensorCount = 10;
+    let sensorLength = 100;
 
     for (var i = 0; i < sensorCount; i++) {
         offsets[i] = sensorLength;
     }
-    offsets = [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()]
+    //offsets = [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()]
     for (let sensorRay = 0; sensorRay < sensorCount; sensorRay++) {
         //TODO make it continious not only ten fixed sensor points
 
-        interpolatedPoints = u.interpolateTwoPoints(this.getCurve().getPositionX(), this.getCurve().getPositionY(),
-            this.getCurve().getPositionX() +
-            Math.cos(this.getCurve().getOptions().angle + (i - sensorCount / 2) / sensorCount) * sensorLength,
-            this.getCurve().getPositionY() + Math.sin(this.getCurve().getOptions().angle + (i - sensorCount / 2) / sensorCount) * sensorLength
+        let sensorTargetX = this.getCurve().getPositionX() + Math.cos(this.getCurve().getOptions().angle + (sensorRay - sensorCount / 2) / sensorCount) * sensorLength;
+        let sensorTargetY = this.getCurve().getPositionY() + Math.sin(this.getCurve().getOptions().angle + (sensorRay - sensorCount / 2) / sensorCount) * sensorLength;
+
+        // Debug sensors
+        if (Kurve.Game.roundCount % Kurve.Config.Debug.gymVisualisationRoundCountModulo === 0) {
+            Kurve.Field.pixiDebugFrame.lineStyle(1, 0x37FDFC);
+            Kurve.Field.pixiDebugFrame.drawRect(sensorTargetX, sensorTargetY, 1, 1);
+        }
+
+        let interpolatedPoints = u.interpolateTwoPoints(
+            this.getCurve().getPositionX(),
+            this.getCurve().getPositionY(),
+            sensorTargetX,
+            sensorTargetY,
         )
 
+        outerLoop:
         for (var pointX in interpolatedPoints) {
             for (var pointY in interpolatedPoints[pointX]) {
                 if (this.getCurve().isCollided(pointX, pointY)) {
-                    offsets[sensorRay] = Math.sqrt(Math.pow(this.getCurve().getPositionX() - pointX, 2) +
+                    offsets[sensorRay] =
+                        Math.sqrt(Math.pow(this.getCurve().getPositionX() - pointX, 2) +
                         Math.pow(this.getCurve().getPositionY() - pointY, 2))
-                    break;
+
+                    if (Kurve.Game.roundCount % Kurve.Config.Debug.gymVisualisationRoundCountModulo === 0) {
+                        Kurve.Field.pixiDebugFrame.lineStyle(1, 0xFD379B);
+                        Kurve.Field.pixiDebugFrame.drawRect(sensorTargetX - 1, sensorTargetY - 1, 3, 3);
+                    }
+
+                    break outerLoop;
                 }
             }
         }
@@ -194,11 +212,11 @@ Kurve.Bot.prototype.act = function() {
             offsets[i] = (offsets[i] - sensorLength) / sensorLength;
         }
 
-
-        for (i = 1; i < sensorLength; i++) {
-            sensorPoint = [this.getCurve().getPositionX() +
-                Math.cos(this.getCurve().getOptions().angle + (i - sensorCount / 2) / sensorCount) * sensorLength,
-            this.getCurve().getPositionY() + Math.sin(this.getCurve().getOptions().angle + (i - sensorCount / 2) / sensorCount) * sensorLength]
+        for (let i = 1; i < sensorLength; i++) {
+            let sensorPoint = [
+                this.getCurve().getPositionX() + Math.cos(this.getCurve().getOptions().angle + (i - sensorCount / 2) / sensorCount) * sensorLength,
+                this.getCurve().getPositionY() + Math.sin(this.getCurve().getOptions().angle + (i - sensorCount / 2) / sensorCount) * sensorLength,
+            ]
 
             if (currentFrameId == 2) {
                 //console.log("sensor Point");

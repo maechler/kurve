@@ -102,8 +102,7 @@ Kurve.Menu = {
     },
 
     onSpaceDown: function() {
-
-        console.log("kurve.menu.onspacedown");
+        console.log('Kurve.Menu:onSpaceDown');
 
         Kurve.Game.curves = [];
         Kurve.Game.isRunning = false;
@@ -124,7 +123,7 @@ Kurve.Menu = {
                 Kurve.Game.curves.push(curve);
 
                 // TODO Only add bot if player is selected as bot
-                console.log("log player id " + player.getId())
+                console.log('Kurve.Menu:onSpaceDown.playerId', player.getId());
                 var bot = new Kurve.Bot(curve, player.getId());
                 Kurve.Game.bots.push(bot);
             }
@@ -153,8 +152,6 @@ Kurve.Menu = {
 
         Kurve.Field.init();
         Kurve.Menu.audioPlayer.pause('menu-music', { fade: 1000 });
-
-        console.log("new game started");
 
         Kurve.Game.startGame();
 

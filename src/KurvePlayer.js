@@ -48,7 +48,8 @@ Kurve.Player = function(id, keyLeft, keyRight, keySuperpower) {
 
     this.setColor = function(newColor) { color = newColor; };
     this.setIsActive = function(newIsActive) { isActive = newIsActive; };
-    
+    this.resetPoints = function() { points = 0; };
+
     this.getPoints = function() { return points; };
     this.getId = function() { return id; };
     this.getColor = function() { return color === null ? Kurve.Theming.getThemedValue('players', id) : color };

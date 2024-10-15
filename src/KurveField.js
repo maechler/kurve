@@ -30,6 +30,7 @@ Kurve.Field = {
     pixiApp: null,
     pixiCurves: null,
     pixiDebug: null,
+    pixiDebugFrame: null,
     
     width: null,
     height: null,
@@ -63,20 +64,25 @@ Kurve.Field = {
     
     initPixi: function() {
         PIXI.utils.skipHello();
-        this.pixiApp = new PIXI.Application({
-            view: this.canvas,
-            width: this.canvas.width,
-            height: this.canvas.height,
-            antialias: true,
-            backgroundAlpha: 0,
-        });
-        this.pixiCurves = new PIXI.Graphics();
-        this.pixiField = new PIXI.Graphics();
-        this.pixiDebug = new PIXI.Graphics();
+        if (!this.pixiApp) {
+            this.pixiApp = new PIXI.Application({
+                view: this.canvas,
+                width: this.canvas.width,
+                height: this.canvas.height,
+                antialias: true,
+                backgroundAlpha: 0,
+            });
 
-        this.pixiApp.stage.addChild(this.pixiCurves);
-        this.pixiApp.stage.addChild(this.pixiField);
-        this.pixiApp.stage.addChild(this.pixiDebug);
+            this.pixiCurves = new PIXI.Graphics();
+            this.pixiField = new PIXI.Graphics();
+            this.pixiDebug = new PIXI.Graphics();
+            this.pixiDebugFrame = new PIXI.Graphics();
+
+            this.pixiApp.stage.addChild(this.pixiCurves);
+            this.pixiApp.stage.addChild(this.pixiField);
+            this.pixiApp.stage.addChild(this.pixiDebug);
+            this.pixiApp.stage.addChild(this.pixiDebugFrame);
+        }
     },
     
     initField: function() {
@@ -107,7 +113,7 @@ Kurve.Field = {
     drawLine: function(type, fromPointX, fromPointY, toPointX, toPointY, color, curve) {
         if ( color === undefined ) color = Kurve.Theming.getThemedValue('field', 'defaultColor');
 
-        if (type === 'curve') {
+        if (type === 'curve' && Kurve.Game.roundCount % Kurve.Config.Debug.gymVisualisationRoundCountModulo === 0) {
             this.pixiCurves.lineStyle(this.defaultLineWidth, u.stringToHex(color));
             this.pixiCurves.moveTo(fromPointX, fromPointY);
             this.pixiCurves.lineTo(toPointX, toPointY);
@@ -126,7 +132,10 @@ Kurve.Field = {
     },
 
     drawPoint: function(type, pointX, pointY, color, curve) {
-        this.drawUntrackedPoint(pointX, pointY, color);
+        if (Kurve.Game.roundCount % Kurve.Config.Debug.gymVisualisationRoundCountModulo === 0) {
+            this.drawUntrackedPoint(pointX, pointY, color);
+        }
+
         this.addPointToDrawnPixel(type, pointX, pointY, color, curve);
     },
 

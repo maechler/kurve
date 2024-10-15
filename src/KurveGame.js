@@ -43,21 +43,26 @@ Kurve.Game = {
     playerScoresElement:    null,
     isGameOver:             false,
     CURRENT_FRAME_ID:       0,
+    roundCount: 0,
     
     init: function() {
         this.fps = Kurve.Config.Game.fps;
-        this.intervalTimeOut = Math.round(50 / this.fps);
+        this.intervalTimeOut = Math.round(1000 / this.fps);
         this.playerScoresElement = document.getElementById('player-scores');
 
         this.Audio.init();
     },
     
     run: function() {
-        requestAnimationFrame(this.drawFrame.bind(this));
+        this.drawFrame();
+
+        this.runIntervalId = setTimeout(this.run.bind(this), this.roundCount % Kurve.Config.Debug.gymVisualisationRoundCountModulo === 0 ? this.intervalTimeOut : 0);
     },
     
     drawFrame: function() {
         this.CURRENT_FRAME_ID++;
+
+        if (Kurve.Field.pixiDebugFrame) Kurve.Field.pixiDebugFrame.clear();
 
         for (var b in this.bots) {
             this.bots[b].resetKeysDown();
@@ -132,7 +137,9 @@ Kurve.Game = {
     },
     
     startGame: function() {
-        this.maxPoints = (this.curves.length - 1) * 10;
+        this.maxPoints = Kurve.Config.Debug.gymOverwriteMaxPoints ?? (this.curves.length - 1) * 10;
+
+        console.log('Kurve.Game:startGame.maxPoints', this.maxPoints);
         
         this.addPlayers();
         this.addWindowListeners();
@@ -193,7 +200,6 @@ Kurve.Game = {
                 this.terminateRound();
                 if(!this.isGameOver)
                 {
-                    console.log("start new Round");
                     this.startNewRound();
                 }
             }
@@ -202,6 +208,8 @@ Kurve.Game = {
     
     startNewRound: function() {
         this.isRoundStarted = true;
+        this.roundCount++;
+        console.log('Kurve.Game:startNewRound.roundCount', this.roundCount);
         this.CURRENT_FRAME_ID = 0;
 
         Kurve.Field.clearFieldContent();
@@ -214,12 +222,12 @@ Kurve.Game = {
     
     startRun: function() {
         this.isRunning = true;
-        this.runIntervalId = setInterval(this.run.bind(this), this.intervalTimeOut);
+        this.runIntervalId = setTimeout(this.run.bind(this), 0);
     },
     
     stopRun: function() {
         this.isRunning = false;
-        clearInterval(this.runIntervalId);
+        clearTimeout(this.runIntervalId);
     },
     
     initRun: function() {
@@ -310,14 +318,14 @@ Kurve.Game = {
     
     gameOver: function(winner) {
         this.isGameOver = true;
-        console.log("game over is now true");
+        console.log('Kurve.Game:gameOver.isGameOver', this.isGameOver);
 
         this.Audio.gameOver();
         Kurve.Piwik.trackPageVariable(4, 'finished_game', 'yes');
         Kurve.Piwik.trackPageView('GameOver');
 
-        console.log("save brain");
-        console.log("winnerId: " + winner.getId());
+        console.log('Kurve.Game:gameOver.saveBrain');
+        console.log('Kurve.Game:gameOver.winnerId', winner.getId());
 
         var index;
         this.bots.forEach((b, i) => {
@@ -327,11 +335,17 @@ Kurve.Game = {
             }
         });
 
-        console.log("index: " + index);
+        console.log('Kurve.Game:gameOver.resetPlayers', this.players);
+        this.players.forEach(player => {
+            player.resetPoints()
+        });
+
+        console.log('Kurve.Game:gameOver.bots.index', index);
         
         localStorage.setItem('brain', JSON.stringify(this.bots[index].brain));
+        this.roundCount = 0
 
-        console.log("Kurve.Menu.onspaceDown ausgelöst");
+        console.log('Kurve.Game:gameOver.onSpaceDown');
         Kurve.Menu.onSpaceDown();
 
         // Kurve.Lightbox.show(
